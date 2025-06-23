@@ -1,0 +1,75 @@
+{
+  "name": "decision-tapestry",
+  "displayName": "Decision Tapestry",
+  "description": "A VS Code extension for visualizing and managing architectural decisions.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onCommand:decision-tapestry.showDashboard"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "decision-tapestry.showDashboard",
+        "title": "Show Dashboard",
+        "category": "Decision Tapestry"
+      },
+      {
+        "command": "decision-tapestry.createDecision",
+        "title": "Create New Decision",
+        "category": "Decision Tapestry"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "decision-tapestry-sidebar",
+          "title": "Decision Tapestry",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "decision-tapestry-sidebar": [
+        {
+          "id": "decision-tapestry-dashboard-view",
+          "name": "Dashboard",
+          "type": "webview"
+        }
+      ]
+    },
+    "yamlValidation": [
+      {
+        "fileMatch": "decisions.yml",
+        "url": "./schemas/decision-schema.json"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
+    "watch": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --sourcemap --watch",
+    "package": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --minify",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "18.x",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^7.10.0",
+    "@typescript-eslint/parser": "^7.10.0",
+    "esbuild": "^0.20.2",
+    "eslint": "^8.57.0",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  }
+}

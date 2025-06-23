@@ -1,0 +1,111 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Decision Tapestry Log Schema",
+    "description": "Defines the structure for the decisions.yml file used by Decision Tapestry.",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "id": {
+                "type": "number",
+                "description": "A unique integer that identifies the decision."
+            },
+            "title": {
+                "type": "string",
+                "description": "A concise, imperative-mood title for the decision."
+            },
+            "author": {
+                "type": "string",
+                "description": "The person or team who made the decision."
+            },
+            "date": {
+                "type": "string",
+                "description": "The timestamp when the decision was accepted, in ISO 8601 format.",
+                "format": "date-time"
+            },
+            "status": {
+                "type": "string",
+                "description": "The current state of the decision.",
+                "enum": [
+                    "Accepted",
+                    "Superseded",
+                    "Ideating"
+                ]
+            },
+            "project": {
+                "type": "string",
+                "description": "The project or domain this decision belongs to."
+            },
+            "rationale": {
+                "type": "array",
+                "description": "The reasons and context behind why this decision was made.",
+                "items": {
+                    "type": "string"
+                }
+            },
+            "tradeoffs": {
+                "type": "array",
+                "description": "The alternative options considered and the reasons they were not chosen.",
+                "items": {
+                    "type": "string"
+                }
+            },
+            "supersedes": {
+                "type": "number",
+                "description": "The ID of a previous decision that this one replaces."
+            },
+            "superseded_by": {
+                "type": "number",
+                "description": "The ID of a newer decision that replaces this one."
+            },
+            "related_to": {
+                "type": "array",
+                "description": "A list of IDs for other decisions that are related to this one.",
+                "items": {
+                    "type": "number"
+                }
+            },
+            "affected_components": {
+                "type": "array",
+                "description": "A list of file paths or system components affected by this decision.",
+                "items": {
+                    "type": "string"
+                }
+            },
+            "tasks": {
+                "type": "array",
+                "description": "A checklist of actionable tasks required to implement the decision.",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "description": {
+                            "type": "string"
+                        },
+                        "status": {
+                            "type": "string",
+                            "enum": [
+                                "Pending",
+                                "Done",
+                                "Completed"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "description",
+                        "status"
+                    ]
+                }
+            }
+        },
+        "required": [
+            "id",
+            "title",
+            "author",
+            "date",
+            "status",
+            "project",
+            "rationale",
+            "tradeoffs"
+        ]
+    }
+}

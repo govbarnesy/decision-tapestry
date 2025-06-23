@@ -1,0 +1,149 @@
+body,
+html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f4f7f6;
+}
+
+.dashboard {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-rows: auto 1fr 1fr;
+    height: 100vh;
+    gap: 1rem;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+.panel {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+#left-panel {
+    grid-column: 1 / 2;
+    grid-row: 1 / 4;
+}
+
+#decision-map {
+    grid-column: 2 / 3;
+    grid-row: 1 / 4;
+}
+
+#controls-panel {
+    grid-column: 3 / 4;
+    grid-row: 1 / 2;
+}
+
+#charter-map {
+    grid-column: 3 / 4;
+    grid-row: 2 / 3;
+}
+
+#decision-log {
+    grid-column: 3 / 4;
+    grid-row: 3 / 4;
+    /* This is a panel-content directly, so needs panel styles */
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.panel-content {
+    padding: 1rem;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+h2,
+h3,
+h4 {
+    margin: 0 0 0.5rem 0;
+    color: #333;
+}
+
+p {
+    margin: 0 0 1rem 0;
+    color: #666;
+}
+
+/* TABS */
+.tabs {
+    display: flex;
+    border-bottom: 1px solid #eee;
+}
+
+.tab-button {
+    padding: 0.8rem 1rem;
+    cursor: pointer;
+    background: #f9f9f9;
+    border: none;
+    border-right: 1px solid #eee;
+}
+
+.tab-button.active {
+    background: white;
+    font-weight: bold;
+    border-bottom: 3px solid #0052cc;
+    color: #0052cc;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+}
+
+/* Status Indicators */
+.status-accepted {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.status-superseded {
+    color: #6c757d;
+    font-weight: bold;
+}
+
+.status-deprecated {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/* Task List */
+.task-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.task-status-done {
+    color: #28a745;
+}
+
+.task-status-to-do {
+    color: #6c757d;
+}
+
+/* Analytics Controls */
+#analytics-controls button {
+    margin-right: 0.5rem;
+}
+
+#analytics-controls button.active {
+    background-color: #0052cc;
+    color: white;
+}

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" />
+    <link rel="stylesheet" href="./style.css" />
+    <title>Decision Tapestry</title>
+    <script type="text/javascript"
+        src="https://unpkg.com/vis-network@latest/standalone/umd/vis-network.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+    <script type="module" src="./health-metrics.mjs"></script>
+    <script type="module" src="./decision-log.mjs"></script>
+    <script type="module" src="./product-backlog.mjs"></script>
+    <script type="module" src="./search-panel.mjs"></script>
+    <script type="module" src="./decision-velocity-chart.mjs"></script>
+    <script type="module" src="./decision-health-chart.mjs"></script>
+    <script type="module" src="./decision-detail-panel.mjs"></script>
+    <script type="module" src="./tab-control.mjs"></script>
+    <script type="module" src="./decision-map.mjs"></script>
+    <script type="module" src="./charter-map.mjs"></script>
+</head>
+
+<body>
+    <div class="dashboard">
+        <div id="left-panel" class="panel">
+            <tab-control></tab-control>
+            <decision-detail-panel id="decision-detail"
+                class="panel-content tab-content active"></decision-detail-panel>
+            <div id="product-backlog" class="panel-content tab-content">
+                <div id="product-backlog-content">
+                    <product-backlog-panel></product-backlog-panel>
+                </div>
+            </div>
+            <div id="analytics" class="panel-content tab-content">
+                <decision-velocity-chart
+                    style="height: 50%; display: flex; flex-direction: column; padding-bottom: 1rem; box-sizing: border-box;">
+                </decision-velocity-chart>
+                <div id="health-metrics"
+                    style="height: 50%; display: flex; flex-direction: column; position: relative; border-top: 1px solid #eee; padding-top: 1rem; box-sizing: border-box;">
+                    <h3>Health Metrics</h3>
+                    <div style="display: flex; align-items: center; gap: 2rem; flex-grow: 1;">
+                        <health-metrics-panel id="health-metrics-stats" style="flex-grow: 1;"></health-metrics-panel>
+                        <div id="decision-health-chart-container" style="flex-basis: 200px; height: 100%;">
+                            <decision-health-chart></decision-health-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <decision-map id="decision-map" class="panel"></decision-map>
+        <search-panel id="controls-panel" class="panel"></search-panel>
+        <charter-map id="charter-map" class="panel"></charter-map>
+        <div id="decision-log" class="panel-content tab-content active">
+            <h2>Decision Log</h2>
+            <div id="decision-log-container" style="height: calc(100% - 40px);">
+                <decision-log-panel id="decision-log-content"></decision-log-panel>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script type="module" src="app.mjs"></script>
+</body>
+
+</html>
