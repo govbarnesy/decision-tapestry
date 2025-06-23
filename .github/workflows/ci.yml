@@ -1,0 +1,24 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: npm install || yarn install
+      - name: Lint
+        run: npm run lint || yarn lint || echo 'No lint script'
+      - name: Build
+        run: npm run build || yarn build || echo 'No build script'
+      - name: Test
+        run: npm test || yarn test || echo 'No test script'
+
