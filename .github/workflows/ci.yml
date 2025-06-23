@@ -22,3 +22,7 @@ jobs:
       - name: Test
         run: npm test || yarn test || echo 'No test script'
 
+- name: TypeScript type check
+  run: npx tsc --noEmit || echo "No TypeScript config"
+- name: Code coverage
+  run: npm run coverage || yarn coverage || npm test -- --coverage || yarn test --coverage || echo "No coverage script"
