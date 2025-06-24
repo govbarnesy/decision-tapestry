@@ -1,22 +1,4 @@
 backlog:
-  - id: 102
-    title: Migrate Legacy Data and Features to New Architecture
-    author: Clyde
-    created: '2025-06-26T13:05:00Z'
-    status: Open
-    rationale:
-      - Preserve historical decisions and backlog items for continuity.
-      - Ensure no loss of critical features or data during migration.
-    tradeoffs:
-      - May require data transformation scripts and manual QA.
-      - Some legacy features may need to be reimagined for the new system.
-    tasks:
-      - description: Write migration scripts for decisions.yml and related files.
-        status: Pending
-      - description: Audit and port all essential features to the new codebase.
-        status: Pending
-    notes: |
-      This ensures a smooth transition and user trust in the new system.
   - id: 104
     title: Automate Release and Publishing Workflow
     author: Clyde
@@ -1180,6 +1162,8 @@ decisions:
     date: '2024-06-26T00:00:00Z'
     status: Accepted
     project: Decision Tapestry
+    related_to:
+      - 42
     rationale:
       - Provides a seamless developer experience directly in the editor.
       - Ensures the extension stays in sync with the core dashboard and CLI.
@@ -1212,7 +1196,6 @@ decisions:
       - Requires CI/CD setup and maintenance.
       - Initial configuration may be time-consuming.
     related_to:
-      - 104
       - 28  # Tooling & Portability
     tasks:
       - description: Set up GitHub Actions (or similar) for build, test, and publish.
@@ -1225,3 +1208,71 @@ decisions:
       - vscode-extension/package.json
       - CHANGELOG.md
       - README.md
+    notes: |
+      This decision will enable automated, reliable, and scalable release workflows for both the main app and the VS Code extension.
+  - id: 43
+    title: Migrate Legacy Data and Features to New Architecture
+    author: Clyde & AI Assistant
+    date: '2025-06-27T10:00:00Z'
+    status: Accepted
+    project: Decision Tapestry
+    rationale:
+      - Preserve historical decisions and backlog items for continuity.
+      - Ensure no loss of critical features or data during migration.
+      - Confirmed that all legacy data and features are now migrated and in use in the new architecture.
+    tradeoffs:
+      - Required data transformation scripts and manual QA.
+      - Some legacy features were reimagined for the new system.
+    related_to:
+      - 42
+    tasks:
+      - description: Write migration scripts for decisions.yml and related files.
+        status: Done
+      - description: Audit and port all essential features to the new codebase.
+        status: Done
+    affected_components:
+      - decisions.yml
+      - dashboard/
+      - server/
+      - cli/
+      - shared/
+    notes: |
+      All legacy data and features have been migrated. The new monorepo is now the single source of truth for Decision Tapestry.
+  - id: 44
+    title: Automate Release and Publishing Workflow
+    author: Clyde & AI Assistant
+    date: '2025-06-27T12:00:00Z'
+    status: Accepted
+    project: Decision Tapestry
+    rationale:
+      - Reduces manual errors and accelerates release cycles.
+      - Ensures consistent versioning and changelog generation.
+      - Critical for scaling and open-source collaboration.
+      - Will use semantic-release for fully automated versioning, changelog, and publishing.
+    tradeoffs:
+      - Requires CI/CD setup and maintenance.
+      - Initial configuration may be time-consuming.
+      - Requires adherence to conventional commits for full automation.
+    related_to:
+      - 104
+      - 28  # Tooling & Portability
+      - 42  # Previous automation decision
+    tasks:
+      - description: Set up semantic-release for the main app (npm publishing, changelog, versioning).
+        status: Pending
+      - description: Set up semantic-release for the VS Code extension (npm and VS Code Marketplace publishing).
+        status: Pending
+      - description: Update GitHub Actions workflow to run semantic-release on main branch merges.
+        status: Pending
+      - description: Configure changelog generation and version bumps for all packages.
+        status: Pending
+      - description: Document the release process and conventional commit requirements for contributors.
+        status: Pending
+    affected_components:
+      - .github/workflows/
+      - package.json
+      - vscode-extension/package.json
+      - CHANGELOG.md
+      - README.md
+    notes: |
+      This decision will enable automated, reliable, and scalable release workflows for both the main app and the VS Code extension, using semantic-release for versioning, changelog, and publishing to npm and the VS Code Marketplace.

@@ -102,4 +102,32 @@ This command does the following:
 
 The application will then be available at `http://localhost:8080`.
 
+## Automated Releases
+
+This project uses [semantic-release](https://semantic-release.gitbook.io/) for fully automated versioning, changelog generation, and publishing to npm and GitHub.
+
+### How to Trigger a Release
+- **Releases are triggered automatically** when commits are pushed to the `main` or `release-automation` branches that follow [Conventional Commits](https://www.conventionalcommits.org/) format.
+- The release process will:
+  - Analyze commit messages to determine the next version.
+  - Update `CHANGELOG.md` with release notes.
+  - Publish the new version to npm (if configured).
+  - Push changelog and version updates to GitHub.
+  - Create a GitHub release with release notes.
+
+### Manual Release (for testing)
+You can run a release locally (dry run) to see what would happen:
+
+```bash
+yarn workspace decision-tapestry-app release --dry-run
+```
+
+To perform a real release (requires proper environment variables for npm and GitHub tokens):
+
+```bash
+yarn workspace decision-tapestry-app release
+```
+
+See `.releaserc` or `package.json` for configuration details.
+
 ## How it Works 

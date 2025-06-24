@@ -1,10 +1,11 @@
-name: Publish to npm
+name: Release
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - main
+      - release-automation
 jobs:
-  publish:
+  release:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -17,8 +18,9 @@ jobs:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org'
       - name: Install dependencies
-        run: npm install
-      - name: Publish
-        run: npm publish --access public
+        run: yarn install --frozen-lockfile
+      - name: Run semantic-release
+        run: yarn workspace decision-tapestry-app release
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
