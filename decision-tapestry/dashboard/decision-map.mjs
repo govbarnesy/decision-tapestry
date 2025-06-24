@@ -165,7 +165,7 @@ class DecisionMap extends LitElement {
 
         // Disable physics after initial stabilization for a static layout
         this._network.once('stabilizationIterationsDone', () => {
-            this._network.setOptions({ physics: false });
+            this._network.setOptions({ physics: true });
         });
 
         this._network.on('click', (params) => {

@@ -6,6 +6,7 @@ import yaml from 'js-yaml';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { WebSocketServer } from 'ws';
+import { readDecisionsFile, writeDecisionsFile } from '../shared/yaml-utils.js';
 
 // Helper to get __dirname in ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -26,19 +27,19 @@ const port = process.env.PORT || 8080;
 const userDataPath = '/app/user_data';
 const CWD = fs.existsSync(userDataPath) ? userDataPath : process.cwd();
 
-// Serve the static frontend from the package's dist directory
-app.use(express.static(path.join(__dirname, 'dist')));
+// Serve the static frontend from the dashboard directory
+app.use(express.static(path.join(__dirname, '../dashboard')));
 app.use(express.json());
 
 // Serve CSS files with the correct MIME type
 app.get('/*.css', (req, res) => {
   res.type('text/css');
-  res.sendFile(path.join(__dirname, 'dist', req.originalUrl));
+  res.sendFile(path.join(__dirname, '../dashboard', req.originalUrl));
 });
 
 // Serve the main HTML file
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+  res.sendFile(path.join(__dirname, '../dashboard', 'index.html'));
 });
 
 wss.on('connection', (ws) => {
@@ -58,14 +59,12 @@ function broadcast(data) {
 
 async function getData() {
   const decisionsPath = path.join(CWD, 'decisions.yml');
-  const content = await fsp.readFile(decisionsPath, 'utf8');
-  return yaml.load(content);
+  return await readDecisionsFile(decisionsPath);
 }
 
 async function updateData(newData) {
   const decisionsPath = path.join(CWD, 'decisions.yml');
-  const yamlString = yaml.dump(newData);
-  await fsp.writeFile(decisionsPath, yamlString, 'utf8');
+  await writeDecisionsFile(decisionsPath, newData);
 }
 
 // Endpoint for the CLI to trigger a UI update - DEPRECATED

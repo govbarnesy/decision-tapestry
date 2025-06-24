@@ -4,6 +4,7 @@ import * as path from 'path';
 import * as vscode from 'vscode';
 import { CodelensProvider } from './CodelensProvider';
 import { WebViewPanel } from './WebViewPanel';
+import { readDecisionsFile, writeDecisionsFile } from '../../decision-tapestry/shared/yaml-utils.js';
 
 /**
  * This method is called when your extension is activated.
@@ -70,8 +71,7 @@ export function activate(context: vscode.ExtensionContext) {
                 const decisionsPath = path.join(workspaceRoot, 'internal-packages/decision-tapestry/decisions.yml');
 
                 try {
-                    const fileContents = fs.readFileSync(decisionsPath, 'utf8');
-                    const decisions: any[] = yaml.load(fileContents) as any[];
+                    const decisions = await readDecisionsFile(decisionsPath) as any[];
 
                     const newId = decisions.length > 0 ? Math.max(...decisions.map(d => d.id || 0)) + 1 : 1;
 
@@ -93,8 +93,7 @@ export function activate(context: vscode.ExtensionContext) {
 
                     decisions.push(newDecision);
 
-                    const yamlString = yaml.dump(decisions);
-                    fs.writeFileSync(decisionsPath, yamlString, 'utf8');
+                    await writeDecisionsFile(decisionsPath, decisions);
 
                     const document = await vscode.workspace.openTextDocument(decisionsPath);
                     await vscode.window.showTextDocument(document);

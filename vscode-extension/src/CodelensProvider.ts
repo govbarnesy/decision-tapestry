@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 import * as path from 'path';
 import * as vscode from 'vscode';
+import { readDecisionsFile } from '../../decision-tapestry/shared/yaml-utils.js';
 
 /**
  * Provides CodeLenses for files mentioned in decisions.yml.
@@ -31,7 +32,7 @@ export class CodelensProvider implements vscode.CodeLensProvider {
         }
     }
 
-    private parseDecisionFile() {
+    private async parseDecisionFile() {
         this.decisionData.clear();
         const workspaceFolders = vscode.workspace.workspaceFolders;
         if (!workspaceFolders) {
@@ -40,8 +41,7 @@ export class CodelensProvider implements vscode.CodeLensProvider {
         const decisionsPath = path.join(workspaceFolders[0].uri.fsPath, 'internal-packages/decision-tapestry/decisions.yml');
 
         try {
-            const fileContents = fs.readFileSync(decisionsPath, 'utf8');
-            const decisions: any[] = yaml.load(fileContents) as any[];
+            const decisions: any[] = await readDecisionsFile(decisionsPath) as any[];
 
             decisions.forEach(decision => {
                 if (decision.affected_components) {

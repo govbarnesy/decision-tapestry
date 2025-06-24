@@ -34,9 +34,18 @@ __export(extension_exports, {
   deactivate: () => deactivate
 });
 module.exports = __toCommonJS(extension_exports);
-var fs2 = __toESM(require("fs"));
+var path2 = __toESM(require("path"));
+var vscode3 = __toESM(require("vscode"));
 
-// node_modules/js-yaml/dist/js-yaml.mjs
+// src/CodelensProvider.ts
+var fs2 = __toESM(require("fs"));
+var path = __toESM(require("path"));
+var vscode = __toESM(require("vscode"));
+
+// ../decision-tapestry/shared/yaml-utils.js
+var import_promises = __toESM(require("fs/promises"), 1);
+
+// ../node_modules/js-yaml/dist/js-yaml.mjs
 function isNothing(subject) {
   return typeof subject === "undefined" || subject === null;
 }
@@ -2686,21 +2695,63 @@ function renamed(from, to) {
     throw new Error("Function yaml." + from + " is removed in js-yaml 4. Use yaml." + to + " instead, which is now safe by default.");
   };
 }
+var Type = type;
+var Schema = schema;
+var FAILSAFE_SCHEMA = failsafe;
+var JSON_SCHEMA = json;
+var CORE_SCHEMA = core;
+var DEFAULT_SCHEMA = _default;
 var load = loader.load;
 var loadAll = loader.loadAll;
 var dump = dumper.dump;
+var YAMLException = exception;
+var types = {
+  binary,
+  float,
+  map,
+  null: _null,
+  pairs,
+  set,
+  timestamp,
+  bool,
+  int,
+  merge,
+  omap,
+  seq,
+  str
+};
 var safeLoad = renamed("safeLoad", "load");
 var safeLoadAll = renamed("safeLoadAll", "loadAll");
 var safeDump = renamed("safeDump", "dump");
+var jsYaml = {
+  Type,
+  Schema,
+  FAILSAFE_SCHEMA,
+  JSON_SCHEMA,
+  CORE_SCHEMA,
+  DEFAULT_SCHEMA,
+  load,
+  loadAll,
+  dump,
+  YAMLException,
+  types,
+  safeLoad,
+  safeLoadAll,
+  safeDump
+};
+var js_yaml_default = jsYaml;
 
-// src/extension.ts
-var path2 = __toESM(require("path"));
-var vscode3 = __toESM(require("vscode"));
+// ../decision-tapestry/shared/yaml-utils.js
+async function readDecisionsFile(filePath) {
+  const content = await import_promises.default.readFile(filePath, "utf8");
+  return js_yaml_default.load(content);
+}
+async function writeDecisionsFile(filePath, data) {
+  const yamlString = js_yaml_default.dump(data);
+  await import_promises.default.writeFile(filePath, yamlString, "utf8");
+}
 
 // src/CodelensProvider.ts
-var fs = __toESM(require("fs"));
-var path = __toESM(require("path"));
-var vscode = __toESM(require("vscode"));
 var CodelensProvider = class {
   constructor() {
     this._onDidChangeCodeLenses = new vscode.EventEmitter();
@@ -2710,7 +2761,7 @@ var CodelensProvider = class {
     const workspaceFolders = vscode.workspace.workspaceFolders;
     if (workspaceFolders) {
       const watchPath = path.join(workspaceFolders[0].uri.fsPath, "internal-packages/decision-tapestry/decisions.yml");
-      fs.watch(watchPath, (event) => {
+      fs2.watch(watchPath, (event) => {
         if (event === "change") {
           this.parseDecisionFile();
           this._onDidChangeCodeLenses.fire();
@@ -2718,7 +2769,7 @@ var CodelensProvider = class {
       });
     }
   }
-  parseDecisionFile() {
+  async parseDecisionFile() {
     this.decisionData.clear();
     const workspaceFolders = vscode.workspace.workspaceFolders;
     if (!workspaceFolders) {
@@ -2726,8 +2777,7 @@ var CodelensProvider = class {
     }
     const decisionsPath = path.join(workspaceFolders[0].uri.fsPath, "internal-packages/decision-tapestry/decisions.yml");
     try {
-      const fileContents = fs.readFileSync(decisionsPath, "utf8");
-      const decisions = load(fileContents);
+      const decisions = await readDecisionsFile(decisionsPath);
       decisions.forEach((decision) => {
         if (decision.affected_components) {
           decision.affected_components.forEach((component) => {
@@ -2879,8 +2929,7 @@ function activate(context) {
         const workspaceRoot = workspaceFolders[0].uri.fsPath;
         const decisionsPath = path2.join(workspaceRoot, "internal-packages/decision-tapestry/decisions.yml");
         try {
-          const fileContents = fs2.readFileSync(decisionsPath, "utf8");
-          const decisions = load(fileContents);
+          const decisions = await readDecisionsFile(decisionsPath);
           const newId = decisions.length > 0 ? Math.max(...decisions.map((d) => d.id || 0)) + 1 : 1;
           const newDecision = {
             id: newId,
@@ -2900,8 +2949,7 @@ function activate(context) {
             affected_components: [""]
           };
           decisions.push(newDecision);
-          const yamlString = dump(decisions);
-          fs2.writeFileSync(decisionsPath, yamlString, "utf8");
+          await writeDecisionsFile(decisionsPath, decisions);
           const document = await vscode3.workspace.openTextDocument(decisionsPath);
           await vscode3.window.showTextDocument(document);
           vscode3.window.showInformationMessage(`Decision "${title}" created successfully.`);

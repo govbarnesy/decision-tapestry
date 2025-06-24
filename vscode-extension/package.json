@@ -1,5 +1,5 @@
 {
-  "name": "decision-tapestry",
+  "name": "decision-tapestry-vscode",
   "displayName": "Decision Tapestry",
   "description": "A VS Code extension for visualizing and managing architectural decisions.",
   "version": "0.0.1",
@@ -57,7 +57,7 @@
     "compile": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
     "watch": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --sourcemap --watch",
     "package": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --minify",
-    "lint": "eslint src --ext ts"
+    "lint": "eslint src"
   },
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",

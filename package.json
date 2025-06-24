@@ -1,0 +1,8 @@
+{
+  "name": "decision-tapestry-monorepo",
+  "private": true,
+  "workspaces": [
+    "decision-tapestry",
+    "vscode-extension"
+  ]
+} 
