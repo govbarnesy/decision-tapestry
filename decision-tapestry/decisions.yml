@@ -1,22 +1,4 @@
 backlog:
-  - id: 101
-    title: Modularize Decision Tapestry for NPM Distribution
-    author: Clyde
-    created: '2025-06-26T13:00:00Z'
-    status: Open
-    rationale:
-      - To enable reuse of the core dashboard and CLI in other projects and environments.
-      - Simplifies upgrades, bugfixes, and integration across multiple consumers.
-    tradeoffs:
-      - Requires up-front refactoring and clear API boundaries.
-      - Increases initial complexity but pays off in maintainability.
-    tasks:
-      - description: Refactor server and dashboard into separate packages.
-        status: Pending
-      - description: Publish to npm with clear documentation and usage examples.
-        status: Pending
-    notes: |
-      This is a foundational step for portability and future adoption.
   - id: 102
     title: Migrate Legacy Data and Features to New Architecture
     author: Clyde
@@ -35,24 +17,6 @@ backlog:
         status: Pending
     notes: |
       This ensures a smooth transition and user trust in the new system.
-  - id: 103
-    title: Establish Monorepo Structure for Decision Tapestry
-    author: Clyde
-    created: '2025-06-26T13:10:00Z'
-    status: Open
-    rationale:
-      - Simplifies dependency management and cross-package development.
-      - Enables atomic commits and easier CI/CD setup.
-    tradeoffs:
-      - Requires initial setup and possible tooling changes.
-      - May increase repo size and complexity.
-    tasks:
-      - description: Set up monorepo tooling (e.g., Yarn Workspaces, TurboRepo, or Nx).
-        status: Pending
-      - description: Move all packages and apps into the monorepo structure.
-        status: Pending
-    notes: |
-      This will streamline development and future scaling.
   - id: 104
     title: Automate Release and Publishing Workflow
     author: Clyde
@@ -71,24 +35,6 @@ backlog:
         status: Pending
     notes: |
       This is critical for scaling and open-source collaboration.
-  - id: 105
-    title: Integrate VS Code Extension with New Architecture
-    author: Clyde
-    created: '2025-06-26T13:20:00Z'
-    status: Open
-    rationale:
-      - Provides a seamless developer experience directly in the editor.
-      - Ensures the extension stays in sync with the core dashboard and CLI.
-    tradeoffs:
-      - May require refactoring extension code to use new APIs.
-      - Needs robust testing to avoid regressions.
-    tasks:
-      - description: Update extension to consume new npm packages.
-        status: Pending
-      - description: Test extension features against the new backend.
-        status: Pending
-    notes: |
-      This will maximize adoption and usability for developers.
   - id: 106
     title: Document Migration and Usage for New Monorepo
     author: Clyde
@@ -106,6 +52,29 @@ backlog:
         status: Pending
     notes: |
       Good documentation is essential for a healthy open-source project.
+  - id: 107
+    title: Utilize Background Agents for Automation and Quality
+    author: Clyde & AI Assistant
+    created: '2025-06-26T14:00:00Z'
+    status: Open
+    rationale:
+      - Automate repetitive and continuous tasks to improve developer productivity and code quality.
+      - Ensure tests, linting, and backlog/decision sync are always up-to-date without manual intervention.
+      - Reduce human error and accelerate feedback cycles.
+    tradeoffs:
+      - Requires initial setup and monitoring of background agents.
+      - May introduce complexity in debugging automated actions.
+    tasks:
+      - description: Set up background agents to run tests automatically on file changes.
+        status: Pending
+      - description: Set up agents to monitor and enforce code quality (lint, format) in the background.
+        status: Pending
+      - description: Implement agents to watch decisions.yml and PRODUCT-BACKLOG.md for changes and trigger dashboard/UI updates or notifications.
+        status: Pending
+      - description: Document the background agent setup and usage for contributors.
+        status: Pending
+    notes: |
+      Background agents can be used for continuous testing, CI/CD automation, code quality checks, and backlog/decision sync. This will help maintain a high-quality, responsive development workflow as the project scales.
 decisions:
   - id: 1
     title: Establish a System for a Durable, Shared Memory
@@ -552,7 +521,7 @@ decisions:
     tasks:
       - description: '[Phase 1] Create basic CLI structure with command parsing.'
         status: Done
-      - description: "[Phase 1] Implement 'show <id>' command to display decision details."
+      - description: '[Phase 1] Implement ''show <id>'' command to display decision details.'
         status: Done
       - description: >-
           [Phase 2] Implement 'task <decision-id> <task-index> <status>' command
@@ -583,7 +552,7 @@ decisions:
       - 16
       - 19
     tasks:
-      - description: "[Phase 1] Add 'ws' library and set up WebSocket server."
+      - description: '[Phase 1] Add ''ws'' library and set up WebSocket server.'
         status: Done
       - description: '[Phase 1] Create a server endpoint for the CLI to trigger updates.'
         status: Done
@@ -676,7 +645,7 @@ decisions:
     related_to:
       - 5
     tasks:
-      - description: "[Phase 1] Add a new 'Analytics' tab and content panel to the UI."
+      - description: '[Phase 1] Add a new ''Analytics'' tab and content panel to the UI.'
         status: Done
       - description: >-
           [Phase 1] Implement client-side logic to calculate decisions made per
@@ -1153,22 +1122,47 @@ decisions:
     status: Accepted
     project: Decision Tapestry
     rationale:
-      - The frontend architecture has been successfully refactored to use Lit components for all major UI areas, including the decision map, log, analytics, and health metrics.
-      - This migration has resulted in significantly improved performance, maintainability, and user experience.
-      - The new architecture enables robust, granular updates to only the components that have changed, eliminating unnecessary re-renders and UI glitches.
-      - The codebase is now more modular, testable, and easier to extend for future features.
+      - >-
+        The frontend architecture has been successfully refactored to use Lit
+        components for all major UI areas, including the decision map, log,
+        analytics, and health metrics.
+      - >-
+        This migration has resulted in significantly improved performance,
+        maintainability, and user experience.
+      - >-
+        The new architecture enables robust, granular updates to only the
+        components that have changed, eliminating unnecessary re-renders and UI
+        glitches.
+      - >-
+        The codebase is now more modular, testable, and easier to extend for
+        future features.
     tradeoffs:
-      - Minimal DOM Diffing (Vanilla JS): Can be complex to implement correctly. Prone to bugs and difficult to maintain as the UI grows.
-      - Lightweight Frontend Library (e.g., Preact, Lit): Required a one-time effort to refactor the rendering logic into components and integrate the new library, but the benefits have proven substantial.
-      - Full Frontend Framework (e.g., React, Vue): Not pursued, as Lit provided the right balance of power and simplicity for our needs.
+      - Minimal DOM Diffing (Vanilla JS): >-
+          Can be complex to implement correctly. Prone to bugs and difficult to
+          maintain as the UI grows.
+      - Lightweight Frontend Library (e.g., Preact, Lit): >-
+          Required a one-time effort to refactor the rendering logic into
+          components and integrate the new library, but the benefits have proven
+          substantial.
+      - Full Frontend Framework (e.g., React, Vue): >-
+          Not pursued, as Lit provided the right balance of power and simplicity
+          for our needs.
     tasks:
-      - description: '[Phase 1] Spike: Introduce Lit dependency and convert the "Health Metrics" panel to a Lit component to validate the approach.'
+      - description: >-
+          [Phase 1] Spike: Introduce Lit dependency and convert the "Health
+          Metrics" panel to a Lit component to validate the approach.
         status: Done
-      - description: '[Phase 2] Systematically convert all major UI sections (graph, log, search) into Lit components.'
+      - description: >-
+          [Phase 2] Systematically convert all major UI sections (graph, log,
+          search) into Lit components.
         status: Done
-      - description: '[Phase 2] Create a root `<dashboard-app>` component to manage state and orchestrate child components.'
+      - description: >-
+          [Phase 2] Create a root `<dashboard-app>` component to manage state
+          and orchestrate child components.
         status: Done
-      - description: '[Phase 3] Refactor data flow to pass data down via properties, enabling automatic, efficient DOM updates.'
+      - description: >-
+          [Phase 3] Refactor data flow to pass data down via properties,
+          enabling automatic, efficient DOM updates.
         status: Done
     related_to:
       - 5
@@ -1180,3 +1174,54 @@ decisions:
       - package.json
     id: 40
     date: '2025-06-23T07:41:44.867Z'
+  - id: 41
+    title: Integrate VS Code Extension with New Architecture
+    author: Clyde
+    date: '2024-06-26T00:00:00Z'
+    status: Accepted
+    project: Decision Tapestry
+    rationale:
+      - Provides a seamless developer experience directly in the editor.
+      - Ensures the extension stays in sync with the core dashboard and CLI.
+    tradeoffs:
+      - May require refactoring extension code to use new APIs.
+      - Needs robust testing to avoid regressions.
+    tasks:
+      - description: Update extension to consume new npm packages.
+        status: Done
+      - description: Test extension features against the new backend.
+        status: Done
+    affected_components:
+      - vscode-extension/package.json
+      - vscode-extension/src/extension.ts
+      - vscode-extension/src/CodelensProvider.ts
+      - decision-tapestry/shared/yaml-utils.js
+    notes: |
+      The extension now uses the shared YAML utility and is fully integrated with the monorepo and backend. All features have been tested and verified.
+  - id: 42
+    title: Automate Release and Publishing Workflow
+    author: Clyde & AI Assistant
+    date: '2025-06-26T15:00:00Z'
+    status: Accepted
+    project: Decision Tapestry
+    rationale:
+      - Reduces manual errors and accelerates release cycles.
+      - Ensures consistent versioning and changelog generation.
+      - Critical for scaling and open-source collaboration.
+    tradeoffs:
+      - Requires CI/CD setup and maintenance.
+      - Initial configuration may be time-consuming.
+    related_to:
+      - 104
+      - 28  # Tooling & Portability
+    tasks:
+      - description: Set up GitHub Actions (or similar) for build, test, and publish.
+        status: Pending
+      - description: Integrate semantic-release or changesets for versioning.
+        status: Pending
+    affected_components:
+      - .github/workflows/
+      - package.json
+      - vscode-extension/package.json
+      - CHANGELOG.md
+      - README.md
