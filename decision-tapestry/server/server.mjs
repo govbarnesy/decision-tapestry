@@ -149,6 +149,23 @@ app.post('/api/decisions/promote', async (req, res) => {
   }
 });
 
+// --- File Watcher for Real-Time Updates ---
+const decisionsPath = path.join(CWD, 'decisions.yml');
+let debounceTimer = null;
+
+if (fs.existsSync(decisionsPath)) {
+  fs.watch(decisionsPath, (eventType) => {
+    if (debounceTimer) clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      console.log(`[Watcher] Detected change in decisions.yml (${eventType}), broadcasting update.`);
+      broadcast({ type: 'update' });
+    }, 200);
+  });
+  console.log(`[Watcher] Watching for changes in: ${decisionsPath}`);
+} else {
+  console.warn(`[Watcher] decisions.yml not found at: ${decisionsPath}`);
+}
+
 server.listen(port, () => {
   console.log(`Decision Tapestry server listening at http://localhost:${port}`);
   console.log(`Watching for changes in: ${CWD}`);
