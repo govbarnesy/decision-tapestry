@@ -11,6 +11,7 @@
     "eslint": "8"
   },
   "scripts": {
-    "lint": "yarn workspace decision-tapestry-app lint && yarn workspace decision-tapestry-vscode lint"
+    "lint": "yarn workspace decision-tapestry-app lint && yarn workspace decision-tapestry-vscode lint",
+    "test": "yarn workspace decision-tapestry-app test && yarn workspace decision-tapestry-vscode test"
   }
 }

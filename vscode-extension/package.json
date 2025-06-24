@@ -57,16 +57,14 @@
     "compile": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
     "watch": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --sourcemap --watch",
     "package": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --minify",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "test": "echo 'No tests for extension yet'"
   },
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",
     "@types/node": "18.x",
     "@types/vscode": "^1.85.0",
-    "@typescript-eslint/eslint-plugin": "^7.10.0",
-    "@typescript-eslint/parser": "^7.10.0",
     "esbuild": "^0.20.2",
-    "eslint": "^8.57.0",
     "typescript": "^5.4.5"
   },
   "dependencies": {
