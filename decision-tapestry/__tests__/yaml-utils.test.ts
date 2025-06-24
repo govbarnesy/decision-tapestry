@@ -19,7 +19,7 @@ describe('yaml-utils', () => {
 
   afterAll(async () => {
     // Clean up test file
-    try { await fs.unlink(testFile); } catch {}
+    try { await fs.unlink(testFile); } catch { /* intentionally empty: file may not exist */ }
   });
 
   it('writes and reads decisions.yml correctly', async () => {

@@ -1,3 +1,4 @@
+/* global Chart */
 import { LitElement, css, html } from 'https://esm.sh/lit@3';
 
 /**

@@ -10,6 +10,14 @@
     "outDir": "dist",
     "allowJs": true
   },
-  "include": ["**/*.ts", "**/*.mjs"],
+  "include": [
+    "cli/**/*.mjs",
+    "dashboard/**/*.mjs",
+    "server/**/*.mjs",
+    "shared/**/*.js",
+    "__tests__/**/*.ts",
+    "shared/yaml-utils.js",
+    "jest.config.mjs"
+  ],
   "exclude": ["node_modules", "dist"]
 } 
