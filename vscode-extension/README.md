@@ -49,6 +49,30 @@ Added features X, Y, and Z.
 
 ---
 
+## Automated Releases
+
+This extension uses [semantic-release](https://semantic-release.gitbook.io/) for automated versioning, changelog generation, and GitHub releases.
+
+### How to Trigger a Release
+- **Releases are triggered automatically** when commits are pushed to the `main` or `release-automation` branches that follow [Conventional Commits](https://www.conventionalcommits.org/) format.
+- The release process will:
+  - Analyze commit messages to determine the next version.
+  - Update `CHANGELOG.md` with release notes.
+  - Push changelog and version updates to GitHub.
+  - Create a GitHub release with release notes.
+
+### Publishing to the VS Code Marketplace
+- Publishing is handled by [`vsce`](https://code.visualstudio.com/api/working-with-extensions/publishing-extension).
+- To publish manually:
+
+```bash
+yarn workspace decision-tapestry-vscode vsce publish
+```
+
+- To automate publishing, add a CI workflow that runs `vsce publish` with the `VSCE_PAT` secret (see docs).
+
+---
+
 ## Working with Markdown
 
 You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:

@@ -58,16 +58,37 @@
     "watch": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --sourcemap --watch",
     "package": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --minify",
     "lint": "eslint src",
-    "test": "echo 'No tests for extension yet'"
+    "test": "echo 'No tests for extension yet'",
+    "release": "semantic-release"
   },
   "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^11.0.3",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "18.x",
     "@types/vscode": "^1.85.0",
     "esbuild": "^0.20.2",
-    "typescript": "^5.4.5"
+    "semantic-release": "^24.2.5",
+    "typescript": "^5.4.5",
+    "vsce": "^2.15.0"
   },
   "dependencies": {
     "js-yaml": "^4.1.0"
+  },
+  "semanticRelease": {
+    "branches": ["main", "release-automation"],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      ["@semantic-release/changelog", {
+        "changelogFile": "CHANGELOG.md"
+      }],
+      ["@semantic-release/git", {
+        "assets": ["package.json", "CHANGELOG.md"],
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      }],
+      "@semantic-release/github"
+    ]
   }
 }
