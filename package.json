@@ -4,5 +4,13 @@
   "workspaces": [
     "decision-tapestry",
     "vscode-extension"
-  ]
-} 
+  ],
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "5",
+    "@typescript-eslint/parser": "5",
+    "eslint": "8"
+  },
+  "scripts": {
+    "lint": "yarn workspace decision-tapestry lint && yarn workspace vscode-extension lint"
+  }
+}
