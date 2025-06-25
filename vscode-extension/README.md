@@ -1,60 +1,31 @@
-# decision-tapestry README
+# Decision Tapestry VS Code Extension
 
-This is the README for your extension "decision-tapestry". After writing up a brief description, we recommend including the following sections.
+Visualize and manage architectural decisions directly within Visual Studio Code.
 
 ## Features
+- **Dashboard View:** See a visual map of architectural decisions in your project.
+- **CodeLens Integration:** Quickly jump to decisions affecting the current file.
+- **Decision Creation:** Add new decisions from within VS Code.
+- **YAML Validation:** Validate your `decisions.yml` against the project schema.
+- **Real-Time Updates:** Changes to `decisions.yml` are reflected instantly in the dashboard.
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+## Getting Started
+1. Open your project in VS Code.
+2. Make sure your project contains a `decisions.yml` file (see [Decision Tapestry](https://github.com/govbarnesy/decision-tapestry)).
+3. Open the Command Palette (`Cmd+Shift+P` / `Ctrl+Shift+P`) and run `Decision Tapestry: Show Dashboard`.
+4. Use CodeLens links at the top of files to see related decisions.
 
-For example if there is an image subfolder under your extension project workspace:
+## Creating a New Decision
+- Use the `Decision Tapestry: Create New Decision` command to add a new entry to your `decisions.yml`.
 
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
-
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
+## YAML Schema Validation
+- The extension validates your `decisions.yml` against the built-in schema for correctness and completeness.
 
 ## Automated Releases
-
 This extension uses [semantic-release](https://semantic-release.gitbook.io/) for automated versioning, changelog generation, and GitHub releases.
 
 ### How to Trigger a Release
-- **Releases are triggered automatically** when commits are pushed to the `main` or `release-automation` branches that follow [Conventional Commits](https://www.conventionalcommits.org/) format.
+- Push commits to `main` or `release-automation` using [Conventional Commits](https://www.conventionalcommits.org/).
 - The release process will:
   - Analyze commit messages to determine the next version.
   - Update `CHANGELOG.md` with release notes.
@@ -64,26 +35,13 @@ This extension uses [semantic-release](https://semantic-release.gitbook.io/) for
 ### Publishing to the VS Code Marketplace
 - Publishing is handled by [`vsce`](https://code.visualstudio.com/api/working-with-extensions/publishing-extension).
 - To publish manually:
+  ```bash
+  yarn workspace decision-tapestry-vscode vsce publish
+  ```
+- To automate publishing, a CI workflow runs `vsce publish` with the `VSCE_PAT` secret.
 
-```bash
-yarn workspace decision-tapestry-vscode vsce publish
-```
+## Contributing
+See the main [Decision Tapestry](https://github.com/govbarnesy/decision-tapestry) repository for contribution guidelines.
 
-- To automate publishing, add a CI workflow that runs `vsce publish` with the `VSCE_PAT` secret (see docs).
-
----
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+## License
+[MIT](../LICENSE)
