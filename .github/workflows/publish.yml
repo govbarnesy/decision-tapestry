@@ -40,6 +40,6 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
       - name: Publish VS Code Extension
-        run: yarn vsce publish --no-verify
+        run: yarn vsce publish
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
