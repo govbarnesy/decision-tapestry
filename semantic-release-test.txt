@@ -1,2 +1,3 @@
 test: trigger semantic-release pipeline
 chore(release): force release for documentation update
+chore(release): test Docker automation
