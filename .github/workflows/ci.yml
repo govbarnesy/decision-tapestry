@@ -62,9 +62,11 @@ jobs:
           echo "NPM_TOKEN is set: ${NODE_AUTH_TOKEN:0:4}****"
 
       - name: Configure npm for publishing
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
-          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > .npmrc
+          echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" > ~/.npmrc
+          echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" > .npmrc
 
       - name: Publish to npm
         env:
@@ -78,6 +80,8 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Print .npmrc for debug
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           echo '--- ~/.npmrc ---'
           cat ~/.npmrc
