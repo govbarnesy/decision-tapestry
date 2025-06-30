@@ -6,7 +6,7 @@ import path from 'path';
 
 const commands = {
     init: {
-        description: "Initialize a new project with a decisions.yml and PRODUCT-BACKLOG.md file.",
+        description: "Initialize a new project with a decisions.yml file.",
         action: initializeProject
     },
     start: {
@@ -52,21 +52,10 @@ async function initializeProject() {
   superseded_by: null
 `;
 
-    const backlogBoilerplate = `# Product Backlog
-
-This file contains ideas, tasks, and potential features that are not yet formal decisions.
-Promote items from this backlog into the decision log when you are ready to formally consider them.
-
-### Feature: Add Search Functionality
-
-- It should be possible to search decisions by title, author, or content.
-`;
-
     try {
         await fs.writeFile('decisions.yml', decisionBoilerplate);
-        await fs.writeFile('PRODUCT-BACKLOG.md', backlogBoilerplate);
         console.log("Project initialized successfully.");
-        console.log("Created 'decisions.yml' and 'PRODUCT-BACKLOG.md'.");
+        console.log("Created 'decisions.yml'.");
         console.log("Run 'decision-tapestry start' to see your dashboard.");
     } catch (error) {
         console.error("Error initializing project:", error);

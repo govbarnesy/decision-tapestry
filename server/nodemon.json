@@ -2,7 +2,6 @@
   "watch": [
     "server.mjs",
     "decisions.yml",
-    "PRODUCT-BACKLOG.md",
     "dist/health-metrics.mjs",
     "dist/decision-log.mjs",
     "dist/product-backlog.mjs",
