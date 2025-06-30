@@ -28,26 +28,14 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Lint (root)
-        run: yarn lint || echo "No root lint script"
+      - name: Lint
+        run: yarn lint || echo "No lint script"
 
-      - name: Lint (decision-tapestry)
-        run: cd decision-tapestry && yarn lint || echo "No lint script"
+      - name: Test
+        run: yarn test
 
-      - name: Lint (vscode-extension)
-        run: cd vscode-extension && yarn lint || echo "No lint script"
-
-      - name: Test (decision-tapestry)
-        run: cd decision-tapestry && yarn test
-
-      - name: Test (vscode-extension)
-        run: cd vscode-extension && yarn test || echo "No test script"
-
-      - name: Build (decision-tapestry)
-        run: cd decision-tapestry && yarn build
-
-      - name: Build (vscode-extension)
-        run: cd vscode-extension && yarn build
+      - name: Build
+        run: yarn build
 
   publish:
     needs: build
@@ -66,25 +54,13 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Build (decision-tapestry)
-        run: cd decision-tapestry && yarn build
+      - name: Build
+        run: yarn build
 
-      - name: Build (vscode-extension)
-        run: cd vscode-extension && yarn build
-
-      - name: Publish decision-tapestry/shared to npm
+      - name: Publish to npm
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          cd decision-tapestry/shared
-          npm publish --access public
-
-      - name: Publish decision-tapestry to npm
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          cd decision-tapestry
-          npm publish --access public
+        run: npm publish --access public
 
   docker-publish:
     needs: build
@@ -110,8 +86,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./decision-tapestry
-          file: ./decision-tapestry/Dockerfile
+          context: .
+          file: ./Dockerfile
           push: true
           tags: |
             govbarnesy/decision-tapestry-server:latest
