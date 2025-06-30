@@ -4,13 +4,11 @@ on:
   push:
     branches:
       - main
-      - 'release-*'
     tags:
       - 'v*.*.*'
   pull_request:
     branches:
       - main
-      - 'release-*'
 
 jobs:
   build:
@@ -61,6 +59,12 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm publish --access public
+
+      - name: Run semantic-release
+        run: yarn release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   docker-publish:
     needs: build
