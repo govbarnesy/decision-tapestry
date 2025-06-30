@@ -3,3 +3,4 @@ chore(release): force release for documentation update
 chore(release): test Docker automation
 chore(release): test new workflow only
 chore(release): test permissions for semantic-release
+chore(release): ensure up-to-date for semantic-release
