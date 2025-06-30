@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-    tags:
-      - 'v*.*.*'
   pull_request:
     branches:
       - main
@@ -35,86 +33,10 @@ jobs:
       - name: Build
         run: yarn build
 
-  publish:
-    needs: build
-    runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/v')
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Use Node.js 20.x
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20.x
-          cache: 'yarn'
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
-      - name: Build
-        run: yarn build
-
-      - name: Debug NPM_TOKEN
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          echo "NPM_TOKEN is set: ${NODE_AUTH_TOKEN:0:4}****"
-
-      - name: Configure npm for publishing
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" > ~/.npmrc
-          echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" > .npmrc
-
-      - name: Publish to npm
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --access public
-
-      - name: Run semantic-release
-        run: yarn release
+      - name: Release (semantic-release handles npm & Docker publishing)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Print .npmrc for debug
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          echo '--- ~/.npmrc ---'
-          cat ~/.npmrc
-          echo '--- .npmrc ---'
-          cat .npmrc
-
-  docker-publish:
-    needs: build
-    runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/v')
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKER }}
-
-      - name: Extract version from tag
-        id: get_version
-        run: echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: |
-            govbarnesy/decision-tapestry-server:latest
-            govbarnesy/decision-tapestry-server:${{ steps.get_version.outputs.version }}
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKER: ${{ secrets.DOCKER }}
+        run: npx semantic-release

@@ -1,39 +1,4 @@
 backlog:
-  - id: 104
-    title: Automate Release and Publishing Workflow
-    author: Clyde
-    created: '2025-06-26T13:15:00Z'
-    status: Open
-    rationale:
-      - Reduces manual errors and accelerates release cycles.
-      - Ensures consistent versioning and changelog generation.
-    tradeoffs:
-      - Requires CI/CD setup and maintenance.
-      - Initial configuration may be time-consuming.
-    tasks:
-      - description: Set up GitHub Actions (or similar) for build, test, and publish.
-        status: Pending
-      - description: Integrate semantic-release or changesets for versioning.
-        status: Pending
-    notes: |
-      This is critical for scaling and open-source collaboration.
-  - id: 106
-    title: Document Migration and Usage for New Monorepo
-    author: Clyde
-    created: '2025-06-26T13:25:00Z'
-    status: Open
-    rationale:
-      - Ensures all contributors can understand and use the new system.
-      - Reduces onboarding time and support requests.
-    tradeoffs:
-      - Documentation must be kept up to date as the system evolves.
-    tasks:
-      - description: Write migration guide for existing users.
-        status: Pending
-      - description: Update README and API docs for all packages.
-        status: Pending
-    notes: |
-      Good documentation is essential for a healthy open-source project.
   - id: 107
     title: Utilize Background Agents for Automation and Quality
     author: Clyde & AI Assistant
@@ -1276,3 +1241,68 @@ decisions:
       - README.md
     notes: |
       This decision will enable automated, reliable, and scalable release workflows for both the main app and the VS Code extension, using semantic-release for versioning, changelog, and publishing to npm and the VS Code Marketplace.
+  - id: 45
+    title: Refactor to Flat Repo Structure and Remove VS Code Extension
+    author: Clyde & AI Assistant
+    date: '2025-06-30T00:00:00Z'
+    status: Accepted
+    project: Decision Tapestry
+    rationale:
+      - Simplifies the codebase by removing unnecessary monorepo complexity.
+      - Reduces maintenance overhead and onboarding friction for new contributors.
+      - Focuses development on the core Decision Tapestry app, improving velocity and clarity.
+      - Removes the VS Code extension to streamline the project and avoid confusion until it is ready for dedicated support.
+    tradeoffs:
+      - Loses the ability to develop and release the VS Code extension in parallel for now.
+      - Requires migration of all app code and configuration to the root directory.
+      - Some documentation and workflow updates required to match the new structure.
+    tasks:
+      - description: Remove the vscode-extension directory and all related files.
+        status: Done
+      - description: Move all app code and config from decision-tapestry/ to the root.
+        status: Done
+      - description: Update all scripts, workflows, and documentation to match the new structure.
+        status: Done
+      - description: Test and verify CI/CD, Docker, and npm publishing in the new structure.
+        status: Done
+    affected_components:
+      - vscode-extension/
+      - decision-tapestry/
+      - .github/workflows/
+      - package.json
+      - README.md
+      - Dockerfile
+      - decisions.yml
+    related_to:
+      - 28  # Tooling & Portability
+      - 38  # Dockerization
+      - 42  # Automate Release and Publishing Workflow
+      - 43  # Migrate Legacy Data and Features to New Architecture
+      - 44  # Automate Release and Publishing Workflow (semantic-release)
+      - 41  # Integrate VS Code Extension with New Architecture
+      - 29  # Create VS Code Extension for Enhanced DX
+    notes: |
+      This decision marks a major simplification and modernization of the Decision Tapestry project, making it easier to maintain, contribute to, and automate. The VS Code extension may be reintroduced as a separate project in the future when ready for dedicated support.
+  - id: 46
+    title: Automate Release and Publishing Workflow
+    author: Clyde
+    date: '2025-06-30T00:00:00Z'
+    status: Accepted
+    project: Decision Tapestry
+    rationale:
+      - Reduces manual errors and accelerates release cycles.
+      - Ensures consistent versioning and changelog generation.
+    tradeoffs:
+      - Requires CI/CD setup and maintenance.
+      - Initial configuration may be time-consuming.
+    tasks:
+      - description: Set up GitHub Actions (or similar) for build, test, and publish.
+        status: Done
+      - description: Integrate semantic-release or changesets for versioning.
+        status: Done
+    related_to:
+      - 42  # Automate Release and Publishing Workflow (previous)
+      - 44  # Automate Release and Publishing Workflow (semantic-release)
+      - 45  # Refactor to Flat Repo Structure and Remove VS Code Extension
+    notes: |
+      This decision marks the completion of the automation of release and publishing workflows, including CI/CD, semantic-release, and npm/Docker publishing. The system now supports fully automated, reliable, and scalable releases for the main app.
