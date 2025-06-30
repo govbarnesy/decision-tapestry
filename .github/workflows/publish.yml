@@ -24,22 +24,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-  vscode-publish:
-    runs-on: ubuntu-latest
-    needs: release
-    defaults:
-      run:
-        working-directory: ./vscode-extension
-    steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js 20.x
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-      - name: Publish VS Code Extension
-        run: yarn vsce publish
-        env:
-          VSCE_PAT: ${{ secrets.VSCE_PAT }}
