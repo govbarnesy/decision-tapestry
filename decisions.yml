@@ -1383,13 +1383,19 @@ decisions:
       - description: >-
           Add the template to the package (e.g., as decisions.template.yml or in
           docs/).
-        status: Completed
+        status: Done
       - description: Reference the template in the README and CLI help output.
-        status: Completed
+        status: Done
       - description: >-
           Ensure the template is updated whenever the schema or conventions
           change.
         status: Pending
+      - description: >-
+          Add allowed status values as comments in the template for tasks, backlog items, and decisions.
+        status: Done
+      - description: >-
+          Create a machine-readable JSON schema for decisions.yml (decisions.schema.json).
+        status: Done
     notes: >
       The template is now available as decisions.template.yml and referenced in
       onboarding prompts and documentation. All new projects can start from this
@@ -1411,11 +1417,17 @@ decisions:
       - Less "hands-on" than a fully interactive CLI wizard.
     tasks:
       - description: Implement CLI command to inspect project and generate onboarding prompt.
-        status: Completed
+        status: Done
       - description: Output prompt to console and (optionally) to a file.
-        status: Completed
+        status: Done
       - description: Update documentation to reflect new onboarding flow.
-        status: Completed
+        status: Done
+      - description: >-
+          Reference the canonical schema and allowed status values in the onboarding prompt.
+        status: Done
+      - description: >-
+          Add schema validation to the CLI (validate command).
+        status: Done
     related_to:
       - 47
       - 18
@@ -1423,8 +1435,10 @@ decisions:
       - cli/cli.mjs
       - README.md
       - decisions.yml
+      - decisions.schema.json
+      - decisions.template.yml
     notes: >
-      The CLI 'plan' command now generates a context-aware onboarding prompt for Cursor chat, including a live schema example from @decisions.template.yml. The onboarding experience also features a modern ASCII art banner in the 'init' command.
+      The CLI 'plan' command now generates a context-aware onboarding prompt for Cursor chat, including a live schema example from @decisions.template.yml. The onboarding experience also features a modern ASCII art banner in the 'init' command, and schema validation is available via the CLI.
   - id: 49
     title: Restore Map-to-Log Scroll Synchronization in UI
     author: Clyde & AI Assistant
