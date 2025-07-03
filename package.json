@@ -1,5 +1,5 @@
 {
-    "name": "decision-tapestry-app",
+    "name": "decision-tapestry",
     "version": "1.1.0",
     "description": "A tool for visualizing and managing architectural decisions.",
     "type": "module",
