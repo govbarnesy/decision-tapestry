@@ -138,4 +138,7 @@ All backlog items and decisions are now managed in a single file: `decisions.yml
 - The `backlog:` section contains open tasks, ideas, and features.
 - The `decisions:` section contains completed, promoted, or superseded decisions.
 
+> **New!** For new projects, start from the provided template: `decisions.template.yml`.
+> This file contains example entries and comments to help you structure your backlog and decisions.
+
 Update your backlog and promote items to decisions as you work. No separate PRODUCT_BACKLOG.md is needed. 

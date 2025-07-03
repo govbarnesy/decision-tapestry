@@ -5,8 +5,12 @@ backlog:
     created: '2025-06-26T14:00:00Z'
     status: Open
     rationale:
-      - Automate repetitive and continuous tasks to improve developer productivity and code quality.
-      - Ensure tests, linting, and backlog/decision sync are always up-to-date without manual intervention.
+      - >-
+        Automate repetitive and continuous tasks to improve developer
+        productivity and code quality.
+      - >-
+        Ensure tests, linting, and backlog/decision sync are always up-to-date
+        without manual intervention.
       - Reduce human error and accelerate feedback cycles.
     tradeoffs:
       - Requires initial setup and monitoring of background agents.
@@ -14,14 +18,20 @@ backlog:
     tasks:
       - description: Set up background agents to run tests automatically on file changes.
         status: Pending
-      - description: Set up agents to monitor and enforce code quality (lint, format) in the background.
+      - description: >-
+          Set up agents to monitor and enforce code quality (lint, format) in
+          the background.
         status: Pending
-      - description: Implement agents to watch decisions.yml and PRODUCT-BACKLOG.md for changes and trigger dashboard/UI updates or notifications.
+      - description: >-
+          Implement agents to watch decisions.yml and PRODUCT-BACKLOG.md for
+          changes and trigger dashboard/UI updates or notifications.
         status: Pending
       - description: Document the background agent setup and usage for contributors.
         status: Pending
-    notes: |
-      Background agents can be used for continuous testing, CI/CD automation, code quality checks, and backlog/decision sync. This will help maintain a high-quality, responsive development workflow as the project scales.
+    notes: >
+      Background agents can be used for continuous testing, CI/CD automation,
+      code quality checks, and backlog/decision sync. This will help maintain a
+      high-quality, responsive development workflow as the project scales.
 decisions:
   - id: 1
     title: Establish a System for a Durable, Shared Memory
@@ -1145,8 +1155,9 @@ decisions:
       - vscode-extension/src/extension.ts
       - vscode-extension/src/CodelensProvider.ts
       - decision-tapestry/shared/yaml-utils.js
-    notes: |
-      The extension now uses the shared YAML utility and is fully integrated with the monorepo and backend. All features have been tested and verified.
+    notes: >
+      The extension now uses the shared YAML utility and is fully integrated
+      with the monorepo and backend. All features have been tested and verified.
   - id: 42
     title: Automate Release and Publishing Workflow
     author: Clyde & AI Assistant
@@ -1161,7 +1172,7 @@ decisions:
       - Requires CI/CD setup and maintenance.
       - Initial configuration may be time-consuming.
     related_to:
-      - 28  # Tooling & Portability
+      - 28
     tasks:
       - description: Set up GitHub Actions (or similar) for build, test, and publish.
         status: Pending
@@ -1173,8 +1184,9 @@ decisions:
       - vscode-extension/package.json
       - CHANGELOG.md
       - README.md
-    notes: |
-      This decision will enable automated, reliable, and scalable release workflows for both the main app and the VS Code extension.
+    notes: >
+      This decision will enable automated, reliable, and scalable release
+      workflows for both the main app and the VS Code extension.
   - id: 43
     title: Migrate Legacy Data and Features to New Architecture
     author: Clyde & AI Assistant
@@ -1184,7 +1196,9 @@ decisions:
     rationale:
       - Preserve historical decisions and backlog items for continuity.
       - Ensure no loss of critical features or data during migration.
-      - Confirmed that all legacy data and features are now migrated and in use in the new architecture.
+      - >-
+        Confirmed that all legacy data and features are now migrated and in use
+        in the new architecture.
     tradeoffs:
       - Required data transformation scripts and manual QA.
       - Some legacy features were reimagined for the new system.
@@ -1201,8 +1215,9 @@ decisions:
       - server/
       - cli/
       - shared/
-    notes: |
-      All legacy data and features have been migrated. The new monorepo is now the single source of truth for Decision Tapestry.
+    notes: >
+      All legacy data and features have been migrated. The new monorepo is now
+      the single source of truth for Decision Tapestry.
   - id: 44
     title: Automate Release and Publishing Workflow
     author: Clyde & AI Assistant
@@ -1213,25 +1228,35 @@ decisions:
       - Reduces manual errors and accelerates release cycles.
       - Ensures consistent versioning and changelog generation.
       - Critical for scaling and open-source collaboration.
-      - Will use semantic-release for fully automated versioning, changelog, and publishing.
+      - >-
+        Will use semantic-release for fully automated versioning, changelog, and
+        publishing.
     tradeoffs:
       - Requires CI/CD setup and maintenance.
       - Initial configuration may be time-consuming.
       - Requires adherence to conventional commits for full automation.
     related_to:
       - 104
-      - 28  # Tooling & Portability
-      - 42  # Previous automation decision
+      - 28
+      - 42
     tasks:
-      - description: Set up semantic-release for the main app (npm publishing, changelog, versioning).
+      - description: >-
+          Set up semantic-release for the main app (npm publishing, changelog,
+          versioning).
         status: Pending
-      - description: Set up semantic-release for the VS Code extension (npm and VS Code Marketplace publishing).
+      - description: >-
+          Set up semantic-release for the VS Code extension (npm and VS Code
+          Marketplace publishing).
         status: Pending
-      - description: Update GitHub Actions workflow to run semantic-release on main branch merges.
+      - description: >-
+          Update GitHub Actions workflow to run semantic-release on main branch
+          merges.
         status: Pending
       - description: Configure changelog generation and version bumps for all packages.
         status: Pending
-      - description: Document the release process and conventional commit requirements for contributors.
+      - description: >-
+          Document the release process and conventional commit requirements for
+          contributors.
         status: Pending
     affected_components:
       - .github/workflows/
@@ -1239,8 +1264,11 @@ decisions:
       - vscode-extension/package.json
       - CHANGELOG.md
       - README.md
-    notes: |
-      This decision will enable automated, reliable, and scalable release workflows for both the main app and the VS Code extension, using semantic-release for versioning, changelog, and publishing to npm and the VS Code Marketplace.
+    notes: >
+      This decision will enable automated, reliable, and scalable release
+      workflows for both the main app and the VS Code extension, using
+      semantic-release for versioning, changelog, and publishing to npm and the
+      VS Code Marketplace.
   - id: 45
     title: Refactor to Flat Repo Structure and Remove VS Code Extension
     author: Clyde & AI Assistant
@@ -1249,21 +1277,37 @@ decisions:
     project: Decision Tapestry
     rationale:
       - Simplifies the codebase by removing unnecessary monorepo complexity.
-      - Reduces maintenance overhead and onboarding friction for new contributors.
-      - Focuses development on the core Decision Tapestry app, improving velocity and clarity.
-      - Removes the VS Code extension to streamline the project and avoid confusion until it is ready for dedicated support.
+      - >-
+        Reduces maintenance overhead and onboarding friction for new
+        contributors.
+      - >-
+        Focuses development on the core Decision Tapestry app, improving
+        velocity and clarity.
+      - >-
+        Removes the VS Code extension to streamline the project and avoid
+        confusion until it is ready for dedicated support.
     tradeoffs:
-      - Loses the ability to develop and release the VS Code extension in parallel for now.
-      - Requires migration of all app code and configuration to the root directory.
-      - Some documentation and workflow updates required to match the new structure.
+      - >-
+        Loses the ability to develop and release the VS Code extension in
+        parallel for now.
+      - >-
+        Requires migration of all app code and configuration to the root
+        directory.
+      - >-
+        Some documentation and workflow updates required to match the new
+        structure.
     tasks:
       - description: Remove the vscode-extension directory and all related files.
         status: Done
       - description: Move all app code and config from decision-tapestry/ to the root.
         status: Done
-      - description: Update all scripts, workflows, and documentation to match the new structure.
+      - description: >-
+          Update all scripts, workflows, and documentation to match the new
+          structure.
         status: Done
-      - description: Test and verify CI/CD, Docker, and npm publishing in the new structure.
+      - description: >-
+          Test and verify CI/CD, Docker, and npm publishing in the new
+          structure.
         status: Done
     affected_components:
       - vscode-extension/
@@ -1274,15 +1318,18 @@ decisions:
       - Dockerfile
       - decisions.yml
     related_to:
-      - 28  # Tooling & Portability
-      - 38  # Dockerization
-      - 42  # Automate Release and Publishing Workflow
-      - 43  # Migrate Legacy Data and Features to New Architecture
-      - 44  # Automate Release and Publishing Workflow (semantic-release)
-      - 41  # Integrate VS Code Extension with New Architecture
-      - 29  # Create VS Code Extension for Enhanced DX
-    notes: |
-      This decision marks a major simplification and modernization of the Decision Tapestry project, making it easier to maintain, contribute to, and automate. The VS Code extension may be reintroduced as a separate project in the future when ready for dedicated support.
+      - 28
+      - 38
+      - 42
+      - 43
+      - 44
+      - 41
+      - 29
+    notes: >
+      This decision marks a major simplification and modernization of the
+      Decision Tapestry project, making it easier to maintain, contribute to,
+      and automate. The VS Code extension may be reintroduced as a separate
+      project in the future when ready for dedicated support.
   - id: 46
     title: Automate Release and Publishing Workflow
     author: Clyde
@@ -1301,8 +1348,80 @@ decisions:
       - description: Integrate semantic-release or changesets for versioning.
         status: Done
     related_to:
-      - 42  # Automate Release and Publishing Workflow (previous)
-      - 44  # Automate Release and Publishing Workflow (semantic-release)
-      - 45  # Refactor to Flat Repo Structure and Remove VS Code Extension
-    notes: |
-      This decision marks the completion of the automation of release and publishing workflows, including CI/CD, semantic-release, and npm/Docker publishing. The system now supports fully automated, reliable, and scalable releases for the main app.
+      - 42
+      - 44
+      - 45
+    notes: >
+      This decision marks the completion of the automation of release and
+      publishing workflows, including CI/CD, semantic-release, and npm/Docker
+      publishing. The system now supports fully automated, reliable, and
+      scalable releases for the main app.
+  - id: 47
+    title: Provide a Template decisions.yml for New Projects
+    author: Clyde & AI Assistant
+    created: '2025-07-01T00:00:00Z'
+    status: Accepted
+    rationale:
+      - >-
+        Ensure that new users and AI agents have a clear, canonical starting
+        point for structuring decision logs and backlogs.
+      - >-
+        Promote consistency and best practices across all projects using
+        Decision Tapestry.
+      - >-
+        Make onboarding and automation easier by providing a ready-to-use
+        template.
+    tradeoffs:
+      - >-
+        Adds a small maintenance burden to keep the template up to date with
+        evolving schema and best practices.
+    tasks:
+      - description: >-
+          Draft a template decisions.yml file that matches the current best
+          practices and schema.
+        status: Done
+      - description: >-
+          Add the template to the package (e.g., as decisions.template.yml or in
+          docs/).
+        status: Completed
+      - description: Reference the template in the README and CLI help output.
+        status: Completed
+      - description: >-
+          Ensure the template is updated whenever the schema or conventions
+          change.
+        status: Pending
+    notes: >
+      The template is now available as decisions.template.yml and referenced in
+      onboarding prompts and documentation. All new projects can start from this
+      canonical schema example.
+    date: '2025-07-03T20:21:46.410Z'
+  - id: 48
+    title: Use Contextual Onboarding CLI to Generate Cursor Planning Prompt
+    author: Clyde & AI Assistant
+    date: '2024-07-03T00:00:00Z'
+    status: Accepted
+    project: Decision Tapestry
+    rationale:
+      - Ensures onboarding is tailored to the user's actual project context.
+      - Leverages the power of AI chat (Cursor) for flexible, collaborative planning.
+      - Reduces friction and cognitive load for new users.
+      - Makes Decision Tapestry more adaptable across diverse project types.
+    tradeoffs:
+      - Relies on users being comfortable with copy-pasting prompts into Cursor or another AI chat.
+      - Less "hands-on" than a fully interactive CLI wizard.
+    tasks:
+      - description: Implement CLI command to inspect project and generate onboarding prompt.
+        status: Completed
+      - description: Output prompt to console and (optionally) to a file.
+        status: Completed
+      - description: Update documentation to reflect new onboarding flow.
+        status: Completed
+    related_to:
+      - 47
+      - 18
+    affected_components:
+      - cli/cli.mjs
+      - README.md
+      - decisions.yml
+    notes: >
+      The CLI 'plan' command now generates a context-aware onboarding prompt for Cursor chat, including a live schema example from @decisions.template.yml. The onboarding experience also features a modern ASCII art banner in the 'init' command.

@@ -1,0 +1,45 @@
+# decisions.template.yml
+# Template for Decision Tapestry decision log and backlog
+#
+# Allowed status values:
+#   - For tasks: Pending, Done
+#   - For backlog items: Open, (add others as needed)
+#   - For decisions: Accepted, Superseded, (add others as needed)
+
+backlog:
+  - id: 1
+    title: Example Backlog Item
+    author: Your Name
+    created: '2024-07-03T00:00:00Z'
+    status: Open  # Allowed: Open
+    rationale:
+      - Briefly explain why this item is in the backlog.
+    tradeoffs:
+      - List any tradeoffs or considerations.
+    tasks:
+      - description: Example task for this backlog item.
+        status: Pending  # Allowed: Pending, Done
+    notes: >
+      Additional notes or context.
+
+decisions:
+  - id: 1
+    title: Example Decision
+    author: Your Name
+    date: '2024-07-03T00:00:00Z'
+    status: Accepted  # Allowed: Accepted, Superseded
+    project: Example Project
+    rationale:
+      - Why was this decision made?
+    tradeoffs:
+      - What were the tradeoffs?
+    related_to: []
+    supersedes: null
+    superseded_by: null
+    affected_components:
+      - List of files or components affected
+    tasks:
+      - description: Example implementation task.
+        status: Done  # Allowed: Pending, Done
+    notes: >
+      Any additional notes about this decision. 
