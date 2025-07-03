@@ -1425,3 +1425,22 @@ decisions:
       - decisions.yml
     notes: >
       The CLI 'plan' command now generates a context-aware onboarding prompt for Cursor chat, including a live schema example from @decisions.template.yml. The onboarding experience also features a modern ASCII art banner in the 'init' command.
+  - id: 49
+    title: Restore Map-to-Log Scroll Synchronization in UI
+    author: Clyde & AI Assistant
+    date: '2024-07-03T00:00:00Z'
+    status: Accepted
+    project: Decision Tapestry
+    rationale:
+      - Restore the intuitive UX where clicking a decision on the map scrolls the log to the corresponding item.
+      - This feature was present before the migration and is important for usability and navigation.
+    tradeoffs:
+      - Adds a small amount of code to the decision-log-panel component.
+    tasks:
+      - description: Implement scroll-into-view for selected decision in the log when selectedId changes.
+        status: Done
+    affected_components:
+      - dashboard/decision-log.mjs
+      - dashboard/app.mjs
+    notes: >
+      The log now smoothly scrolls to the selected decision when a node is clicked on the map, restoring pre-migration behavior and improving user experience.

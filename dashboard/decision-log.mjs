@@ -58,6 +58,19 @@ class DecisionLogPanel extends LitElement {
         }));
     }
 
+    updated(changedProps) {
+        super.updated && super.updated(changedProps);
+        if (changedProps.has('selectedId')) {
+            // Wait for render, then scroll selected item into view
+            this.updateComplete.then(() => {
+                const selected = this.renderRoot.querySelector('.selected-log-item');
+                if (selected) {
+                    selected.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            });
+        }
+    }
+
     render() {
         const sortedDecisions = [...this.decisions].sort((a, b) => new Date(b.date) - new Date(a.date));
 
