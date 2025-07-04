@@ -78,13 +78,13 @@ body.dark-theme {
 #controls-panel {
     grid-column: 3 / 4;
     grid-row: 1 / 2;
-    height: 50%;
+    height: auto;
 }
 
 #decision-log {
     grid-column: 3 / 4;
     grid-row: 2 / 4;
-    height: 50%;
+    height: auto;
     background: var(--panel-bg);
     border-radius: var(--panel-radius);
     box-shadow: var(--panel-shadow);
