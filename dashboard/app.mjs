@@ -30,19 +30,20 @@ async function initializeDashboard(focusNodeId = null) {
             const statusColorMapping = { Accepted: '#28a745', Superseded: '#6c757d' };
             const isDark = document.body.classList.contains('dark-theme');
             const fontColor = isDark ? '#fff' : '#000';
+            const nodeBg = isDark ? '#000' : '#fff';
             const nodes = decisions.map(d => ({
                 id: d.id,
                 label: `#${d.id}: ${d.title}`,
                 color: {
                     border: statusColorMapping[d.status] || '#007bff',
-                    background: 'rgba(0,0,0,0)',
+                    background: nodeBg,
                     highlight: {
                         border: statusColorMapping[d.status] || '#007bff',
-                        background: 'rgba(0,0,0,0)'
+                        background: nodeBg
                     },
                     hover: {
                         border: statusColorMapping[d.status] || '#007bff',
-                        background: 'rgba(0,0,0,0)'
+                        background: nodeBg
                     }
                 },
                 font: { color: fontColor }
