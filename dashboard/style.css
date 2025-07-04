@@ -29,21 +29,21 @@ html {
 
 body.dark-theme {
     --background: #181a1b;
-    --panel-bg: #23272a;
+    --panel-bg: #000;
     --panel-shadow: 0 2px 8px rgba(0,0,0,0.4);
-    --text-main: #f4f7f6;
-    --text-secondary: #b0b3b8;
-    --border: #333;
+    --text-main: #fff;
+    --text-secondary: #fff;
+    --border: #222;
     --accent: #3399ff;
     --status-accepted: #6be675;
     --status-superseded: #b0b3b8;
     --status-deprecated: #ff6b6b;
-    --tab-bg: #23272a;
-    --tab-active-bg: #181a1b;
+    --tab-bg: #000;
+    --tab-active-bg: #000;
     --tab-active-border: #3399ff;
     --tab-active-color: #3399ff;
-    --log-selected-bg: #23272a;
-    --log-hover-bg: #23272a;
+    --log-selected-bg: #000;
+    --log-hover-bg: #111;
 }
 
 .dashboard {
@@ -118,6 +118,7 @@ p {
 .tabs {
     display: flex;
     border-bottom: 1px solid var(--border);
+    background: var(--tab-bg);
 }
 
 .tab-button {
@@ -126,6 +127,7 @@ p {
     background: var(--tab-bg);
     border: none;
     border-right: 1px solid var(--border);
+    color: var(--text-main);
 }
 
 .tab-button.active {
@@ -188,8 +190,23 @@ p {
 .log-item.selected-log-item {
     background-color: var(--log-selected-bg) !important;
     border-left: 3px solid var(--accent);
+    color: var(--text-main);
 }
 
-.log-item:hover {
-    background-color: var(--log-hover-bg);
+.log-item {
+    color: var(--text-main);
+}
+
+input, textarea, select {
+    background: var(--panel-bg);
+    color: var(--text-main);
+    border: 1px solid var(--border);
+}
+
+body.dark-theme input,
+body.dark-theme textarea,
+body.dark-theme select {
+    background: #000;
+    color: #fff;
+    border: 1px solid #333;
 }
