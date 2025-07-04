@@ -3,8 +3,8 @@ html {
     --panel-bg: #fff;
     --panel-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     --panel-radius: 8px;
-    --text-main: #333;
-    --text-secondary: #666;
+    --text-main: #000;
+    --text-secondary: #000;
     --border: #eee;
     --accent: #0052cc;
     --status-accepted: #28a745;
@@ -100,7 +100,7 @@ body.dark-theme {
     padding: 1rem;
     overflow-y: auto;
     flex-grow: 1;
-    color: #fff;
+    color: var(--text-main) !important;
 }
 
 h2,
@@ -215,32 +215,32 @@ body.dark-theme select {
 .tab-button,
 body.dark-theme .tab-button {
     background: #000 !important;
-    color: #fff !important;
+    color: var(--text-main) !important;
 }
 
 .tab-button.active,
 body.dark-theme .tab-button.active {
     background: #000 !important;
-    color: #fff !important;
+    color: var(--text-main) !important;
     border-bottom: 3px solid var(--tab-active-border);
 }
 
 .log-item,
 body.dark-theme .log-item {
     background: #000 !important;
-    color: #fff !important;
+    color: var(--text-main) !important;
 }
 
 .log-item.selected-log-item {
     background-color: #000 !important;
     border-left: 3px solid var(--accent);
-    color: #fff !important;
+    color: var(--text-main) !important;
 }
 
 .log-item:hover,
 body.dark-theme .log-item:hover {
     background: #000 !important;
-    color: #fff !important;
+    color: var(--text-main) !important;
 }
 
 input[type="text"],
@@ -250,10 +250,10 @@ body.dark-theme input[type="text"],
 body.dark-theme input[type="search"],
 body.dark-theme .search-input {
     background: #000 !important;
-    color: #fff !important;
+    color: var(--text-main) !important;
     border: 1px solid #333;
 }
 
 h2, h3, h4, p, .panel-content, .log-item, .tab-button {
-    color: #fff !important;
+    color: var(--text-main) !important;
 }
