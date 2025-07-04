@@ -29,7 +29,7 @@ html {
 
 body.dark-theme {
     --background: #181a1b;
-    --panel-bg: #333;
+    --panel-bg: #222222;
     --panel-shadow: 0 2px 8px rgba(0,0,0,0.4);
     --text-main: #fff;
     --text-secondary: #fff;
@@ -78,22 +78,23 @@ body.dark-theme {
 #controls-panel {
     grid-column: 3 / 4;
     grid-row: 1 / 2;
-}
-
-#charter-map {
-    grid-column: 3 / 4;
-    grid-row: 2 / 3;
+    height: 50%;
 }
 
 #decision-log {
     grid-column: 3 / 4;
-    grid-row: 3 / 4;
+    grid-row: 2 / 4;
+    height: 50%;
     background: var(--panel-bg);
     border-radius: var(--panel-radius);
     box-shadow: var(--panel-shadow);
     overflow: hidden;
     display: flex;
     flex-direction: column;
+}
+
+#charter-map {
+    display: none;
 }
 
 .panel-content {
