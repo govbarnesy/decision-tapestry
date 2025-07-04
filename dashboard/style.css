@@ -1,10 +1,49 @@
+html {
+    --background: #f4f7f6;
+    --panel-bg: #fff;
+    --panel-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --panel-radius: 8px;
+    --text-main: #333;
+    --text-secondary: #666;
+    --border: #eee;
+    --accent: #0052cc;
+    --status-accepted: #28a745;
+    --status-superseded: #6c757d;
+    --status-deprecated: #dc3545;
+    --tab-bg: #f9f9f9;
+    --tab-active-bg: #fff;
+    --tab-active-border: #0052cc;
+    --tab-active-color: #0052cc;
+    --log-selected-bg: #e9ecef;
+    --log-hover-bg: #f8f9fa;
+}
+
 body,
 html {
     margin: 0;
     padding: 0;
     height: 100%;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background-color: #f4f7f6;
+    background-color: var(--background);
+}
+
+body.dark-theme {
+    --background: #181a1b;
+    --panel-bg: #23272a;
+    --panel-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    --text-main: #f4f7f6;
+    --text-secondary: #b0b3b8;
+    --border: #333;
+    --accent: #3399ff;
+    --status-accepted: #6be675;
+    --status-superseded: #b0b3b8;
+    --status-deprecated: #ff6b6b;
+    --tab-bg: #23272a;
+    --tab-active-bg: #181a1b;
+    --tab-active-border: #3399ff;
+    --tab-active-color: #3399ff;
+    --log-selected-bg: #23272a;
+    --log-hover-bg: #23272a;
 }
 
 .dashboard {
@@ -18,9 +57,9 @@ html {
 }
 
 .panel {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background: var(--panel-bg);
+    border-radius: var(--panel-radius);
+    box-shadow: var(--panel-shadow);
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -49,15 +88,13 @@ html {
 #decision-log {
     grid-column: 3 / 4;
     grid-row: 3 / 4;
-    /* This is a panel-content directly, so needs panel styles */
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background: var(--panel-bg);
+    border-radius: var(--panel-radius);
+    box-shadow: var(--panel-shadow);
     overflow: hidden;
     display: flex;
     flex-direction: column;
 }
-
 
 .panel-content {
     padding: 1rem;
@@ -69,33 +106,33 @@ h2,
 h3,
 h4 {
     margin: 0 0 0.5rem 0;
-    color: #333;
+    color: var(--text-main);
 }
 
 p {
     margin: 0 0 1rem 0;
-    color: #666;
+    color: var(--text-secondary);
 }
 
 /* TABS */
 .tabs {
     display: flex;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--border);
 }
 
 .tab-button {
     padding: 0.8rem 1rem;
     cursor: pointer;
-    background: #f9f9f9;
+    background: var(--tab-bg);
     border: none;
-    border-right: 1px solid #eee;
+    border-right: 1px solid var(--border);
 }
 
 .tab-button.active {
-    background: white;
+    background: var(--tab-active-bg);
     font-weight: bold;
-    border-bottom: 3px solid #0052cc;
-    color: #0052cc;
+    border-bottom: 3px solid var(--tab-active-border);
+    color: var(--tab-active-color);
 }
 
 .tab-content {
@@ -110,17 +147,17 @@ p {
 
 /* Status Indicators */
 .status-accepted {
-    color: #28a745;
+    color: var(--status-accepted);
     font-weight: bold;
 }
 
 .status-superseded {
-    color: #6c757d;
+    color: var(--status-superseded);
     font-weight: bold;
 }
 
 .status-deprecated {
-    color: #dc3545;
+    color: var(--status-deprecated);
     font-weight: bold;
 }
 
@@ -131,11 +168,11 @@ p {
 }
 
 .task-status-done {
-    color: #28a745;
+    color: var(--status-accepted);
 }
 
 .task-status-to-do {
-    color: #6c757d;
+    color: var(--status-superseded);
 }
 
 /* Analytics Controls */
@@ -144,6 +181,15 @@ p {
 }
 
 #analytics-controls button.active {
-    background-color: #0052cc;
+    background-color: var(--accent);
     color: white;
+}
+
+.log-item.selected-log-item {
+    background-color: var(--log-selected-bg) !important;
+    border-left: 3px solid var(--accent);
+}
+
+.log-item:hover {
+    background-color: var(--log-hover-bg);
 }

@@ -301,8 +301,42 @@ function initializeWebSocket() {
     connect();
 }
 
-// Initialize the dashboard once the DOM is fully loaded
-document.addEventListener('DOMContentLoaded', () => {
+// --- THEME TOGGLE LOGIC ---
+function applyTheme(theme) {
+    if (theme === 'dark') {
+        document.body.classList.add('dark-theme');
+        const btn = document.getElementById('theme-toggle-btn');
+        if (btn) btn.textContent = '☀️ Light Mode';
+    } else {
+        document.body.classList.remove('dark-theme');
+        const btn = document.getElementById('theme-toggle-btn');
+        if (btn) btn.textContent = '🌙 Dark Mode';
+    }
+}
+
+function getPreferredTheme() {
+    const saved = localStorage.getItem('dt-theme');
+    if (saved) return saved;
+    // Fallback to system preference
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
+function setupThemeToggle() {
+    const btn = document.getElementById('theme-toggle-btn');
+    if (!btn) return;
+    let currentTheme = getPreferredTheme();
+    applyTheme(currentTheme);
+    btn.addEventListener('click', () => {
+        currentTheme = document.body.classList.contains('dark-theme') ? 'light' : 'dark';
+        localStorage.setItem('dt-theme', currentTheme);
+        applyTheme(currentTheme);
+    });
+}
+
+// --- END THEME TOGGLE LOGIC ---
+
+window.addEventListener('DOMContentLoaded', () => {
+    setupThemeToggle();
     initializeDashboard();
     setupEventListeners();
     initializeWebSocket();

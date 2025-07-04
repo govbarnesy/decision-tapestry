@@ -1458,3 +1458,30 @@ decisions:
       - dashboard/app.mjs
     notes: >
       The log now smoothly scrolls to the selected decision when a node is clicked on the map, restoring pre-migration behavior and improving user experience.
+  - id: 50
+    title: Add Dark/Light Theme Toggle to UI
+    author: Clyde & AI Assistant
+    date: '2024-07-03T00:00:00Z'
+    status: Accepted
+    project: Decision Tapestry
+    rationale:
+      - Improve accessibility and user comfort by allowing users to choose between dark and light themes.
+      - Modernize the UI to meet user expectations for theme customization.
+    tradeoffs:
+      - Adds complexity to CSS and UI state management.
+      - Requires testing for both themes to ensure consistent experience.
+    tasks:
+      - description: Implement theme toggle button in the dashboard UI.
+        status: In Progress
+      - description: Add CSS variables and styles for both dark and light themes.
+        status: Pending
+      - description: Persist user theme preference (e.g., localStorage).
+        status: Pending
+      - description: Test and polish both themes for accessibility and usability.
+        status: Pending
+    affected_components:
+      - dashboard/style.css
+      - dashboard/app.mjs
+      - dashboard/index.html
+    notes: >
+      This feature will allow users to switch between dark and light modes, improving comfort and accessibility, and aligning with modern UI standards.
