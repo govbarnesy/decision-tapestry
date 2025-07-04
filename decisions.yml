@@ -1456,6 +1456,10 @@ decisions:
     affected_components:
       - dashboard/decision-log.mjs
       - dashboard/app.mjs
+    related_to:
+      - 16  # Architect the Interactive Backlog Application
+      - 17  # Enhance Narrative Flow in Visualization
+      - 18  # Implement an Interactive CLI for Decision Management
     notes: >
       The log now smoothly scrolls to the selected decision when a node is clicked on the map, restoring pre-migration behavior and improving user experience.
   - id: 50
@@ -1483,5 +1487,8 @@ decisions:
       - dashboard/style.css
       - dashboard/app.mjs
       - dashboard/index.html
+    related_to:
+      - 14  # Incorporate Actionable Tasks into Decisions (UI/UX)
+      - 49  # Restore Map-to-Log Scroll Synchronization in UI
     notes: >
       This feature will allow users to switch between dark and light modes, improving comfort and accessibility, and aligning with modern UI standards.
