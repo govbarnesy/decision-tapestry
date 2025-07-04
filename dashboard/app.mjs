@@ -28,10 +28,14 @@ async function initializeDashboard(focusNodeId = null) {
         const decisionMap = document.getElementById('decision-map');
         if (decisionMap) {
             const statusColorMapping = { Accepted: '#28a745', Superseded: '#6c757d' };
+            // Detect dark mode
+            const isDark = document.body.classList.contains('dark-theme');
+            const fontColor = isDark ? '#fff' : '#000';
             const nodes = decisions.map(d => ({
                 id: d.id,
                 label: `#${d.id}: ${d.title}`,
-                color: statusColorMapping[d.status] || '#007bff'
+                color: statusColorMapping[d.status] || '#007bff',
+                font: { color: fontColor }
             }));
             const relatedEdges = decisions.flatMap(d => d.related_to ? d.related_to.map(r => ({ from: r, to: d.id, dashes: true, color: '#848484' })) : []);
             const supersedesEdges = decisions.flatMap(d => d.supersedes ? [{ from: d.id, to: d.supersedes, dashes: [5, 5], color: '#dc3545', width: 2, label: 'supersedes' }] : []);
@@ -340,4 +344,12 @@ window.addEventListener('DOMContentLoaded', () => {
     initializeDashboard();
     setupEventListeners();
     initializeWebSocket();
+    // Re-render nodes on theme change
+    const btn = document.getElementById('theme-toggle-btn');
+    if (btn) {
+        btn.addEventListener('click', () => {
+            // Re-run initializeDashboard to update node font color
+            initializeDashboard();
+        });
+    }
 });
