@@ -28,13 +28,23 @@ async function initializeDashboard(focusNodeId = null) {
         const decisionMap = document.getElementById('decision-map');
         if (decisionMap) {
             const statusColorMapping = { Accepted: '#28a745', Superseded: '#6c757d' };
-            // Detect dark mode
             const isDark = document.body.classList.contains('dark-theme');
             const fontColor = isDark ? '#fff' : '#000';
             const nodes = decisions.map(d => ({
                 id: d.id,
                 label: `#${d.id}: ${d.title}`,
-                color: statusColorMapping[d.status] || '#007bff',
+                color: {
+                    border: statusColorMapping[d.status] || '#007bff',
+                    background: 'rgba(0,0,0,0)',
+                    highlight: {
+                        border: statusColorMapping[d.status] || '#007bff',
+                        background: 'rgba(0,0,0,0)'
+                    },
+                    hover: {
+                        border: statusColorMapping[d.status] || '#007bff',
+                        background: 'rgba(0,0,0,0)'
+                    }
+                },
                 font: { color: fontColor }
             }));
             const relatedEdges = decisions.flatMap(d => d.related_to ? d.related_to.map(r => ({ from: r, to: d.id, dashes: true, color: '#848484' })) : []);
@@ -249,7 +259,19 @@ function setupEventListeners() {
                 const nodes = filteredDecisions.map(d => ({
                     id: d.id,
                     label: `#${d.id}: ${d.title}`,
-                    color: statusColorMapping[d.status] || '#007bff'
+                    color: {
+                        border: statusColorMapping[d.status] || '#007bff',
+                        background: 'rgba(0,0,0,0)',
+                        highlight: {
+                            border: statusColorMapping[d.status] || '#007bff',
+                            background: 'rgba(0,0,0,0)'
+                        },
+                        hover: {
+                            border: statusColorMapping[d.status] || '#007bff',
+                            background: 'rgba(0,0,0,0)'
+                        }
+                    },
+                    font: { color: fontColor }
                 }));
                 const relatedEdges = filteredDecisions.flatMap(d => d.related_to ? d.related_to.map(r => ({ from: r, to: d.id, dashes: true, color: '#848484' })) : []);
                 const supersedesEdges = filteredDecisions.flatMap(d => d.supersedes ? [{ from: d.id, to: d.supersedes, dashes: [5, 5], color: '#dc3545', width: 2, label: 'supersedes' }] : []);
