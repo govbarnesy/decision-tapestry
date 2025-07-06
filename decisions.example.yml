@@ -1,0 +1,64 @@
+# decisions.example.yml
+# Simple example showing basic usage of Decision Tapestry
+
+decisions:
+  - id: 1
+    title: "Use TypeScript for new services"
+    author: "Engineering Team"
+    date: "2024-07-06T10:00:00Z"
+    status: Accepted
+    project: "Platform"
+    rationale:
+      - "Improve code quality and maintainability"
+      - "Better IDE support and developer experience"
+      - "Catch errors at compile time"
+    tradeoffs:
+      - "Additional build step and complexity"
+      - "Learning curve for team members new to TypeScript"
+    affected_components:
+      - "src/services/"
+      - "build/typescript.config.json"
+
+  - id: 2
+    title: "Adopt microservices architecture"
+    author: "Architecture Team"
+    date: "2024-07-06T14:00:00Z"
+    status: Superseded
+    superseded_by: 3
+    project: "Platform"
+    rationale:
+      - "Improve scalability and team autonomy"
+      - "Enable independent deployments"
+    tradeoffs:
+      - "Increased operational complexity"
+      - "Network latency between services"
+
+  - id: 3
+    title: "Use modular monolith instead of microservices"
+    author: "Architecture Team"
+    date: "2024-07-06T16:00:00Z"
+    status: Accepted
+    supersedes: 2
+    project: "Platform"
+    rationale:
+      - "Simpler to deploy and maintain initially"
+      - "Can evolve to microservices later if needed"
+      - "Better performance for current scale"
+    tradeoffs:
+      - "May need refactoring later for scale"
+    related_to: [1]
+
+backlog:
+  - id: 1
+    title: "Evaluate database migration strategy"
+    author: "Data Team"
+    created: "2024-07-06T12:00:00Z"
+    status: Open
+    rationale:
+      - "Current database is reaching performance limits"
+      - "Need better support for distributed transactions"
+    tasks:
+      - description: "Research PostgreSQL vs MongoDB for our use case"
+        status: Pending
+      - description: "Create proof of concept with sample data"
+        status: Pending

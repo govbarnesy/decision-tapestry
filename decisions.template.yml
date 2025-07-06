@@ -1,45 +1,94 @@
 # decisions.template.yml
-# Template for Decision Tapestry decision log and backlog
+# Template and Examples for Decision Tapestry
 #
-# Allowed status values:
-#   - For tasks: Pending, Done
-#   - For backlog items: Open, (add others as needed)
-#   - For decisions: Accepted, Superseded, (add others as needed)
+# This file shows both minimal and comprehensive examples of decision and backlog items.
+# Only 'id', 'title', and 'status' are required. All other fields are optional.
+#
+# IMPORTANT: The top-level structure should be:
+# - decisions: []  (array of decision objects)
+# - backlog: []    (array of backlog objects - optional)
+#
+# NOT nested like: decisions: { backlog: [], decided: [] }
 
-backlog:
-  - id: 1
-    title: Example Backlog Item
-    author: Your Name
-    created: '2024-07-03T00:00:00Z'
-    status: Open  # Allowed: Open
-    rationale:
-      - Briefly explain why this item is in the backlog.
-    tradeoffs:
-      - List any tradeoffs or considerations.
-    tasks:
-      - description: Example task for this backlog item.
-        status: Pending  # Allowed: Pending, Done
-    notes: >
-      Additional notes or context.
+# ============================================================================
+# MINIMAL EXAMPLE - Only required fields
+# ============================================================================
 
+# Minimal decision - only required fields
 decisions:
   - id: 1
-    title: Example Decision
-    author: Your Name
-    date: '2024-07-03T00:00:00Z'
-    status: Accepted  # Allowed: Accepted, Superseded
-    project: Example Project
-    rationale:
-      - Why was this decision made?
-    tradeoffs:
-      - What were the tradeoffs?
-    related_to: []
-    supersedes: null
-    superseded_by: null
-    affected_components:
-      - List of files or components affected
-    tasks:
-      - description: Example implementation task.
-        status: Done  # Allowed: Pending, Done
-    notes: >
-      Any additional notes about this decision. 
+    title: "Adopt Decision Tapestry for tracking decisions"
+    status: Accepted
+
+# Optional backlog section
+backlog: []
+
+# ============================================================================
+# COMPREHENSIVE EXAMPLE - All available fields
+# ============================================================================
+
+# Uncomment and modify the section below for a full-featured example:
+
+# decisions:
+#   - id: 1
+#     title: "Adopt Decision Tapestry for tracking decisions"
+#     author: "Your Name"
+#     date: "2024-07-06T10:00:00Z"
+#     status: Accepted  # Options: Accepted, Superseded, Rejected, Proposed
+#     project: "Architecture"
+#     rationale:
+#       - "Need a systematic way to track architectural decisions"
+#       - "Improve knowledge sharing across the team"
+#     tradeoffs:
+#       - "Requires initial setup and learning"
+#       - "Adds documentation overhead"
+#     related_to: []  # Array of decision IDs this relates to
+#     supersedes: null  # ID of decision this replaces
+#     superseded_by: null  # ID of decision that replaces this
+#     affected_components:
+#       - "docs/architecture/"
+#       - "decisions.yml"
+#     tasks:
+#       - description: "Set up decisions.yml file"
+#         status: Done  # Options: Pending, In Progress, Done, Blocked
+#       - description: "Train team on process"
+#         status: Pending
+#     notes: |
+#       Additional context or notes about this decision.
+#       Can be multi-line text.
+
+# backlog:
+#   - id: 1
+#     title: "Consider automated decision validation"
+#     author: "Your Name"
+#     created: "2024-07-06T11:00:00Z"
+#     status: Open  # Options: Open, In Progress, Blocked
+#     rationale:
+#       - "Ensure consistency in decision format"
+#     tradeoffs:
+#       - "Additional tooling complexity"
+#     tasks:
+#       - description: "Research JSON Schema validation"
+#         status: Pending
+#     notes: "Lower priority item for future consideration"
+
+# ============================================================================
+# STATUS VALUES REFERENCE
+# ============================================================================
+#
+# Decision Status Options:
+#   - Accepted: Decision has been made and approved
+#   - Superseded: Decision has been replaced by another
+#   - Rejected: Decision was considered but rejected
+#   - Proposed: Decision is proposed but not yet approved
+#
+# Backlog Item Status Options:
+#   - Open: Item is ready for consideration
+#   - In Progress: Item is actively being worked on
+#   - Blocked: Item is blocked by dependencies
+#
+# Task Status Options:
+#   - Pending: Task not yet started
+#   - In Progress: Task is being worked on
+#   - Done: Task completed
+#   - Blocked: Task blocked by dependencies 

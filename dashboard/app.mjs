@@ -14,7 +14,14 @@ async function initializeDashboard(focusNodeId = null) {
     try {
         const response = await fetch('/api/data');
         if (!response.ok) {
-            throw new Error(`Failed to fetch data: ${response.statusText}`);
+            // Try to get detailed error information from the server
+            let errorInfo;
+            try {
+                errorInfo = await response.json();
+            } catch (e) {
+                errorInfo = { error: 'Unknown error', message: `Server returned ${response.status}: ${response.statusText}` };
+            }
+            throw new Error(`${errorInfo.error}: ${errorInfo.message}`);
         }
         const apiData = await response.json();
         const { decisions, backlog, charter } = apiData;
@@ -80,8 +87,36 @@ async function initializeDashboard(focusNodeId = null) {
 
     } catch (error) {
         console.error('Failed to initialize dashboard:', error);
-        document.body.innerHTML = '<p>Error loading dashboard. Please check the console.</p>';
+        displayErrorMessage(error.message);
     }
+}
+
+function displayErrorMessage(message) {
+    document.body.innerHTML = `
+        <div style="padding: 20px; max-width: 800px; margin: 0 auto; font-family: Arial, sans-serif;">
+            <h2 style="color: #d32f2f; margin-bottom: 20px;">⚠️ Error Loading Dashboard</h2>
+            <div style="background: #ffebee; border: 1px solid #f44336; border-radius: 4px; padding: 16px; margin-bottom: 20px;">
+                <p style="margin: 0; color: #d32f2f;"><strong>Error:</strong> ${message}</p>
+            </div>
+            <div style="background: #e3f2fd; border: 1px solid #2196f3; border-radius: 4px; padding: 16px;">
+                <h3 style="margin: 0 0 10px 0; color: #1976d2;">💡 Troubleshooting Tips:</h3>
+                <ul style="margin: 0; color: #1976d2;">
+                    <li>If you see "decisions.yml not found", run <code>decision-tapestry init</code> to create a new file</li>
+                    <li>If you see "Invalid YAML syntax", check your YAML file for formatting errors</li>
+                    <li>If you see "must be an array", ensure your decisions and backlog are formatted as arrays</li>
+                    <li>Check the browser console and server logs for more details</li>
+                </ul>
+            </div>
+            <div style="margin-top: 20px;">
+                <button onclick="window.location.reload()" style="background: #4caf50; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">
+                    🔄 Retry
+                </button>
+                <button onclick="window.open('/api/health', '_blank')" style="background: #2196f3; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; margin-left: 10px;">
+                    🔍 Health Check
+                </button>
+            </div>
+        </div>
+    `;
 }
 
 function renderDecisionLog(decisions) {
@@ -160,7 +195,14 @@ async function promoteToDecision(backlogId) {
         });
 
         if (!response.ok) {
-            throw new Error(`Failed to promote: ${response.statusText}`);
+            // Try to get detailed error information from the server
+            let errorInfo;
+            try {
+                errorInfo = await response.json();
+            } catch (e) {
+                errorInfo = { error: 'Unknown error', message: `Server returned ${response.status}: ${response.statusText}` };
+            }
+            throw new Error(`${errorInfo.error}: ${errorInfo.message}`);
         }
 
         // The websocket will trigger a full refresh, so no need to manually update the UI here.
@@ -174,7 +216,66 @@ async function promoteToDecision(backlogId) {
             button.disabled = false;
             button.textContent = 'Promote';
         }
+        
+        // Show user-friendly error message
+        showErrorToast(error.message);
     }
+}
+
+function showErrorToast(message) {
+    // Remove any existing toast
+    const existingToast = document.getElementById('error-toast');
+    if (existingToast) {
+        existingToast.remove();
+    }
+    
+    // Create new toast
+    const toast = document.createElement('div');
+    toast.id = 'error-toast';
+    toast.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #f44336;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 4px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        z-index: 10000;
+        max-width: 400px;
+        font-family: Arial, sans-serif;
+        animation: slideIn 0.3s ease-out;
+    `;
+    
+    toast.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span>⚠️</span>
+            <span>${message}</span>
+            <button onclick="this.parentElement.parentElement.remove()" style="background: none; border: none; color: white; cursor: pointer; font-size: 18px; margin-left: auto;">×</button>
+        </div>
+    `;
+    
+    // Add CSS animation
+    if (!document.querySelector('#toast-animations')) {
+        const style = document.createElement('style');
+        style.id = 'toast-animations';
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    document.body.appendChild(toast);
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        if (toast.parentElement) {
+            toast.remove();
+        }
+    }, 5000);
 }
 
 function handleDecisionSelection(decisionId, animate = false) {
@@ -257,19 +358,22 @@ function setupEventListeners() {
             const decisionMap = document.getElementById('decision-map');
             if (decisionMap) {
                 const statusColorMapping = { Accepted: '#28a745', Superseded: '#6c757d' };
+                const isDark = document.body.classList.contains('dark-theme');
+                const fontColor = isDark ? '#fff' : '#000';
+                const nodeBg = isDark ? '#000' : '#fff';
                 const nodes = filteredDecisions.map(d => ({
                     id: d.id,
                     label: `#${d.id}: ${d.title}`,
                     color: {
                         border: statusColorMapping[d.status] || '#007bff',
-                        background: 'rgba(0,0,0,0)',
+                        background: nodeBg,
                         highlight: {
                             border: statusColorMapping[d.status] || '#007bff',
-                            background: 'rgba(0,0,0,0)'
+                            background: nodeBg
                         },
                         hover: {
                             border: statusColorMapping[d.status] || '#007bff',
-                            background: 'rgba(0,0,0,0)'
+                            background: nodeBg
                         }
                     },
                     font: { color: fontColor }

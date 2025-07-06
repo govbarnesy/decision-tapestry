@@ -1,69 +1,148 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Decision Tapestry Schema",
+  "description": "Schema for Decision Tapestry YAML files. This validates the structure of backlog items and decisions.",
   "type": "object",
   "properties": {
     "backlog": {
       "type": "array",
+      "description": "Array of backlog items (ideas, features, or decisions being considered)",
       "items": {
         "type": "object",
         "properties": {
-          "id": { "type": "integer" },
-          "title": { "type": "string" },
-          "author": { "type": "string" },
-          "created": { "type": "string", "format": "date-time" },
-          "status": { "type": "string", "enum": ["Open"] },
-          "rationale": { "type": "array", "items": { "type": "string" } },
-          "tradeoffs": { "type": "array", "items": { "type": "string" } },
+          "id": { 
+            "type": "integer",
+            "description": "Unique identifier for the backlog item"
+          },
+          "title": { 
+            "type": "string",
+            "description": "Brief title describing the backlog item"
+          },
+          "author": { 
+            "type": "string",
+            "description": "Person who created this backlog item"
+          },
+          "created": { 
+            "type": "string", 
+            "format": "date-time",
+            "description": "ISO 8601 timestamp when the item was created"
+          },
+          "status": { 
+            "type": "string", 
+            "enum": ["Open", "In Progress", "Blocked"],
+            "description": "Current status of the backlog item"
+          },
+          "rationale": { 
+            "type": "array", 
+            "items": { "type": "string" },
+            "description": "List of reasons why this item is important"
+          },
+          "tradeoffs": { 
+            "type": "array", 
+            "items": { "type": "string" },
+            "description": "List of considerations or compromises involved"
+          },
           "tasks": {
             "type": "array",
+            "description": "Specific implementation tasks for this backlog item",
             "items": {
               "type": "object",
               "properties": {
                 "description": { "type": "string" },
-                "status": { "type": "string", "enum": ["Pending", "Done"] }
+                "status": { "type": "string", "enum": ["Pending", "In Progress", "Done", "Blocked"] }
               },
-              "required": ["description", "status"]
+              "required": ["description"]
             }
           },
-          "notes": { "type": "string" }
+          "notes": { 
+            "type": "string",
+            "description": "Additional notes or context"
+          }
         },
-        "required": ["id", "title", "author", "created", "status", "rationale", "tradeoffs", "tasks"]
+        "required": ["id", "title", "status"]
       }
     },
     "decisions": {
-      "type": "array",
+      "type": "array", 
+      "description": "Array of finalized decisions that have been made",
       "items": {
         "type": "object",
         "properties": {
-          "id": { "type": "integer" },
-          "title": { "type": "string" },
-          "author": { "type": "string" },
-          "date": { "type": "string", "format": "date-time" },
-          "status": { "type": "string", "enum": ["Accepted", "Superseded"] },
-          "project": { "type": "string" },
-          "rationale": { "type": "array", "items": { "type": "string" } },
-          "tradeoffs": { "type": "array", "items": { "type": "string" } },
-          "related_to": { "type": "array", "items": { "type": "integer" } },
-          "supersedes": { "type": ["integer", "null"] },
-          "superseded_by": { "type": ["integer", "null"] },
-          "affected_components": { "type": "array", "items": { "type": "string" } },
+          "id": { 
+            "type": "integer",
+            "description": "Unique identifier for the decision"
+          },
+          "title": { 
+            "type": "string",
+            "description": "Brief title describing the decision"
+          },
+          "author": { 
+            "type": "string",
+            "description": "Person who made or documented this decision"
+          },
+          "date": { 
+            "type": "string", 
+            "format": "date-time",
+            "description": "ISO 8601 timestamp when the decision was made"
+          },
+          "status": { 
+            "type": "string", 
+            "enum": ["Accepted", "Superseded", "Rejected", "Proposed"],
+            "description": "Current status of the decision"
+          },
+          "project": { 
+            "type": "string",
+            "description": "Project or component this decision relates to"
+          },
+          "rationale": { 
+            "type": "array", 
+            "items": { "type": "string" },
+            "description": "List of reasons why this decision was made"
+          },
+          "tradeoffs": { 
+            "type": "array", 
+            "items": { "type": "string" },
+            "description": "List of tradeoffs or compromises in this decision"
+          },
+          "related_to": { 
+            "type": "array", 
+            "items": { "type": "integer" },
+            "description": "IDs of related decisions"
+          },
+          "supersedes": { 
+            "type": ["integer", "null"],
+            "description": "ID of the decision this one replaces (if any)"
+          },
+          "superseded_by": { 
+            "type": ["integer", "null"],
+            "description": "ID of the decision that replaces this one (if any)"
+          },
+          "affected_components": { 
+            "type": "array", 
+            "items": { "type": "string" },
+            "description": "List of files, modules, or components affected by this decision"
+          },
           "tasks": {
             "type": "array",
+            "description": "Implementation tasks for this decision",
             "items": {
               "type": "object",
               "properties": {
                 "description": { "type": "string" },
-                "status": { "type": "string", "enum": ["Pending", "Done"] }
+                "status": { "type": "string", "enum": ["Pending", "In Progress", "Done", "Blocked"] }
               },
-              "required": ["description", "status"]
+              "required": ["description"]
             }
           },
-          "notes": { "type": "string" }
+          "notes": { 
+            "type": "string",
+            "description": "Additional notes or context about this decision"
+          }
         },
-        "required": ["id", "title", "author", "date", "status", "project", "rationale", "tradeoffs", "tasks"]
+        "required": ["id", "title", "status"]
       }
     }
   },
-  "required": ["backlog", "decisions"]
+  "required": ["decisions"],
+  "additionalProperties": false
 } 

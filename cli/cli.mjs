@@ -28,6 +28,19 @@ const commands = {
     }
 };
 
+// Check Node.js version
+const nodeVersion = process.version;
+const majorVersion = parseInt(nodeVersion.slice(1).split('.')[0], 10);
+
+if (majorVersion < 20) {
+    console.error(`❌ Node.js ${nodeVersion} is not supported.`);
+    console.error(`📋 Decision Tapestry requires Node.js 20.0.0 or higher.`);
+    console.error(`💡 Please upgrade your Node.js version:`);
+    console.error(`   • Download from: https://nodejs.org/`);
+    console.error(`   • Or use a version manager like nvm: https://github.com/nvm-sh/nvm`);
+    process.exit(1);
+}
+
 const args = process.argv.slice(2);
 const command = args[0] || 'help';
 
@@ -57,23 +70,24 @@ async function initializeProject() {
     console.log("Initializing Decision Tapestry project...\n");
 
     const decisionBoilerplate = `# decisions.yml
-# This is an example of a decision log.
-# For more information on the schema, see the documentation.
+# Decision Tapestry - Simple decision tracking for your project
+#
+# This file tracks architectural and project decisions.
+# For the full template with examples, see decisions.template.yml
+# For schema validation, run: decision-tapestry validate
 
-- id: 1
-  title: \"Adopt Decision Tapestry for ADRs\"
-  date: \"2024-01-15T10:00:00Z\"
-  author: \"Clyde\"
-  status: \"Accepted\"
-  project: \"Component Library\"
-  rationale:
-    - \"To improve our process for recording and communicating architectural decisions.\"
-    - \"To create a living document that can be easily updated and referenced.\"
-  tradeoffs:
-    - \"Requires a small time investment to learn and adopt the tool.\"
-  related_to: []
-  supersedes: null
-  superseded_by: null
+# Decisions array - the main content
+decisions:
+  - id: 1
+    title: "Adopt Decision Tapestry for decision tracking"
+    status: Accepted
+
+# Optional backlog for future decisions
+backlog: []
+
+# Tip: Only 'id', 'title', and 'status' are required.
+# Add other fields like 'author', 'date', 'rationale', 'tradeoffs' as needed.
+# Run 'decision-tapestry start' to view your decisions in the dashboard.
 `;
 
     try {
@@ -108,7 +122,15 @@ function showHelp() {
         console.log(`  ${cmd.padEnd(10)} ${commands[cmd].description}`);
     }
     console.log("");
-    console.log("For new projects, see 'decisions.template.yml' for a ready-to-use template.");
+    console.log("📚 Documentation and Examples:");
+    console.log("  • decisions.template.yml - Comprehensive template with all available fields");
+    console.log("  • decisions.example.yml  - Real-world examples showing common patterns");
+    console.log("  • decisions.schema.json  - JSON schema for validation");
+    console.log("");
+    console.log("💡 Quick start:");
+    console.log("  1. decision-tapestry init      # Create a new decisions.yml");
+    console.log("  2. decision-tapestry validate  # Check your file is valid");
+    console.log("  3. decision-tapestry start     # Open the dashboard");
 }
 
 async function generateCursorPrompt() {
@@ -167,33 +189,122 @@ async function generateCursorPrompt() {
 }
 
 async function validateDecisionsFile() {
-    console.log("Validating decisions.yml against decisions.schema.json...\n");
+    console.log("🔍 Validating decisions.yml against schema...\n");
+    
     let yamlData, schema;
     try {
         const yamlRaw = await fs.readFile('decisions.yml', 'utf8');
         const yaml = (await import('js-yaml')).default;
         yamlData = yaml.load(yamlRaw);
     } catch (err) {
-        console.error("Could not read or parse decisions.yml:", err.message);
+        if (err.code === 'ENOENT') {
+            console.error("❌ decisions.yml not found in current directory.");
+            console.log("💡 Run 'decision-tapestry init' to create a new decisions.yml file.");
+            return;
+        }
+        console.error("❌ Could not parse decisions.yml:", err.message);
+        if (err.name === 'YAMLException') {
+            console.log("💡 Check your YAML syntax. Common issues:");
+            console.log("   - Incorrect indentation (use spaces, not tabs)");
+            console.log("   - Missing quotes around strings with special characters");
+            console.log("   - Mismatched brackets or array syntax");
+        }
         return;
     }
+    
+    // Check basic structure first
+    if (!yamlData) {
+        console.error("❌ decisions.yml is empty or invalid");
+        console.log("💡 See decisions.template.yml for examples");
+        return;
+    }
+    
+    if (!yamlData.decisions) {
+        console.error("❌ Missing 'decisions' array in decisions.yml");
+        console.log("💡 Your file should have a top-level 'decisions' array:");
+        console.log("   decisions:");
+        console.log("     - id: 1");
+        console.log("       title: \"Your first decision\"");
+        console.log("       status: Accepted");
+        return;
+    }
+    
+    if (!Array.isArray(yamlData.decisions)) {
+        console.error("❌ 'decisions' must be an array, not an object");
+        console.log("💡 Use this structure:");
+        console.log("   decisions:");
+        console.log("     - id: 1       # Array item");
+        console.log("   NOT:");
+        console.log("   decisions:");
+        console.log("     backlog: []   # Object properties");
+        return;
+    }
+    
     try {
-        const schemaRaw = await fs.readFile('decisions.schema.json', 'utf8');
+        const schemaPath = path.resolve(path.dirname(import.meta.url.slice(7)), '../decisions.schema.json');
+        const schemaRaw = await fs.readFile(schemaPath, 'utf8');
         schema = JSON.parse(schemaRaw);
     } catch (err) {
-        console.error("Could not read or parse decisions.schema.json:", err.message);
+        console.error("❌ Could not load schema file:", err.message);
+        console.log("💡 This might be a package installation issue.");
         return;
     }
+    
     const ajv = new Ajv({ allErrors: true, strict: false });
     const validate = ajv.compile(schema);
     const valid = validate(yamlData);
+    
     if (valid) {
         console.log("✅ decisions.yml is valid!");
-    } else {
-        console.error("❌ decisions.yml is INVALID. Errors:");
-        for (const error of validate.errors) {
-            console.error(`- ${error.instancePath}: ${error.message}`);
+        console.log(`📊 Found ${yamlData.decisions.length} decision(s)`);
+        if (yamlData.backlog && yamlData.backlog.length > 0) {
+            console.log(`📋 Found ${yamlData.backlog.length} backlog item(s)`);
         }
+    } else {
+        console.error("❌ decisions.yml has validation errors:\n");
+        
+        // Group errors by type for better readability
+        const errorsByType = {};
+        for (const error of validate.errors) {
+            const errorType = error.keyword;
+            if (!errorsByType[errorType]) {
+                errorsByType[errorType] = [];
+            }
+            errorsByType[errorType].push(error);
+        }
+        
+        // Show missing required fields
+        if (errorsByType.required) {
+            console.log("📝 Missing required fields:");
+            for (const error of errorsByType.required) {
+                const itemPath = error.instancePath || "root";
+                console.log(`   ${itemPath}: missing '${error.params.missingProperty}'`);
+            }
+            console.log("   💡 Required fields: id, title, status\n");
+        }
+        
+        // Show enum violations (invalid status values)
+        if (errorsByType.enum) {
+            console.log("🏷️  Invalid status values:");
+            for (const error of errorsByType.enum) {
+                console.log(`   ${error.instancePath}: '${error.data}' is not valid`);
+                console.log(`      Allowed values: ${error.params.allowedValues.join(', ')}`);
+            }
+            console.log();
+        }
+        
+        // Show other errors
+        const otherErrors = validate.errors.filter(e => !['required', 'enum'].includes(e.keyword));
+        if (otherErrors.length > 0) {
+            console.log("🔧 Other validation errors:");
+            for (const error of otherErrors) {
+                console.log(`   ${error.instancePath || 'root'}: ${error.message}`);
+            }
+            console.log();
+        }
+        
+        console.log("💡 For examples and documentation, see decisions.template.yml");
+        console.log("💡 Run 'decision-tapestry init' to start with a minimal valid file");
         process.exitCode = 1;
     }
 } 

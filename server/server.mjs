@@ -104,7 +104,33 @@ app.get('/api/data', async (req, res) => {
     res.json({ decisions, backlog, charter });
   } catch (error) {
     console.error('Error fetching API data:', error);
-    res.status(500).send('Error fetching API data');
+    
+    // Send more specific error messages to the client
+    if (error.message.includes('Could not find decisions.yml')) {
+      res.status(404).json({ 
+        error: 'decisions.yml not found',
+        message: error.message,
+        suggestion: 'Run "decision-tapestry init" to create a new decisions.yml file'
+      });
+    } else if (error.message.includes('Invalid YAML syntax')) {
+      res.status(400).json({ 
+        error: 'Invalid YAML format',
+        message: error.message,
+        suggestion: 'Check the YAML syntax in your decisions.yml file'
+      });
+    } else if (error.message.includes('must be an array')) {
+      res.status(400).json({ 
+        error: 'Invalid file structure',
+        message: error.message,
+        suggestion: 'Ensure decisions and backlog are arrays in your YAML file'
+      });
+    } else {
+      res.status(500).json({ 
+        error: 'Server error',
+        message: 'An unexpected error occurred while loading your decisions',
+        suggestion: 'Check the server logs for more details'
+      });
+    }
   }
 });
 
@@ -145,8 +171,73 @@ app.post('/api/decisions/promote', async (req, res) => {
     res.status(201).json(newDecision);
   } catch (error) {
     console.error('Error promoting backlog item:', error);
-    res.status(500).send('Error promoting backlog item');
+    
+    if (error.message.includes('Permission denied')) {
+      res.status(403).json({ 
+        error: 'Permission denied',
+        message: error.message,
+        suggestion: 'Check file permissions for decisions.yml'
+      });
+    } else if (error.message.includes('Directory does not exist')) {
+      res.status(400).json({ 
+        error: 'Directory error',
+        message: error.message,
+        suggestion: 'Ensure the directory containing decisions.yml exists'
+      });
+    } else {
+      res.status(500).json({ 
+        error: 'Promotion failed',
+        message: 'Failed to promote backlog item to decision',
+        suggestion: 'Check the server logs for more details'
+      });
+    }
   }
+});
+
+// Health check endpoint
+app.get('/api/health', async (_req, res) => {
+  const health = {
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    checks: {}
+  };
+
+  // Check if decisions.yml exists and is readable
+  const decisionsPath = path.join(CWD, 'decisions.yml');
+  try {
+    await getData();
+    health.checks.decisionsFile = { 
+      status: 'ok', 
+      message: 'decisions.yml found and readable',
+      path: decisionsPath 
+    };
+  } catch (error) {
+    health.status = 'error';
+    health.checks.decisionsFile = { 
+      status: 'error', 
+      message: error.message,
+      path: decisionsPath 
+    };
+  }
+
+  // Check working directory
+  try {
+    await fsp.access(CWD);
+    health.checks.workingDirectory = { 
+      status: 'ok', 
+      message: 'Working directory accessible',
+      path: CWD 
+    };
+  } catch (error) {
+    health.status = 'error';
+    health.checks.workingDirectory = { 
+      status: 'error', 
+      message: 'Working directory not accessible',
+      path: CWD 
+    };
+  }
+
+  res.json(health);
 });
 
 // --- File Watcher for Real-Time Updates ---
