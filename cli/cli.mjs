@@ -89,13 +89,13 @@ async function initializeProject() {
 function startServer() {
     console.log("Starting Decision Tapestry server...");
     // We need to find the server.mjs file relative to *this* script's location
-    const serverPath = path.resolve(path.dirname(import.meta.url.slice(7)), 'server.mjs');
+    const serverPath = path.resolve(path.dirname(import.meta.url.slice(7)), '../server/server.mjs');
 
-    const nodemon = spawn('nodemon', [serverPath], {
+    const node = spawn('node', [serverPath], {
         stdio: 'inherit' // This will pipe the output of the server to the current console
     });
 
-    nodemon.on('close', (code) => {
+    node.on('close', (code) => {
         console.log(`Server process exited with code ${code}`);
     });
 }
