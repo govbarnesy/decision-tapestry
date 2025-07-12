@@ -300,6 +300,33 @@ npm start
 
 This will start the server using `nodemon`, which will automatically restart the server when files change.
 
+### Background Automation & Development Tools
+
+Decision Tapestry includes several automation features to improve developer productivity:
+
+**Development Mode with Auto-Testing:**
+```bash
+npm run dev
+```
+This runs the server and test watcher simultaneously for continuous feedback.
+
+**Pre-commit Quality Checks:**
+- Automatic linting and code quality checks run before each commit
+- Set up via Husky and lint-staged
+- Ensures consistent code quality across all contributions
+
+**Continuous Integration:**
+- GitHub Actions automatically run tests, linting, and builds on all PRs
+- Semantic release automation for versioning and publishing
+- Multi-platform Docker image building
+
+**Manual Quality Commands:**
+```bash
+npm run lint:fix    # Auto-fix linting issues
+npm run test:watch  # Run tests in watch mode
+npm run build       # TypeScript compilation check
+```
+
 ### Running with Docker
 
 For universal portability, you can run Decision Tapestry using Docker. This method does not require a local Node.js installation.

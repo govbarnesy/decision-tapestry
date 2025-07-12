@@ -9,39 +9,36 @@ on:
       - main
 
 permissions:
-  contents: write
-  issues: write
-  pull-requests: write
+  contents: read
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18, 20, 22]
+    
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Use Node.js 20.x
+      - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
-          node-version: 20.x
-          cache: 'yarn'
+          node-version: ${{ matrix.node-version }}
+          cache: npm
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: npm ci
 
-      - name: Lint
-        run: yarn lint || echo "No lint script"
+      - name: Run tests
+        run: npm test
 
-      - name: Test
-        run: yarn test
+      - name: Run build
+        run: npm run build
 
-      - name: Build
-        run: yarn build
+      - name: Run lint
+        run: npm run lint
 
-      - name: Release (semantic-release handles npm & Docker publishing)
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKER: ${{ secrets.DOCKER }}
-        run: npx semantic-release
+      - name: Check TypeScript
+        run: npx tsc --noEmit

@@ -1,37 +1,3 @@
-backlog:
-  - id: 107
-    title: Utilize Background Agents for Automation and Quality
-    author: Clyde & AI Assistant
-    created: '2025-06-26T14:00:00Z'
-    status: Open
-    rationale:
-      - >-
-        Automate repetitive and continuous tasks to improve developer
-        productivity and code quality.
-      - >-
-        Ensure tests, linting, and backlog/decision sync are always up-to-date
-        without manual intervention.
-      - Reduce human error and accelerate feedback cycles.
-    tradeoffs:
-      - Requires initial setup and monitoring of background agents.
-      - May introduce complexity in debugging automated actions.
-    tasks:
-      - description: Set up background agents to run tests automatically on file changes.
-        status: Pending
-      - description: >-
-          Set up agents to monitor and enforce code quality (lint, format) in
-          the background.
-        status: Pending
-      - description: >-
-          Implement agents to watch decisions.yml and PRODUCT-BACKLOG.md for
-          changes and trigger dashboard/UI updates or notifications.
-        status: Pending
-      - description: Document the background agent setup and usage for contributors.
-        status: Pending
-    notes: >
-      Background agents can be used for continuous testing, CI/CD automation,
-      code quality checks, and backlog/decision sync. This will help maintain a
-      high-quality, responsive development workflow as the project scales.
 decisions:
   - id: 1
     title: Establish a System for a Durable, Shared Memory
@@ -1391,10 +1357,12 @@ decisions:
           change.
         status: Pending
       - description: >-
-          Add allowed status values as comments in the template for tasks, backlog items, and decisions.
+          Add allowed status values as comments in the template for tasks,
+          backlog items, and decisions.
         status: Done
       - description: >-
-          Create a machine-readable JSON schema for decisions.yml (decisions.schema.json).
+          Create a machine-readable JSON schema for decisions.yml
+          (decisions.schema.json).
         status: Done
     notes: >
       The template is now available as decisions.template.yml and referenced in
@@ -1409,24 +1377,30 @@ decisions:
     project: Decision Tapestry
     rationale:
       - Ensures onboarding is tailored to the user's actual project context.
-      - Leverages the power of AI chat (Cursor) for flexible, collaborative planning.
+      - >-
+        Leverages the power of AI chat (Cursor) for flexible, collaborative
+        planning.
       - Reduces friction and cognitive load for new users.
       - Makes Decision Tapestry more adaptable across diverse project types.
     tradeoffs:
-      - Relies on users being comfortable with copy-pasting prompts into Cursor or another AI chat.
+      - >-
+        Relies on users being comfortable with copy-pasting prompts into Cursor
+        or another AI chat.
       - Less "hands-on" than a fully interactive CLI wizard.
     tasks:
-      - description: Implement CLI command to inspect project and generate onboarding prompt.
+      - description: >-
+          Implement CLI command to inspect project and generate onboarding
+          prompt.
         status: Done
       - description: Output prompt to console and (optionally) to a file.
         status: Done
       - description: Update documentation to reflect new onboarding flow.
         status: Done
       - description: >-
-          Reference the canonical schema and allowed status values in the onboarding prompt.
+          Reference the canonical schema and allowed status values in the
+          onboarding prompt.
         status: Done
-      - description: >-
-          Add schema validation to the CLI (validate command).
+      - description: Add schema validation to the CLI (validate command).
         status: Done
     related_to:
       - 47
@@ -1438,7 +1412,10 @@ decisions:
       - decisions.schema.json
       - decisions.template.yml
     notes: >
-      The CLI 'plan' command now generates a context-aware onboarding prompt for Cursor chat, including a live schema example from @decisions.template.yml. The onboarding experience also features a modern ASCII art banner in the 'init' command, and schema validation is available via the CLI.
+      The CLI 'plan' command now generates a context-aware onboarding prompt for
+      Cursor chat, including a live schema example from @decisions.template.yml.
+      The onboarding experience also features a modern ASCII art banner in the
+      'init' command, and schema validation is available via the CLI.
   - id: 49
     title: Restore Map-to-Log Scroll Synchronization in UI
     author: Clyde & AI Assistant
@@ -1446,22 +1423,30 @@ decisions:
     status: Accepted
     project: Decision Tapestry
     rationale:
-      - Restore the intuitive UX where clicking a decision on the map scrolls the log to the corresponding item.
-      - This feature was present before the migration and is important for usability and navigation.
+      - >-
+        Restore the intuitive UX where clicking a decision on the map scrolls
+        the log to the corresponding item.
+      - >-
+        This feature was present before the migration and is important for
+        usability and navigation.
     tradeoffs:
       - Adds a small amount of code to the decision-log-panel component.
     tasks:
-      - description: Implement scroll-into-view for selected decision in the log when selectedId changes.
+      - description: >-
+          Implement scroll-into-view for selected decision in the log when
+          selectedId changes.
         status: Done
     affected_components:
       - dashboard/decision-log.mjs
       - dashboard/app.mjs
     related_to:
-      - 16  # Architect the Interactive Backlog Application
-      - 17  # Enhance Narrative Flow in Visualization
-      - 18  # Implement an Interactive CLI for Decision Management
+      - 16
+      - 17
+      - 18
     notes: >
-      The log now smoothly scrolls to the selected decision when a node is clicked on the map, restoring pre-migration behavior and improving user experience.
+      The log now smoothly scrolls to the selected decision when a node is
+      clicked on the map, restoring pre-migration behavior and improving user
+      experience.
   - id: 50
     title: Add Dark/Light Theme Toggle to UI
     author: Clyde & AI Assistant
@@ -1469,26 +1454,122 @@ decisions:
     status: Accepted
     project: Decision Tapestry
     rationale:
-      - Improve accessibility and user comfort by allowing users to choose between dark and light themes.
+      - >-
+        Improve accessibility and user comfort by allowing users to choose
+        between dark and light themes.
       - Modernize the UI to meet user expectations for theme customization.
     tradeoffs:
       - Adds complexity to CSS and UI state management.
       - Requires testing for both themes to ensure consistent experience.
     tasks:
       - description: Implement theme toggle button in the dashboard UI.
-        status: In Progress
+        status: Done
       - description: Add CSS variables and styles for both dark and light themes.
-        status: Pending
+        status: Done
       - description: Persist user theme preference (e.g., localStorage).
-        status: Pending
+        status: Done
       - description: Test and polish both themes for accessibility and usability.
-        status: Pending
+        status: Done
     affected_components:
       - dashboard/style.css
       - dashboard/app.mjs
       - dashboard/index.html
     related_to:
-      - 14  # Incorporate Actionable Tasks into Decisions (UI/UX)
-      - 49  # Restore Map-to-Log Scroll Synchronization in UI
+      - 14
+      - 49
     notes: >
-      This feature will allow users to switch between dark and light modes, improving comfort and accessibility, and aligning with modern UI standards.
+      Theme toggle is fully implemented with localStorage persistence and system
+      preference detection. Users can switch between dark and light modes with a
+      fixed-position toggle button.
+  - id: 51
+    title: Implement Comprehensive Development Automation and Quality Infrastructure
+    author: Clyde & AI Assistant
+    date: '2025-07-12T14:45:00Z'
+    status: Accepted
+    project: Decision Tapestry
+    rationale:
+      - >-
+        Automate repetitive development tasks to improve productivity and reduce
+        human error.
+      - Establish consistent code quality standards across all contributions.
+      - Implement robust CI/CD pipeline for reliable releases and deployments.
+      - Modernize configuration to follow current best practices.
+    tradeoffs:
+      - Adds initial setup complexity and new dependencies (husky, lint-staged).
+      - Requires developers to adapt to automated quality checks.
+      - May slightly slow down commit process due to pre-commit hooks.
+    tasks:
+      - description: Fix ESLint configuration with modern flat config format.
+        status: Done
+      - description: >-
+          Update Jest configuration to use current syntax (remove deprecated
+          globals).
+        status: Done
+      - description: >-
+          Set up pre-commit hooks with Husky and lint-staged for automatic code
+          quality.
+        status: Done
+      - description: Create comprehensive GitHub Actions workflow for CI/CD.
+        status: Done
+      - description: Add development automation scripts (dev mode, test watching).
+        status: Done
+      - description: Document automation features and development workflows.
+        status: Done
+      - description: Complete background agents backlog item tasks.
+        status: Done
+    affected_components:
+      - eslint.config.js
+      - jest.config.mjs
+      - .github/workflows/ci.yml
+      - .github/workflows/release.yml
+      - .husky/pre-commit
+      - package.json
+      - README.md
+      - decisions.yml
+    related_to:
+      - 107
+      - 44
+      - 46
+    notes: >
+      This decision marks the completion of a comprehensive automation overhaul
+      including: - Pre-commit quality checks via Husky and lint-staged - Modern
+      ESLint flat config with TypeScript support   - Updated Jest configuration
+      using current best practices - Multi-platform CI/CD pipeline with semantic
+      release - Development mode with concurrent server and test watching -
+      Comprehensive documentation of automation features All background agent
+      automation tasks from backlog item 107 are now complete.
+  - id: 52
+    title: Utilize Background Agents for Automation and Quality
+    author: Clyde & AI Assistant
+    created: '2025-06-26T14:00:00Z'
+    status: Accepted
+    rationale:
+      - >-
+        Automate repetitive and continuous tasks to improve developer
+        productivity and code quality.
+      - >-
+        Ensure tests, linting, and backlog/decision sync are always up-to-date
+        without manual intervention.
+      - Reduce human error and accelerate feedback cycles.
+    tradeoffs:
+      - Requires initial setup and monitoring of background agents.
+      - May introduce complexity in debugging automated actions.
+    tasks:
+      - description: Set up background agents to run tests automatically on file changes.
+        status: Done
+      - description: >-
+          Set up agents to monitor and enforce code quality (lint, format) in
+          the background.
+        status: Done
+      - description: >-
+          Implement agents to watch decisions.yml and PRODUCT-BACKLOG.md for
+          changes and trigger dashboard/UI updates or notifications.
+        status: Done
+      - description: Document the background agent setup and usage for contributors.
+        status: Done
+    notes: >
+      Background agents can be used for continuous testing, CI/CD automation,
+      code quality checks, and backlog/decision sync. This will help maintain a
+      high-quality, responsive development workflow as the project scales.
+    date: '2025-07-12T14:53:45.842Z'
+backlog: []
