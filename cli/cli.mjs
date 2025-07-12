@@ -10,6 +10,14 @@ const commands = {
         description: "Initialize a new project with a decisions.yml file.",
         action: initializeProject
     },
+    analyze: {
+        description: "Analyze existing codebase and generate historical decisions.",
+        action: analyzeProject
+    },
+    capture: {
+        description: "Quickly capture a new decision during development.",
+        action: captureDecision
+    },
     start: {
         description: "Start the Decision Tapestry server and open the dashboard.",
         action: startServer
@@ -67,6 +75,21 @@ async function initializeProject() {
 ╚════════════════════════════════════════════════════════════════════╝
 `;
     console.log(asciiArt);
+    
+    // Check if decisions.yml already exists
+    try {
+        await fs.access('decisions.yml');
+        console.log("⚠️  decisions.yml already exists in this directory.");
+        console.log("To view your decisions: decision-tapestry start");
+        console.log("To validate format: decision-tapestry validate");
+        return;
+    } catch {
+        // File doesn't exist, continue with initialization
+    }
+
+    // Detect project type
+    const isExistingProject = await detectExistingProject();
+    
     console.log("Initializing Decision Tapestry project...\n");
 
     const decisionBoilerplate = `# decisions.yml
@@ -92,11 +115,54 @@ backlog: []
 
     try {
         await fs.writeFile('decisions.yml', decisionBoilerplate);
-        console.log("Project initialized successfully.");
-        console.log("Created 'decisions.yml'.");
-        console.log("Run 'decision-tapestry start' to see your dashboard.");
+        console.log("✅ Project initialized successfully!");
+        console.log("📄 Created 'decisions.yml'");
+        
+        if (isExistingProject) {
+            console.log("\n🔍 Next steps for existing project:");
+            console.log("   1. decision-tapestry analyze    # Auto-generate historical decisions");
+            console.log("   2. decision-tapestry start      # Launch dashboard");
+        } else {
+            console.log("\n🚀 Next steps for new project:");
+            console.log("   1. decision-tapestry plan       # Get AI-powered planning help");
+            console.log("   2. decision-tapestry start      # Launch dashboard");
+        }
     } catch (error) {
-        console.error("Error initializing project:", error);
+        console.error("❌ Error initializing project:", error);
+    }
+}
+
+async function detectExistingProject() {
+    try {
+        // Check for common project indicators
+        const indicators = [
+            'package.json', 'Cargo.toml', 'go.mod', 'pom.xml', 'requirements.txt',
+            'Gemfile', 'composer.json', 'CMakeLists.txt', 'Makefile'
+        ];
+        
+        for (const indicator of indicators) {
+            try {
+                await fs.access(indicator);
+                return true; // Found at least one project file
+            } catch {
+                // File doesn't exist, continue checking
+            }
+        }
+        
+        // Check for source directories
+        const sourceDirs = ['src', 'lib', 'app', 'source', 'code'];
+        for (const dir of sourceDirs) {
+            try {
+                const stat = await fs.stat(dir);
+                if (stat.isDirectory()) return true;
+            } catch {
+                // Directory doesn't exist, continue checking
+            }
+        }
+        
+        return false; // No project indicators found
+    } catch {
+        return false;
     }
 }
 
@@ -131,6 +197,151 @@ function showHelp() {
     console.log("  1. decision-tapestry init      # Create a new decisions.yml");
     console.log("  2. decision-tapestry validate  # Check your file is valid");
     console.log("  3. decision-tapestry start     # Open the dashboard");
+}
+
+async function analyzeProject() {
+    console.log("🔍 Analyzing project to generate historical decisions...\n");
+    
+    // Check if decisions.yml exists
+    try {
+        await fs.access('decisions.yml');
+        console.log("📄 Found existing decisions.yml");
+    } catch {
+        console.log("⚠️  No decisions.yml found. Run 'decision-tapestry init' first.");
+        return;
+    }
+    
+    const analysis = await performProjectAnalysis();
+    
+    if (analysis.decisions.length === 0) {
+        console.log("💡 No obvious architectural decisions detected in this project.");
+        console.log("   Consider manually adding decisions about:");
+        console.log("   • Framework/library choices");
+        console.log("   • Architecture patterns");
+        console.log("   • Database decisions");
+        console.log("   • Infrastructure choices");
+        return;
+    }
+    
+    console.log(`📋 Found ${analysis.decisions.length} potential historical decisions:`);
+    analysis.decisions.forEach((decision, i) => {
+        console.log(`   ${i + 1}. ${decision.title}`);
+    });
+    
+    console.log("\n🤖 This is a preview. Full implementation coming soon!");
+    console.log("   For now, consider adding these decisions manually to decisions.yml");
+}
+
+async function performProjectAnalysis() {
+    const decisions = [];
+    
+    try {
+        // Analyze package.json for framework decisions
+        const pkg = JSON.parse(await fs.readFile('package.json', 'utf8'));
+        
+        // React detection
+        if (pkg.dependencies?.react) {
+            decisions.push({
+                title: "Adopt React for frontend development",
+                rationale: "Framework choice for building user interfaces"
+            });
+        }
+        
+        // Express detection
+        if (pkg.dependencies?.express) {
+            decisions.push({
+                title: "Use Express.js for backend API",
+                rationale: "Web framework choice for Node.js backend"
+            });
+        }
+        
+        // TypeScript detection
+        if (pkg.devDependencies?.typescript || pkg.dependencies?.typescript) {
+            decisions.push({
+                title: "Adopt TypeScript for type safety",
+                rationale: "Add static typing to improve code quality and developer experience"
+            });
+        }
+        
+        // Database decisions
+        if (pkg.dependencies?.mongoose || pkg.dependencies?.mongodb) {
+            decisions.push({
+                title: "Choose MongoDB for data storage",
+                rationale: "Database selection for document-based data model"
+            });
+        }
+        
+        if (pkg.dependencies?.sequelize || pkg.dependencies?.pg) {
+            decisions.push({
+                title: "Choose PostgreSQL for data storage",
+                rationale: "Database selection for relational data model"
+            });
+        }
+        
+    } catch {
+        // package.json not found or invalid, skip analysis
+    }
+    
+    return { decisions };
+}
+
+async function captureDecision() {
+    const args = process.argv.slice(3); // Get arguments after 'capture'
+    const title = args[0];
+    
+    if (!title) {
+        console.log("❌ Please provide a decision title:");
+        console.log("   decision-tapestry capture \"Your decision title\"");
+        console.log("   decision-tapestry capture \"Use Redis for caching\"");
+        return;
+    }
+    
+    try {
+        // Check if decisions.yml exists
+        let decisionsData;
+        try {
+            const rawData = await fs.readFile('decisions.yml', 'utf8');
+            decisionsData = rawData;
+        } catch {
+            console.log("⚠️  No decisions.yml found. Run 'decision-tapestry init' first.");
+            return;
+        }
+        
+        // Find the highest existing ID
+        const idMatches = decisionsData.match(/id:\s*(\d+)/g);
+        let nextId = 1;
+        if (idMatches) {
+            const ids = idMatches.map(match => parseInt(match.split(':')[1].trim()));
+            nextId = Math.max(...ids) + 1;
+        }
+        
+        const newDecision = `  - id: ${nextId}
+    title: "${title}"
+    author: "Quick Capture"
+    date: "${new Date().toISOString()}"
+    status: Proposed
+    rationale:
+      - "Captured during development workflow"
+    tradeoffs:
+      - "TODO: Add trade-offs analysis"
+    tasks:
+      - description: "Review and complete this decision"
+        status: Pending`;
+        
+        // Insert the new decision after the decisions: line
+        const updatedData = decisionsData.replace(
+            /decisions:\s*\n/,
+            `decisions:\n${newDecision}\n`
+        );
+        
+        await fs.writeFile('decisions.yml', updatedData);
+        console.log(`✅ Captured decision #${nextId}: "${title}"`);
+        console.log("📝 Added to decisions.yml with 'Proposed' status");
+        console.log("💡 Edit the file to add rationale, trade-offs, and mark as Accepted");
+        
+    } catch (error) {
+        console.error("❌ Error capturing decision:", error.message);
+    }
 }
 
 async function generateCursorPrompt() {

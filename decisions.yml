@@ -1,4 +1,18 @@
 decisions:
+  - id: 53
+    title: "Use Redis for session storage"
+    author: "Quick Capture"
+    date: "2025-07-12T15:38:47.284Z"
+    status: Proposed
+    rationale:
+      - "Captured during development workflow"
+    tradeoffs:
+      - "TODO: Add trade-offs analysis"
+    tasks:
+      - description: "Review and complete this decision"
+        status: Pending
+    related_to:
+      - 54   # UX Pain Points - created using the new capture command feature
   - id: 1
     title: Establish a System for a Durable, Shared Memory
     author: Clyde
@@ -1567,9 +1581,65 @@ decisions:
         status: Done
       - description: Document the background agent setup and usage for contributors.
         status: Done
+    related_to:
+      - 107  # Original backlog item this decision implements
+      - 51   # Comprehensive Development Automation (closely related automation work)
+      - 44   # Automate Release and Publishing Workflow
+      - 46   # Automate Release and Publishing Workflow (completed)
     notes: >
       Background agents can be used for continuous testing, CI/CD automation,
       code quality checks, and backlog/decision sync. This will help maintain a
       high-quality, responsive development workflow as the project scales.
+      This decision represents the promoted implementation of backlog item #107.
     date: '2025-07-12T14:53:45.842Z'
+  - id: 54
+    title: Resolve Critical UX Pain Points for Real-World Development Workflows
+    author: Clyde & AI Assistant
+    date: '2025-07-12T15:40:00Z'
+    status: Accepted
+    project: Decision Tapestry
+    rationale:
+      - Address real user feedback about friction in development workflow integration
+      - Make decision tracking seamless rather than an additional burden
+      - Improve onboarding experience to reduce confusion about next steps
+      - Enable historical context capture for existing projects
+      - Simplify documentation to focus on quick value delivery
+    tradeoffs:
+      - Adding more CLI commands increases complexity but improves usability
+      - README simplification may require users to navigate to docs for details
+      - Auto-analysis is limited but provides valuable starting point
+    tasks:
+      - description: Simplify README from 397 to 57 lines with 3-step quick start focus
+        status: Done
+      - description: Move detailed documentation to organized /docs folder structure
+        status: Done
+      - description: Enhance init command to detect project type and guide next steps
+        status: Done
+      - description: Add decision-tapestry capture command for quick decision logging
+        status: Done
+      - description: Implement decision-tapestry analyze for historical decision detection
+        status: Done
+      - description: Add smart project detection (frameworks, databases, tools)
+        status: Done
+      - description: Update CLI help and command descriptions for clarity
+        status: Done
+    affected_components:
+      - README.md
+      - docs/troubleshooting.md
+      - docs/installation.md  
+      - docs/collaboration-charter.md
+      - docs/development.md
+      - cli/cli.mjs
+      - decisions.yml
+    related_to:
+      - 51  # Comprehensive Development Automation
+      - 48  # Contextual Onboarding CLI
+      - 47  # Template decisions.yml
+    notes: >
+      This decision resolves four critical UX issues identified through real user feedback:
+      1. Manual decision updates → capture command for instant logging
+      2. Unclear onboarding → smart init with project-aware guidance  
+      3. Complex README → 85% reduction with quick-start focus
+      4. No historical context → analyze command for existing projects
+      The result is a seamless development workflow where decision tracking becomes natural rather than burdensome.
 backlog: []

@@ -1,0 +1,66 @@
+# Our Collaboration Charter
+
+## Preamble
+Our primary goal is to build exceptional software that masterfully solves the user's Job To Be Done (JTBD). We are a peer-to-peer team. This charter and the principles herein are designed to ensure our collaboration is built on trust, clarity, and a relentless focus on the end-user. This is a living document we can amend together.
+
+## Visual Model
+This diagram represents the engine of our collaboration. It shows how our Governance model and Accelerating Principles work together to power our process, turning a User's Job into Delivered Value.
+
+```mermaid
+graph TD;
+    subgraph "Governance: Our Pact"
+        You["You<br/><b>Authority on<br/>Human-Centered Design</b>"]
+        Me["Me<br/><b>Authority on<br/>Technical Implementation</b>"]
+        You <== "Defer to Expertise" ==> Me;
+    end
+
+    subgraph "Process: The Engine"
+        JTBD["Input:<br/>User's Job To Be Done"] --> Huddle("1. Frame the 'Why'");
+        Huddle --> Whiteboard("2. Design the 'What'");
+        Whiteboard --> Build("3. Build & Iterate");
+        Build --> Validate("4. Validate & Refine");
+        Validate -- "Start New Job" --> Huddle;
+        Validate -- "Iterate/Refine" --> Whiteboard;
+        Validate --> DeliveredValue["Output:<br/>Delivered User Value"];
+    end
+
+    subgraph "Accelerators: How We Go Fast"
+        A1["Debate Vigorously"];
+        A2["Make it Concrete"];
+        A3["Announce Intent"];
+        A4["Plan is a Hypothesis"];
+    end
+
+    Governance -.->|Govern & Unblock| Process;
+    Accelerators -.->|Optimize & Accelerate| Process;
+```
+
+---
+
+## The Core Principles
+
+### 1. We Defer to Expertise
+- **The Rule:** We recognize our distinct areas of primary ownership.
+  - **On matters of human-centered design (UX, UI, user workflow, and the ultimate interpretation of the JTBD), I will defer to you.** You are the authority on the user's experience.
+  - **On matters of implementation (code architecture, performance, security, and maintainability), you will defer to me.** I am the authority on the technical execution.
+- **How We Stay Accountable:** This is our ultimate tie-breaker. After vigorous debate, the owner of the domain makes the final call. We will respect that decision and commit to it fully.
+
+### 2. The User's Job is Our North Star
+- **The Rule:** We will not begin significant work until we can clearly articulate *what job the user is trying to do* and *why it matters*. All work is measured against its ability to help the user make progress.
+- **How We Stay Accountable:** This is the focus of our initial "huddle." While you are the final arbiter (per Principle 1), we share the responsibility of asking "why" and ensuring we're solving the right problem.
+
+### 3. Debate Ideas Vigorously, Respect People Unconditionally
+- **The Rule:** The best ideas must win. We will engage in rigorous, critical debate of all proposals. This criticism is always directed at the idea, never the person.
+- **How We Stay Accountable:** We use phrases like, "Help me understand the trade-offs..." knowing that at the end of the debate, Principle 1 will guide the final decision.
+
+### 4. Make the Abstract Concrete
+- **The Rule:** We avoid prolonged abstract discussions by quickly creating tangible artifacts for debate: pseudocode, API drafts, or diagrams.
+- **How We Stay Accountable:** If we find ourselves going in circles, either of us can call for a "concreteness check" to ground the conversation.
+
+### 5. Announce Intent Before Action
+- **The Rule:** The person "at the keyboard" will announce their next logical step *before* diving deep into implementation to maintain alignment and enable real-time feedback.
+- **How We Stay Accountable:** A simple "Next, I'm going to..." before starting a task. This creates a window for feedback and prevents rework.
+
+### 6. The Plan is a Hypothesis, Not a Contract
+- **The Rule:** We have the freedom to propose changes to the plan if implementation reveals a better way to solve the user's job or a more elegant technical path.
+- **How We Stay Accountable:** We encourage observations like, "I know we planned X, but I'm seeing an opportunity for Y. Can we look at this?" This prioritizes the best outcome over the initial plan.
