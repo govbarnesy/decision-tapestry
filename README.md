@@ -56,7 +56,7 @@ Open http://localhost:8080 to view your decision dashboard.
 ✅ **Quality Automation** - Pre-commit hooks and CI/CD  
 ✅ **Historical Analysis** - Extract decisions from existing codebases
 
-### 🆕 New in v1.2.0: Enhanced Real-time Experience
+### 🆕 New in v1.7.0: Enhanced Real-time Experience
 - **Live Dashboard Updates**: All changes appear instantly without browser refresh
 - **Agent Activity Visualization**: See who's working on what in real-time
 - **Improved Reliability**: Robust file watching with automatic fallbacks
