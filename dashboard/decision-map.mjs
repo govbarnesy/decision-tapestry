@@ -19,10 +19,38 @@ class DecisionMap extends LitElement {
             width: 100%;
             height: 100%;
         }
+        
+        /* Activity state animations */
+        @keyframes pulse-working {
+            0% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(76, 175, 80, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+        }
+        
+        @keyframes pulse-debugging {
+            0% { box-shadow: 0 0 0 0 rgba(255, 152, 0, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 152, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 152, 0, 0); }
+        }
+        
+        @keyframes pulse-testing {
+            0% { box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(33, 150, 243, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(33, 150, 243, 0); }
+        }
+        
+        @keyframes pulse-reviewing {
+            0% { box-shadow: 0 0 0 0 rgba(156, 39, 176, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(156, 39, 176, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(156, 39, 176, 0); }
+        }
     `;
 
     // No properties that trigger re-renders. We manage everything manually.
     static properties = {};
+    
+    // Track agent activities on nodes
+    _nodeActivities = new Map(); // nodeId -> { agentId, state, timestamp }
 
     _nodes = [];
     _edges = [];
@@ -30,6 +58,7 @@ class DecisionMap extends LitElement {
 
     set nodes(newVal) {
         console.log('[decision-map] set nodes:', newVal);
+        this._originalNodes = newVal; // Store original nodes for restoration
         if (this._nodesDataSet) {
             // Update or add nodes
             this._nodesDataSet.update(newVal);
@@ -125,6 +154,227 @@ class DecisionMap extends LitElement {
             }
         }, 100);
     }
+    
+    // Update node with activity state
+    updateNodeActivity(nodeId, agentId, activityState) {
+        if (!this._nodesDataSet) return;
+        
+        const activityColors = {
+            'working': '#4CAF50',
+            'debugging': '#FF9800',
+            'testing': '#2196F3',
+            'reviewing': '#9C27B0',
+            'idle': '#757575'
+        };
+        
+        const activityEmojis = {
+            'working': '🔨',
+            'debugging': '🐛',
+            'testing': '🧪',
+            'reviewing': '👀',
+            'idle': '💤'
+        };
+        
+        // Store activity info
+        if (activityState !== 'idle') {
+            this._nodeActivities.set(nodeId, {
+                agentId,
+                state: activityState,
+                timestamp: new Date()
+            });
+        } else {
+            this._nodeActivities.delete(nodeId);
+        }
+        
+        // Find the original node
+        const originalNode = this._originalNodes?.find(n => n.id === nodeId);
+        if (!originalNode) return;
+        
+        // Create updated node with activity visualization
+        const updatedNode = {
+            ...originalNode,
+            borderWidth: activityState !== 'idle' ? 4 : 2,
+            borderWidthSelected: activityState !== 'idle' ? 5 : 3,
+            shapeProperties: {
+                ...(originalNode.shapeProperties || {}),
+                ...(activityState !== 'idle' ? {} : { borderDashes: originalNode.shapeProperties?.borderDashes })
+            },
+            color: {
+                ...originalNode.color,
+                border: activityState !== 'idle' ? activityColors[activityState] : originalNode.color.border,
+                background: activityState !== 'idle' ? 
+                    this._hexToRgba(activityColors[activityState], 0.8) : 
+                    originalNode.color.background,
+                highlight: {
+                    ...originalNode.color.highlight,
+                    border: activityState !== 'idle' ? activityColors[activityState] : originalNode.color.highlight?.border,
+                    background: activityState !== 'idle' ? 
+                        this._hexToRgba(activityColors[activityState], 0.8) : 
+                        originalNode.color.highlight?.background
+                },
+                hover: {
+                    ...originalNode.color.hover,
+                    border: activityState !== 'idle' ? activityColors[activityState] : originalNode.color.hover?.border,
+                    background: activityState !== 'idle' ? 
+                        this._hexToRgba(activityColors[activityState], 0.8) : 
+                        originalNode.color.hover?.background
+                }
+            },
+            shadow: activityState !== 'idle' ? {
+                enabled: true,
+                color: activityColors[activityState],
+                size: 10,
+                x: 0,
+                y: 0
+            } : false
+        };
+        
+        // Update label with activity info using visual separators
+        if (activityState !== 'idle') {
+            // Parse the original label to get decision number and title
+            const originalLabel = originalNode.label;
+            const labelParts = originalLabel.split(':');
+            const decisionNumber = labelParts[0]; // e.g., "#55"
+            const decisionTitle = labelParts.slice(1).join(':').replace(/^\n/, ''); // Remove leading newline
+            
+            const emoji = activityEmojis[activityState];
+            const agentName = agentId.toUpperCase();
+            const stateName = activityState.toUpperCase();
+            
+            // Create enhanced label with bigger decision number and better spacing
+            const enhancedDecisionNumber = `<b>${decisionNumber}</b>`;
+            const separator = '\n\n';  // Double line break for spacing
+            const badge = `<code>${emoji} ${agentName}: ${stateName}</code>`;
+            updatedNode.label = `${enhancedDecisionNumber}:\n\n${decisionTitle}${separator}${badge}`;
+            updatedNode.font = {
+                size: 12,
+                face: 'helvetica',
+                multi: 'html',
+                vadjust: 0,
+                color: '#FFFFFF',  // Make all text white for active nodes
+                bold: {
+                    size: 14,  // Larger size for decision number
+                    color: '#FFFFFF'
+                },
+                mono: {
+                    size: 10,
+                    face: 'monospace',
+                    color: '#FFFFFF',
+                    strokeWidth: 2,
+                    strokeColor: activityColors[activityState],
+                    vadjust: 2
+                }
+            };
+        } else {
+            // Reset to original label when idle
+            updatedNode.label = originalNode.label.split('\\n')[0];
+            updatedNode.font = {
+                size: 12,
+                face: 'helvetica',
+                multi: 'html',
+                vadjust: 0
+            };
+        }
+        
+        // Update the node in the dataset
+        this._nodesDataSet.update(updatedNode);
+        
+        // Enhanced visual effects for better visibility
+        if (activityState !== 'idle') {
+            updatedNode.borderWidth = 6;
+            updatedNode.borderWidthSelected = 8;
+            updatedNode.size = 40; // Larger for active nodes
+            
+            // Add stronger shadow for active nodes
+            updatedNode.shadow = {
+                enabled: true,
+                color: activityColors[activityState],
+                size: 15,
+                x: 0,
+                y: 0
+            };
+            
+            // Keep consistent font styling
+        } else {
+            // Reset to original state when idle
+            updatedNode.size = originalNode.size || 25;
+            updatedNode.shadow = false;
+        }
+    }
+    
+    // Add visual pulsing effect to active nodes
+    // Helper function to convert hex color to rgba with opacity
+    _hexToRgba(hex, opacity) {
+        const r = parseInt(hex.slice(1, 3), 16);
+        const g = parseInt(hex.slice(3, 5), 16);
+        const b = parseInt(hex.slice(5, 7), 16);
+        return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+    }
+
+    _addPulsingEffect(nodeId, activityState) {
+        if (!this._network) return;
+        
+        const pulseInterval = 2000; // 2 seconds
+        const pulseKey = `pulse-${nodeId}`;
+        
+        // Clear existing pulse for this node
+        if (this[pulseKey]) {
+            clearInterval(this[pulseKey]);
+        }
+        
+        // Create pulsing effect by periodically updating node size
+        let scale = 1;
+        let growing = true;
+        
+        this[pulseKey] = setInterval(() => {
+            if (!this._nodeActivities.has(nodeId)) {
+                clearInterval(this[pulseKey]);
+                delete this[pulseKey];
+                return;
+            }
+            
+            // Update scale
+            if (growing) {
+                scale += 0.02;
+                if (scale >= 1.1) growing = false;
+            } else {
+                scale -= 0.02;
+                if (scale <= 1) growing = true;
+            }
+            
+            // Apply scale to node (visual effect only)
+            const node = this._nodesDataSet.get(nodeId);
+            if (node) {
+                this._nodesDataSet.update({
+                    id: nodeId,
+                    scaling: {
+                        label: {
+                            enabled: true,
+                            min: 14 * scale,
+                            max: 14 * scale
+                        }
+                    }
+                });
+            }
+        }, 50);
+    }
+    
+    // Clear all activity states
+    clearAllActivities() {
+        // Clear all pulse effects
+        Object.keys(this).forEach(key => {
+            if (key.startsWith('pulse-')) {
+                clearInterval(this[key]);
+                delete this[key];
+            }
+        });
+        
+        // Reset all nodes to original state
+        this._nodeActivities.clear();
+        if (this._originalNodes && this._nodesDataSet) {
+            this._nodesDataSet.update(this._originalNodes);
+        }
+    }
 
     _maybeInitNetwork() {
         const container = this.shadowRoot && this.shadowRoot.getElementById('network');
@@ -153,7 +403,27 @@ class DecisionMap extends LitElement {
             edges: this._edgesDataSet,
         };
         const options = {
-            nodes: { shape: 'box', widthConstraint: 200 },
+            nodes: { 
+                shape: 'box', 
+                widthConstraint: { maximum: 200, minimum: 100 },
+                heightConstraint: { minimum: 60, valign: 'middle' },
+                margin: {
+                    top: 15,
+                    bottom: 15,
+                    left: 12,
+                    right: 12
+                },
+                font: {
+                    size: 12,
+                    face: 'helvetica',
+                    multi: 'html',
+                    vadjust: 0,
+                    mono: {
+                        size: 10,
+                        face: 'monospace'
+                    }
+                }
+            },
             physics: { forceAtlas2Based: { gravitationalConstant: -50, centralGravity: 0.005, springLength: 230 } },
             interaction: {
                 dragNodes: true,

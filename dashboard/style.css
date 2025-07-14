@@ -16,6 +16,13 @@ html {
     --tab-active-color: #0052cc;
     --log-selected-bg: #e9ecef;
     --log-hover-bg: #f8f9fa;
+    
+    /* Activity state colors */
+    --activity-working: #4CAF50;
+    --activity-debugging: #FF9800;
+    --activity-testing: #2196F3;
+    --activity-reviewing: #9C27B0;
+    --activity-idle: #757575;
 }
 
 body,
@@ -44,6 +51,13 @@ body.dark-theme {
     --tab-active-color: #3399ff;
     --log-selected-bg: #000;
     --log-hover-bg: #000;
+    
+    /* Activity colors stay the same - they work well in dark theme */
+    --activity-working: #4CAF50;
+    --activity-debugging: #FF9800;
+    --activity-testing: #2196F3;
+    --activity-reviewing: #9C27B0;
+    --activity-idle: #757575;
 }
 
 .dashboard {
@@ -257,4 +271,169 @@ body.dark-theme .search-input {
 
 h2, h3, h4, p, .panel-content, .log-item, .tab-button {
     color: var(--text-main) !important;
+}
+
+/* Activity State Animations */
+@keyframes pulse-activity {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes glow-working {
+    0% { box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); }
+    50% { box-shadow: 0 0 20px rgba(76, 175, 80, 0.8), 0 0 30px rgba(76, 175, 80, 0.4); }
+    100% { box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); }
+}
+
+@keyframes glow-debugging {
+    0% { box-shadow: 0 0 5px rgba(255, 152, 0, 0.5); }
+    50% { box-shadow: 0 0 20px rgba(255, 152, 0, 0.8), 0 0 30px rgba(255, 152, 0, 0.4); }
+    100% { box-shadow: 0 0 5px rgba(255, 152, 0, 0.5); }
+}
+
+@keyframes glow-testing {
+    0% { box-shadow: 0 0 5px rgba(33, 150, 243, 0.5); }
+    50% { box-shadow: 0 0 20px rgba(33, 150, 243, 0.8), 0 0 30px rgba(33, 150, 243, 0.4); }
+    100% { box-shadow: 0 0 5px rgba(33, 150, 243, 0.5); }
+}
+
+@keyframes glow-reviewing {
+    0% { box-shadow: 0 0 5px rgba(156, 39, 176, 0.5); }
+    50% { box-shadow: 0 0 20px rgba(156, 39, 176, 0.8), 0 0 30px rgba(156, 39, 176, 0.4); }
+    100% { box-shadow: 0 0 5px rgba(156, 39, 176, 0.5); }
+}
+
+/* Activity Panel Styles */
+#activity-panel {
+    grid-column: 3 / 4;
+    grid-row: 1 / 2;
+    background: var(--panel-bg);
+    border-radius: var(--panel-radius);
+    box-shadow: var(--panel-shadow);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+#activity-timeline-panel {
+    grid-column: 1 / 2;
+    grid-row: 3 / 4;
+    background: var(--panel-bg);
+    border-radius: var(--panel-radius);
+    box-shadow: var(--panel-shadow);
+    overflow: hidden;
+}
+
+/* Adjust grid for new activity panels */
+.dashboard.with-activities {
+    grid-template-rows: auto 1fr 1fr;
+}
+
+/* Activity state animations and effects */
+@keyframes activityPulse {
+    0% { 
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% { 
+        transform: scale(1.05);
+        opacity: 0.8;
+    }
+    100% { 
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes activityGlow {
+    0% { 
+        filter: drop-shadow(0 0 5px currentColor);
+    }
+    50% { 
+        filter: drop-shadow(0 0 15px currentColor);
+    }
+    100% { 
+        filter: drop-shadow(0 0 5px currentColor);
+    }
+}
+
+@keyframes activityBorderPulse {
+    0% { border-width: 3px; }
+    50% { border-width: 6px; }
+    100% { border-width: 3px; }
+}
+
+/* Activity state indicators for decision nodes */
+.decision-node-active {
+    animation: activityPulse 2s infinite ease-in-out;
+}
+
+.decision-node-working {
+    border-color: var(--activity-working) !important;
+    background-color: rgba(76, 175, 80, 0.1) !important;
+}
+
+.decision-node-debugging {
+    border-color: var(--activity-debugging) !important;
+    background-color: rgba(255, 152, 0, 0.1) !important;
+}
+
+.decision-node-testing {
+    border-color: var(--activity-testing) !important;
+    background-color: rgba(33, 150, 243, 0.1) !important;
+}
+
+.decision-node-reviewing {
+    border-color: var(--activity-reviewing) !important;
+    background-color: rgba(156, 39, 176, 0.1) !important;
+}
+
+/* Activity badges for decision details and log */
+.activity-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    padding: 4px 8px !important;
+    border-radius: 12px !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    animation: activityPulse 2s infinite ease-in-out !important;
+    border: 2px solid #000 !important; /* Debug border */
+}
+
+.activity-badge.working {
+    background-color: #4CAF50 !important;
+    color: white !important;
+}
+
+.activity-badge.debugging {
+    background-color: #FF9800 !important;
+    color: white !important;
+}
+
+.activity-badge.testing {
+    background-color: #2196F3 !important;
+    color: white !important;
+}
+
+.activity-badge.reviewing {
+    background-color: #9C27B0 !important;
+    color: white !important;
+}
+
+.activity-badge.idle {
+    background-color: #757575 !important;
+    color: white !important;
+}
+
+/* Override vis.js default font styling for network nodes */
+.vis-network canvas {
+    font-weight: normal !important;
+}
+
+/* Ensure decision map nodes maintain consistent font weight */
+#decision-map * {
+    font-weight: normal !important;
 }

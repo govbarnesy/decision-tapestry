@@ -40,7 +40,7 @@ async function initializeDashboard(focusNodeId = null) {
             const nodeBg = isDark ? '#000' : '#fff';
             const nodes = decisions.map(d => ({
                 id: d.id,
-                label: `#${d.id}: ${d.title}`,
+                label: `#${d.id}:\n${d.title}`,  // Add line break for better spacing
                 color: {
                     border: statusColorMapping[d.status] || '#007bff',
                     background: nodeBg,
@@ -53,9 +53,25 @@ async function initializeDashboard(focusNodeId = null) {
                         background: nodeBg
                     }
                 },
-                font: { color: fontColor }
+                chosen: {
+                    node: function(values, id, selected, hovering) {
+                        // Prevent font changes on selection/hover
+                        if (!values.font) values.font = {};
+                        values.font.size = 12;
+                        values.font.face = 'helvetica';
+                        values.font.vadjust = 0;
+                        values.font.multi = 'html';
+                    }
+                },
+                font: { 
+                    color: fontColor,
+                    size: 12,
+                    face: 'helvetica',
+                    multi: 'html',
+                    vadjust: 0
+                }
             }));
-            const relatedEdges = decisions.flatMap(d => d.related_to ? d.related_to.map(r => ({ from: r, to: d.id, dashes: true, color: '#848484' })) : []);
+            const relatedEdges = decisions.flatMap(d => d.related_to ? d.related_to.map(r => ({ from: r, to: d.id, dashes: [5, 5], color: '#848484' })) : []);
             const supersedesEdges = decisions.flatMap(d => d.supersedes ? [{ from: d.id, to: d.supersedes, dashes: [5, 5], color: '#dc3545', width: 2, label: 'supersedes' }] : []);
             const edges = [...relatedEdges, ...supersedesEdges];
             requestAnimationFrame(() => {
@@ -70,6 +86,17 @@ async function initializeDashboard(focusNodeId = null) {
                 requestAnimationFrame(() => {
                     handleDecisionSelection(currentSelectedDecisionId, false);
                 });
+            }
+        }
+        
+        // After loading new data, update the decision detail panel if a decision is currently selected
+        if (currentSelectedDecisionId && !focusNodeId) {
+            const updatedDecision = allDecisions.find(d => d.id === currentSelectedDecisionId);
+            const detailPanel = document.getElementById('decision-detail');
+            
+            if (detailPanel && updatedDecision) {
+                // Use the forceUpdateDecision method for better reactivity
+                detailPanel.forceUpdateDecision(JSON.parse(JSON.stringify(updatedDecision)));
             }
         }
 
@@ -89,6 +116,9 @@ async function initializeDashboard(focusNodeId = null) {
         console.error('Failed to initialize dashboard:', error);
         displayErrorMessage(error.message);
     }
+    
+    // Load current agent activities after dashboard loads
+    loadCurrentActivities();
 }
 
 function displayErrorMessage(message) {
@@ -363,7 +393,7 @@ function setupEventListeners() {
                 const nodeBg = isDark ? '#000' : '#fff';
                 const nodes = filteredDecisions.map(d => ({
                     id: d.id,
-                    label: `#${d.id}: ${d.title}`,
+                    label: `#${d.id}:\n${d.title}`,  // Add line break for better spacing
                     color: {
                         border: statusColorMapping[d.status] || '#007bff',
                         background: nodeBg,
@@ -376,9 +406,25 @@ function setupEventListeners() {
                             background: nodeBg
                         }
                     },
-                    font: { color: fontColor }
+                    chosen: {
+                        node: function(values, id, selected, hovering) {
+                            // Prevent font changes on selection/hover
+                            if (!values.font) values.font = {};
+                            values.font.size = 12;
+                            values.font.face = 'helvetica';
+                            values.font.vadjust = 0;
+                            values.font.multi = 'html';
+                        }
+                    },
+                    font: { 
+                        color: fontColor,
+                        size: 12,
+                        face: 'helvetica',
+                        multi: 'html',
+                        vadjust: 0
+                    }
                 }));
-                const relatedEdges = filteredDecisions.flatMap(d => d.related_to ? d.related_to.map(r => ({ from: r, to: d.id, dashes: true, color: '#848484' })) : []);
+                const relatedEdges = filteredDecisions.flatMap(d => d.related_to ? d.related_to.map(r => ({ from: r, to: d.id, dashes: [5, 5], color: '#848484' })) : []);
                 const supersedesEdges = filteredDecisions.flatMap(d => d.supersedes ? [{ from: d.id, to: d.supersedes, dashes: [5, 5], color: '#dc3545', width: 2, label: 'supersedes' }] : []);
                 const edges = [...relatedEdges, ...supersedesEdges];
                 requestAnimationFrame(() => {
@@ -390,6 +436,117 @@ function setupEventListeners() {
             if (filteredDecisions.length === 1) {
                 handleDecisionSelection(filteredDecisions[0].id, true); // Animate
             }
+        });
+    }
+    
+    // Add event listeners for activity component events
+    document.addEventListener('decision-focus', (e) => {
+        const decisionId = e.detail.decisionId;
+        if (decisionId) {
+            handleDecisionSelection(decisionId, true); // Animate to decision
+        }
+    });
+    
+    document.addEventListener('agent-click', (e) => {
+        console.log('Agent clicked:', e.detail);
+        // Could be extended to show agent details or filter by agent
+    });
+}
+
+async function loadCurrentActivities() {
+    try {
+        const response = await fetch('/api/activity');
+        const data = await response.json();
+        
+        console.log('Loading current activities:', data.activities);
+        
+        // Restore visual states for all active agents
+        data.activities.forEach(activity => {
+            if (activity.state !== 'idle' && activity.decisionId) {
+                // Check if the decision exists before restoring activity
+                const decision = allDecisions.find(d => d.id === activity.decisionId);
+                if (decision) {
+                    handleActivityUpdate({
+                        agentId: activity.agentId,
+                        activity: {
+                            state: activity.state,
+                            decisionId: activity.decisionId,
+                            taskDescription: activity.taskDescription
+                        },
+                        timestamp: activity.lastUpdate
+                    });
+                } else {
+                    console.warn(`[Activity] Skipping restore for decision ${activity.decisionId} - not found in current decisions`);
+                }
+            }
+        });
+    } catch (error) {
+        console.warn('Could not load current activities:', error);
+    }
+}
+
+function handleActivityUpdate(message) {
+    console.log(`[Activity] ${message.agentId} -> ${message.activity.state} on decision ${message.activity.decisionId}`);
+    
+    // Update decision map with activity indicators if the activity is linked to a decision
+    if (message.activity.decisionId) {
+        const decisionMap = document.getElementById('decision-map');
+        if (decisionMap && decisionMap.updateNodeActivity) {
+            // Use the new updateNodeActivity method
+            decisionMap.updateNodeActivity(
+                message.activity.decisionId,
+                message.agentId,
+                message.activity.state
+            );
+        }
+        
+        // Auto-select and focus on the node when activity starts (not for idle state)
+        if (message.activity.state !== 'idle') {
+            // Check if the decision exists before trying to select it
+            const decision = allDecisions.find(d => d.id === message.activity.decisionId);
+            if (decision) {
+                console.log(`[Activity] Auto-selecting decision ${message.activity.decisionId} for ${message.agentId}`);
+                handleDecisionSelection(message.activity.decisionId, true); // true = animate focus
+            } else {
+                console.warn(`[Activity] Decision ${message.activity.decisionId} not found in current decisions, skipping auto-selection`);
+            }
+        }
+        
+        // Update decision details panel if this decision is currently selected
+        const detailPanel = document.getElementById('decision-detail');
+        if (detailPanel && detailPanel.decision && detailPanel.decision.id === message.activity.decisionId) {
+            detailPanel.updateActivity(
+                message.agentId,
+                message.activity.state,
+                message.activity.taskDescription
+            );
+        }
+        
+        // Update decision log with activity badge
+        const logPanel = document.getElementById('decision-log-content');
+        if (logPanel && logPanel.updateDecisionActivity) {
+            logPanel.updateDecisionActivity(
+                message.activity.decisionId,
+                message.agentId,
+                message.activity.state,
+                message.activity.taskDescription
+            );
+        }
+    }
+    
+    // Update agent status panel if it exists
+    const agentStatusPanel = document.querySelector('agent-status-panel');
+    if (agentStatusPanel && agentStatusPanel.updateAgentActivity) {
+        agentStatusPanel.updateAgentActivity(message.agentId, message.activity);
+    }
+    
+    // Update activity timeline if it exists
+    const activityTimeline = document.querySelector('activity-timeline');
+    if (activityTimeline && activityTimeline.addActivity) {
+        activityTimeline.addActivity({
+            agentId: message.agentId,
+            activity: message.activity,
+            timestamp: message.timestamp || new Date().toISOString()
         });
     }
 }
@@ -416,12 +573,15 @@ function initializeWebSocket() {
         socket.onerror = (error) => console.error('WebSocket error:', error);
 
         socket.onmessage = (event) => {
-            console.log('WebSocket message received:', event.data);
             try {
                 const message = JSON.parse(event.data);
                 if (message.type === 'update') {
                     console.log('File change detected, refreshing dashboard...');
                     initializeDashboard(message.decisionId); // focus on the updated node if available
+                } else if (message.type === 'activity') {
+                    handleActivityUpdate(message);
+                } else {
+                    console.log('Unknown WebSocket message type:', message.type);
                 }
             } catch (e) {
                 console.error('Error parsing WebSocket message:', e);
@@ -437,11 +597,11 @@ function applyTheme(theme) {
     if (theme === 'dark') {
         document.body.classList.add('dark-theme');
         const btn = document.getElementById('theme-toggle-btn');
-        if (btn) btn.textContent = '☀️ Light Mode';
+        if (btn) btn.textContent = '☀️';
     } else {
         document.body.classList.remove('dark-theme');
         const btn = document.getElementById('theme-toggle-btn');
-        if (btn) btn.textContent = '🌙 Dark Mode';
+        if (btn) btn.textContent = '🌙';
     }
 }
 
@@ -480,3 +640,6 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// Expose handleActivityUpdate globally for testing
+window.handleActivityUpdate = handleActivityUpdate;

@@ -46,11 +46,21 @@ Open http://localhost:8080 to view your decision dashboard.
 ## Features
 
 ✅ **Interactive Dashboard** - Visual decision map with search and filtering  
+✅ **Real-time Collaboration** - Live updates across all connected clients  
+  - Instant decision and task status changes
+  - Agent activity tracking with visual indicators  
+  - Auto-focus on active decisions
+  - WebSocket-based synchronization
 ✅ **Dark/Light Themes** - Automatic system preference detection  
-✅ **Real-time Updates** - Live sync across team members  
 ✅ **AI-Powered Planning** - Context-aware project onboarding  
 ✅ **Quality Automation** - Pre-commit hooks and CI/CD  
-✅ **Historical Analysis** - Extract decisions from existing codebases  
+✅ **Historical Analysis** - Extract decisions from existing codebases
+
+### 🆕 New in v1.2.0: Enhanced Real-time Experience
+- **Live Dashboard Updates**: All changes appear instantly without browser refresh
+- **Agent Activity Visualization**: See who's working on what in real-time
+- **Improved Reliability**: Robust file watching with automatic fallbacks
+- **Better Visual Feedback**: Activity badges and animations on decision nodes  
 
 ---
 

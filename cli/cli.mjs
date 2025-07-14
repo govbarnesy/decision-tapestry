@@ -30,6 +30,10 @@ const commands = {
         description: "Validate decisions.yml against the schema.",
         action: validateDecisionsFile
     },
+    activity: {
+        description: "Manage Claude Code activity tracking (start, end, status).",
+        action: manageActivity
+    },
     help: {
         description: "Show this help message.",
         action: showHelp
@@ -517,5 +521,105 @@ async function validateDecisionsFile() {
         console.log("💡 For examples and documentation, see decisions.template.yml");
         console.log("💡 Run 'decision-tapestry init' to start with a minimal valid file");
         process.exitCode = 1;
+    }
+}
+
+async function manageActivity() {
+    const activityArgs = process.argv.slice(3);
+    const subcommand = activityArgs[0] || 'help';
+    
+    // Dynamic import for activity module
+    let activityModule;
+    try {
+        activityModule = await import('../claude-code-integration/claude-code-hook.mjs');
+    } catch (err) {
+        console.error("❌ Activity tracking module not available");
+        console.error("💡 This feature requires the Claude Code integration to be installed");
+        return;
+    }
+    
+    const { 
+        startSession, 
+        endSession, 
+        setDecisionContext, 
+        getMonitoringStatus,
+        toggleActivityTracking 
+    } = activityModule;
+    
+    switch (subcommand) {
+        case 'start': {
+            const decisionId = activityArgs[1];
+            startSession(decisionId ? parseInt(decisionId) : null);
+            console.log("✅ Activity tracking session started");
+            if (decisionId) {
+                console.log(`📌 Tracking activities for decision #${decisionId}`);
+            }
+            break;
+        }
+            
+        case 'end':
+            endSession();
+            console.log("⏹️  Activity tracking session ended");
+            break;
+            
+        case 'context': {
+            const contextId = activityArgs[1];
+            if (!contextId) {
+                console.error("❌ Please provide a decision ID");
+                console.log("💡 Usage: decision-tapestry activity context <decision-id>");
+                return;
+            }
+            setDecisionContext(parseInt(contextId));
+            console.log(`📌 Activity context set to decision #${contextId}`);
+            break;
+        }
+            
+        case 'status': {
+            const status = getMonitoringStatus();
+            console.log("\n🔍 Activity Monitoring Status:");
+            console.log("─".repeat(40));
+            console.log(`Tracking: ${status.enabled ? '✅ enabled' : '❌ disabled'}`);
+            console.log(`Server: ${status.serverUrl}`);
+            console.log(`Current Decision: ${status.currentDecision ? `#${status.currentDecision}` : 'none'}`);
+            console.log(`File Mappings: ${status.fileMapSize} files mapped`);
+            
+            if (status.lastActivity) {
+                console.log("\n📊 Last Activity:");
+                console.log("─".repeat(40));
+                console.log(`State: ${status.lastActivity.state}`);
+                console.log(`Description: ${status.lastActivity.taskDescription}`);
+                if (status.lastActivity.decisionId) {
+                    console.log(`Decision: #${status.lastActivity.decisionId}`);
+                }
+            }
+            break;
+        }
+            
+        case 'toggle': {
+            const state = activityArgs[1];
+            if (!state || !['on', 'off'].includes(state)) {
+                console.error("❌ Please specify 'on' or 'off'");
+                console.log("💡 Usage: decision-tapestry activity toggle [on|off]");
+                return;
+            }
+            toggleActivityTracking(state === 'on');
+            console.log(`✅ Activity tracking ${state === 'on' ? 'enabled' : 'disabled'}`);
+            break;
+        }
+            
+        case 'help':
+        default:
+            console.log("\n📊 Activity Tracking Commands:");
+            console.log("─".repeat(40));
+            console.log("  start [decision-id]  Start tracking session");
+            console.log("  end                  End tracking session");
+            console.log("  context <id>         Set decision context");
+            console.log("  status               Show current status");
+            console.log("  toggle [on|off]      Enable/disable tracking");
+            console.log("\nExamples:");
+            console.log("  decision-tapestry activity start 58");
+            console.log("  decision-tapestry activity status");
+            console.log("  decision-tapestry activity end");
+            break;
     }
 } 

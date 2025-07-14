@@ -4,6 +4,7 @@ import fsp from 'fs/promises';
 import http from 'http';
 import yaml from 'js-yaml';
 import path from 'path';
+import chokidar from 'chokidar';
 import { fileURLToPath } from 'url';
 import { WebSocketServer } from 'ws';
 import { readDecisionsFile, writeDecisionsFile } from '../shared/yaml-utils.js';
@@ -55,6 +56,48 @@ function broadcast(data) {
       client.send(JSON.stringify(data));
     }
   });
+}
+
+// Activity state tracking for real-time development visualization
+const activeAgents = new Map();
+const activityHistory = [];
+const activityStates = ['idle', 'working', 'debugging', 'testing', 'reviewing'];
+const MAX_HISTORY_ENTRIES = 1000;
+
+function broadcastActivity(agentId, activity) {
+  const activityData = {
+    type: 'activity',
+    agentId,
+    activity,
+    timestamp: new Date().toISOString(),
+    decisionId: activity.decisionId || null
+  };
+  
+  // Persist activity to history
+  persistActivity(agentId, activity);
+  
+  console.log(`[Agent-1] Broadcasting activity: ${agentId} is ${activity.state}`);
+  broadcast(activityData);
+}
+
+function persistActivity(agentId, activity) {
+  const historyEntry = {
+    id: `${agentId}-${Date.now()}`,
+    agentId,
+    state: activity.state,
+    decisionId: activity.decisionId,
+    taskDescription: activity.taskDescription,
+    timestamp: new Date().toISOString()
+  };
+  
+  activityHistory.push(historyEntry);
+  
+  // Maintain history size limit
+  if (activityHistory.length > MAX_HISTORY_ENTRIES) {
+    activityHistory.shift();
+  }
+  
+  console.log(`[Agent-1] Persisted activity: ${agentId} -> ${activity.state} (history: ${activityHistory.length} entries)`);
 }
 
 async function getData() {
@@ -194,6 +237,121 @@ app.post('/api/decisions/promote', async (req, res) => {
   }
 });
 
+// Activity tracking endpoints - Agent-1 Infrastructure work
+app.post('/api/activity', express.json(), (req, res) => {
+  const { agentId, state, decisionId, taskDescription } = req.body;
+  
+  if (!agentId || !state) {
+    return res.status(400).json({ error: 'agentId and state are required' });
+  }
+  
+  if (!activityStates.includes(state)) {
+    return res.status(400).json({ error: 'Invalid activity state' });
+  }
+  
+  // Update agent activity
+  activeAgents.set(agentId, {
+    state,
+    decisionId,
+    taskDescription,
+    lastUpdate: new Date().toISOString()
+  });
+  
+  // Broadcast to all connected clients
+  broadcastActivity(agentId, { state, decisionId, taskDescription });
+  
+  console.log(`[Agent-1] Activity update: ${agentId} -> ${state} on decision ${decisionId}`);
+  res.status(200).json({ message: 'Activity updated successfully' });
+});
+
+app.get('/api/activity', (req, res) => {
+  const { includeHistory = false, agentId, limit = 50 } = req.query;
+  
+  const currentActivities = Array.from(activeAgents.entries()).map(([agentId, activity]) => ({
+    agentId,
+    ...activity
+  }));
+  
+  const response = { activities: currentActivities };
+  
+  if (includeHistory === 'true') {
+    let history = activityHistory;
+    
+    // Filter by agent if requested
+    if (agentId) {
+      history = history.filter(entry => entry.agentId === agentId);
+    }
+    
+    // Apply limit
+    const limitNum = parseInt(limit);
+    if (limitNum && limitNum > 0) {
+      history = history.slice(-limitNum);
+    }
+    
+    response.history = history;
+  }
+  
+  res.json(response);
+});
+
+// New endpoint for activity history analytics
+app.get('/api/activity/analytics', (req, res) => {
+  const { timeRange = '1h' } = req.query;
+  
+  // Calculate time cutoff
+  const now = new Date();
+  let cutoffTime;
+  switch (timeRange) {
+    case '15m': cutoffTime = new Date(now - 15 * 60 * 1000); break;
+    case '1h': cutoffTime = new Date(now - 60 * 60 * 1000); break;
+    case '6h': cutoffTime = new Date(now - 6 * 60 * 60 * 1000); break;
+    case '24h': cutoffTime = new Date(now - 24 * 60 * 60 * 1000); break;
+    default: cutoffTime = new Date(now - 60 * 60 * 1000);
+  }
+  
+  // Filter activity history by time range
+  const recentActivity = activityHistory.filter(entry => 
+    new Date(entry.timestamp) >= cutoffTime
+  );
+  
+  // Calculate analytics
+  const agentActivityCounts = {};
+  const stateDistribution = {};
+  const decisionActivityCounts = {};
+  
+  recentActivity.forEach(entry => {
+    // Agent activity counts
+    agentActivityCounts[entry.agentId] = (agentActivityCounts[entry.agentId] || 0) + 1;
+    
+    // State distribution
+    stateDistribution[entry.state] = (stateDistribution[entry.state] || 0) + 1;
+    
+    // Decision activity counts
+    if (entry.decisionId) {
+      decisionActivityCounts[entry.decisionId] = (decisionActivityCounts[entry.decisionId] || 0) + 1;
+    }
+  });
+  
+  res.json({
+    timeRange,
+    totalActivities: recentActivity.length,
+    agentActivityCounts,
+    stateDistribution,
+    decisionActivityCounts,
+    mostActiveAgent: Object.keys(agentActivityCounts).reduce((a, b) => 
+      agentActivityCounts[a] > agentActivityCounts[b] ? a : b, null),
+    mostActiveDecision: Object.keys(decisionActivityCounts).reduce((a, b) => 
+      decisionActivityCounts[a] > decisionActivityCounts[b] ? a : b, null)
+  });
+});
+
+// Manual refresh endpoint for backup
+app.post('/api/refresh', (req, res) => {
+  console.log('[Manual] Forcing dashboard refresh via API call');
+  broadcast({ type: 'update' });
+  res.json({ message: 'Refresh broadcast sent to all clients' });
+});
+
 // Health check endpoint
 app.get('/api/health', async (_req, res) => {
   const health = {
@@ -244,17 +402,61 @@ app.get('/api/health', async (_req, res) => {
 const decisionsPath = path.join(CWD, 'decisions.yml');
 let debounceTimer = null;
 
-if (fs.existsSync(decisionsPath)) {
-  fs.watch(decisionsPath, (eventType) => {
+// Use chokidar for more reliable file watching
+const watcher = chokidar.watch(decisionsPath, {
+  persistent: true,
+  usePolling: false,
+  interval: 100,
+  binaryInterval: 300,
+  ignoreInitial: true,
+  awaitWriteFinish: {
+    stabilityThreshold: 100,
+    pollInterval: 50
+  }
+});
+
+watcher
+  .on('change', (path, stats) => {
     if (debounceTimer) clearTimeout(debounceTimer);
     debounceTimer = setTimeout(() => {
-      console.log(`[Watcher] Detected change in decisions.yml (${eventType}), broadcasting update.`);
+      console.log(`[Chokidar] Detected change in decisions.yml, broadcasting update.`);
       broadcast({ type: 'update' });
-    }, 200);
+    }, 150);
+  })
+  .on('error', error => {
+    console.error(`[Chokidar] Watcher error:`, error);
+    // Fallback to polling if watching fails
+    console.log(`[Chokidar] Falling back to polling mode...`);
+    watcher.close();
+    startPollingFallback();
+  })
+  .on('ready', () => {
+    console.log(`[Chokidar] Watching for changes in: ${decisionsPath}`);
   });
-  console.log(`[Watcher] Watching for changes in: ${decisionsPath}`);
-} else {
-  console.warn(`[Watcher] decisions.yml not found at: ${decisionsPath}`);
+
+// Polling fallback for extreme cases
+function startPollingFallback() {
+  let lastModified = null;
+  
+  const pollFile = async () => {
+    try {
+      const stats = await fsp.stat(decisionsPath);
+      const currentModified = stats.mtime.getTime();
+      
+      if (lastModified !== null && currentModified !== lastModified) {
+        console.log(`[Polling] Detected change in decisions.yml, broadcasting update.`);
+        broadcast({ type: 'update' });
+      }
+      
+      lastModified = currentModified;
+    } catch (error) {
+      console.error(`[Polling] Error checking file:`, error);
+    }
+  };
+  
+  // Poll every 1 second as fallback
+  setInterval(pollFile, 1000);
+  console.log(`[Polling] Started polling fallback for: ${decisionsPath}`);
 }
 
 server.listen(port, () => {
@@ -264,6 +466,13 @@ server.listen(port, () => {
 
 const gracefulShutdown = () => {
   console.log('Attempting graceful shutdown...');
+  
+  // Close file watcher
+  if (watcher) {
+    watcher.close();
+    console.log('File watcher closed.');
+  }
+  
   server.close(() => {
     console.log('Server successfully closed.');
     process.exit(0);

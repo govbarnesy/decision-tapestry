@@ -37,17 +37,71 @@ class DecisionLogPanel extends LitElement {
         .status-accepted { color: #28a745; font-weight: bold; }
         .status-superseded { color: #6c757d; font-weight: bold; }
         .status-deprecated { color: #dc3545; font-weight: bold; }
+        
+        /* Activity badge styles */
+        .activity-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: white;
+            animation: activityPulse 1.5s infinite ease-in-out;
+        }
+        .activity-badge.working { background-color: #4CAF50; }
+        .activity-badge.debugging { background-color: #FF9800; }
+        .activity-badge.testing { background-color: #2196F3; }
+        .activity-badge.reviewing { background-color: #9C27B0; }
+        .activity-badge.idle { background-color: #757575; }
+        
+        @keyframes activityPulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
     `;
 
     static properties = {
         decisions: { type: Array },
         selectedId: { type: Number },
+        decisionActivities: { type: Map },
     };
 
     constructor() {
         super();
         this.decisions = [];
         this.selectedId = null;
+        this.decisionActivities = new Map();
+    }
+    
+    updateDecisionActivity(decisionId, agentId, activityState, taskDescription) {
+        console.log('[DecisionLogPanel] updateDecisionActivity called:', { decisionId, agentId, activityState, taskDescription });
+        if (activityState === 'idle') {
+            this.decisionActivities.delete(decisionId);
+        } else {
+            this.decisionActivities.set(decisionId, {
+                agentId,
+                state: activityState,
+                taskDescription
+            });
+        }
+        console.log('[DecisionLogPanel] decisionActivities updated:', this.decisionActivities);
+        this.requestUpdate();
+        console.log('[DecisionLogPanel] requestUpdate called');
+    }
+    
+    getActivityEmoji(state) {
+        const emojis = {
+            'working': '🔧',
+            'debugging': '🐛', 
+            'testing': '🧪',
+            'reviewing': '👁️',
+            'idle': '💤'
+        };
+        return emojis[state] || '⚙️';
     }
 
     _handleItemClick(decisionId) {
@@ -80,6 +134,13 @@ class DecisionLogPanel extends LitElement {
             const formattedDate = decisionDate.toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
             const statusClass = `status-${decision.status.toLowerCase().replace(' ', '-')}`;
             const isSelected = this.selectedId === decision.id;
+            const activity = this.decisionActivities.get(decision.id);
+            
+            const activityBadge = activity ? html`
+                <span class="activity-badge ${activity.state}" style="margin-left: 8px; font-size: 10px;">
+                    ${this.getActivityEmoji(activity.state)} ${activity.agentId}
+                </span>
+            ` : '';
 
             return html`
                     <div
@@ -87,7 +148,7 @@ class DecisionLogPanel extends LitElement {
                         data-decision-id=${decision.id}
                         @click=${() => this._handleItemClick(decision.id)}
                     >
-                        <h4>Decision #${decision.id}: ${decision.title}</h4>
+                        <h4>Decision #${decision.id}: ${decision.title} ${activityBadge}</h4>
                         <p>${formattedDate} | Status: <span class=${statusClass}>${decision.status}</span></p>
                     </div>
                 `;
