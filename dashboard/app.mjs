@@ -89,6 +89,33 @@ async function initializeDashboard(focusNodeId = null) {
             }
         }
         
+        // Setup Architecture Map
+        const architectureMap = document.getElementById('architecture-map');
+        if (architectureMap) {
+            architectureMap.decisions = decisions;
+        }
+        
+        // Setup Search Panel
+        const searchPanel = document.getElementById('search-controls');
+        if (searchPanel) {
+            searchPanel.decisions = decisions;
+            // Initialize filteredDecisions to show all decisions initially
+            searchPanel.filteredDecisions = decisions;
+        }
+        
+        // Setup Advanced Filter
+        const advancedFilter = document.getElementById('advanced-filter');
+        if (advancedFilter) {
+            advancedFilter.decisions = decisions;
+        }
+        
+        // Setup Pathway Explorer
+        const pathwayExplorer = document.getElementById('pathway-explorer');
+        if (pathwayExplorer) {
+            pathwayExplorer.decisions = decisions;
+        }
+        
+        
         // After loading new data, update the decision detail panel if a decision is currently selected
         if (currentSelectedDecisionId && !focusNodeId) {
             const updatedDecision = allDecisions.find(d => d.id === currentSelectedDecisionId);
@@ -214,6 +241,49 @@ function calculateHealthMetrics(decisions) {
     };
 }
 
+function calculateImpactScore(decision) {
+    // Simple impact scoring based on available data
+    let score = 0;
+    
+    if (decision.affected_components && decision.affected_components.length > 0) {
+        score += decision.affected_components.length;
+    }
+    
+    if (decision.related_to && decision.related_to.length > 0) {
+        score += decision.related_to.length;
+    }
+    
+    if (decision.supersedes) {
+        score += 2;
+    }
+    
+    return Math.min(score, 10); // Cap at 10
+}
+
+function inferCategory(decision) {
+    const title = decision.title || '';
+    const lowerTitle = title.toLowerCase();
+    
+    if (lowerTitle.includes('cli') || lowerTitle.includes('automation') || lowerTitle.includes('docker') || lowerTitle.includes('release')) {
+        return 'Developer Experience';
+    } else if (lowerTitle.includes('websocket') || lowerTitle.includes('server') || lowerTitle.includes('infrastructure') || lowerTitle.includes('api') || lowerTitle.includes('redis') || lowerTitle.includes('session')) {
+        return 'Infrastructure';
+    } else if (lowerTitle.includes('dashboard') || lowerTitle.includes('ui') || lowerTitle.includes('theme') || lowerTitle.includes('visual') || lowerTitle.includes('layout') || lowerTitle.includes('panel')) {
+        return 'UI/UX';
+    } else if (lowerTitle.includes('architecture') || lowerTitle.includes('component') || lowerTitle.includes('structure') || lowerTitle.includes('design')) {
+        return 'Architecture';
+    } else if (lowerTitle.includes('process') || lowerTitle.includes('workflow') || lowerTitle.includes('coordination') || lowerTitle.includes('collaboration') || lowerTitle.includes('debugging')) {
+        return 'Process';
+    } else if (lowerTitle.includes('test') || lowerTitle.includes('quality') || lowerTitle.includes('lint') || lowerTitle.includes('error')) {
+        return 'Quality';
+    } else if (lowerTitle.includes('integration') || lowerTitle.includes('vscode') || lowerTitle.includes('extension') || lowerTitle.includes('prompt')) {
+        return 'Integration';
+    } else if (lowerTitle.includes('memory') || lowerTitle.includes('knowledge') || lowerTitle.includes('decision') || lowerTitle.includes('tapestry')) {
+        return 'Knowledge Management';
+    }
+    return 'Other';
+}
+
 async function promoteToDecision(backlogId) {
     try {
         const response = await fetch('/api/decisions/promote', {
@@ -311,15 +381,20 @@ function showErrorToast(message) {
 function handleDecisionSelection(decisionId, animate = false) {
     currentSelectedDecisionId = decisionId;
     const decisionMap = document.getElementById('decision-map');
+    const architectureMap = document.getElementById('architecture-map');
     const detailPanel = document.getElementById('decision-detail');
     const logPanel = document.getElementById('decision-log-content');
-
     const decision = allDecisions.find(d => d.id === decisionId);
 
     // Update the state of all relevant components
     if (detailPanel) detailPanel.decision = decision ? JSON.parse(JSON.stringify(decision)) : null;
     if (logPanel) logPanel.selectedId = decisionId;
     if (decisionMap) decisionMap.selectNode(decisionId);
+    
+    // Update Architecture Map - highlight affected components
+    if (architectureMap) {
+        architectureMap.highlightDecisionImpact(decisionId);
+    }
 
     // If triggered from an interaction that requires camera movement,
     // fire the animation on the next frame.
@@ -328,6 +403,117 @@ function handleDecisionSelection(decisionId, animate = false) {
             decisionMap.focusOnNode(decisionId);
         });
     }
+}
+
+function switchCenterView(view) {
+    // Update tab active states
+    const centerTabs = document.querySelectorAll('.center-tab');
+    centerTabs.forEach(tab => {
+        if (tab.dataset.view === view) {
+            tab.classList.add('active');
+        } else {
+            tab.classList.remove('active');
+        }
+    });
+    
+    // Update view active states
+    const centerViews = document.querySelectorAll('.center-view');
+    centerViews.forEach(viewEl => {
+        if (viewEl.dataset.view === view) {
+            viewEl.classList.add('active');
+        } else {
+            viewEl.classList.remove('active');
+        }
+    });
+    
+    // If switching to architecture view, update with current decisions
+    if (view === 'architecture') {
+        const architectureMap = document.getElementById('architecture-map');
+        if (architectureMap && allDecisions) {
+            architectureMap.decisions = allDecisions;
+            
+            // If a decision is currently selected, highlight its impact
+            if (currentSelectedDecisionId) {
+                setTimeout(() => {
+                    architectureMap.highlightDecisionImpact(currentSelectedDecisionId);
+                }, 100);
+            }
+        }
+    }
+}
+
+function switchControlsTab(tab) {
+    // Update tab active states
+    const controlsTabs = document.querySelectorAll('.controls-tab');
+    controlsTabs.forEach(tabEl => {
+        if (tabEl.dataset.tab === tab) {
+            tabEl.classList.add('active');
+        } else {
+            tabEl.classList.remove('active');
+        }
+    });
+    
+    // Update view active states
+    const controlsViews = document.querySelectorAll('.controls-view');
+    controlsViews.forEach(viewEl => {
+        if (viewEl.dataset.tab === tab) {
+            viewEl.classList.add('active');
+        } else {
+            viewEl.classList.remove('active');
+        }
+    });
+}
+
+function updateDecisionMapWithFiltered(filteredDecisions) {
+    const decisionMap = document.getElementById('decision-map');
+    if (!decisionMap) return;
+    
+    const statusColorMapping = { Accepted: '#28a745', Superseded: '#6c757d' };
+    const isDark = document.body.classList.contains('dark-theme');
+    const fontColor = isDark ? '#fff' : '#000';
+    const nodeBg = isDark ? '#000' : '#fff';
+    
+    const nodes = filteredDecisions.map(d => ({
+        id: d.id,
+        label: `#${d.id}:\n${d.title}`,
+        color: {
+            border: statusColorMapping[d.status] || '#007bff',
+            background: nodeBg,
+            highlight: {
+                border: statusColorMapping[d.status] || '#007bff',
+                background: nodeBg
+            },
+            hover: {
+                border: statusColorMapping[d.status] || '#007bff',
+                background: nodeBg
+            }
+        },
+        font: { 
+            color: fontColor,
+            size: 12,
+            face: 'helvetica',
+            multi: 'html',
+            vadjust: 0
+        }
+    }));
+    
+    const relatedEdges = filteredDecisions.flatMap(d => 
+        d.related_to ? d.related_to
+            .filter(r => filteredDecisions.some(fd => fd.id === r))
+            .map(r => ({ from: r, to: d.id, dashes: [5, 5], color: '#848484' })) : []
+    );
+    
+    const supersedesEdges = filteredDecisions.flatMap(d => 
+        d.supersedes && filteredDecisions.some(fd => fd.id === d.supersedes) ? 
+        [{ from: d.id, to: d.supersedes, dashes: [5, 5], color: '#dc3545', width: 2, label: 'supersedes' }] : []
+    );
+    
+    const edges = [...relatedEdges, ...supersedesEdges];
+    
+    requestAnimationFrame(() => {
+        decisionMap.nodes = nodes;
+        decisionMap.edges = edges;
+    });
 }
 
 function setupEventListeners() {
@@ -373,7 +559,7 @@ function setupEventListeners() {
     }
 
     // Add event listener for search
-    const searchPanel = document.getElementById('controls-panel');
+    const searchPanel = document.getElementById('search-controls');
     if (searchPanel) {
         searchPanel.addEventListener('search-input', (e) => {
             const searchTerm = e.detail.searchTerm.toLowerCase();
@@ -382,60 +568,205 @@ function setupEventListeners() {
                 d.id.toString().includes(searchTerm) ||
                 (d.author && d.author.toLowerCase().includes(searchTerm))
             );
+            
+            // Update the search panel with filtered data
+            searchPanel.filteredDecisions = filteredDecisions;
+            
             // Update the log
             renderDecisionLog(filteredDecisions);
             // Update the map
-            const decisionMap = document.getElementById('decision-map');
-            if (decisionMap) {
-                const statusColorMapping = { Accepted: '#28a745', Superseded: '#6c757d' };
-                const isDark = document.body.classList.contains('dark-theme');
-                const fontColor = isDark ? '#fff' : '#000';
-                const nodeBg = isDark ? '#000' : '#fff';
-                const nodes = filteredDecisions.map(d => ({
-                    id: d.id,
-                    label: `#${d.id}:\n${d.title}`,  // Add line break for better spacing
-                    color: {
-                        border: statusColorMapping[d.status] || '#007bff',
-                        background: nodeBg,
-                        highlight: {
-                            border: statusColorMapping[d.status] || '#007bff',
-                            background: nodeBg
-                        },
-                        hover: {
-                            border: statusColorMapping[d.status] || '#007bff',
-                            background: nodeBg
-                        }
-                    },
-                    chosen: {
-                        node: function(values, id, selected, hovering) {
-                            // Prevent font changes on selection/hover
-                            if (!values.font) values.font = {};
-                            values.font.size = 12;
-                            values.font.face = 'helvetica';
-                            values.font.vadjust = 0;
-                            values.font.multi = 'html';
-                        }
-                    },
-                    font: { 
-                        color: fontColor,
-                        size: 12,
-                        face: 'helvetica',
-                        multi: 'html',
-                        vadjust: 0
-                    }
-                }));
-                const relatedEdges = filteredDecisions.flatMap(d => d.related_to ? d.related_to.map(r => ({ from: r, to: d.id, dashes: [5, 5], color: '#848484' })) : []);
-                const supersedesEdges = filteredDecisions.flatMap(d => d.supersedes ? [{ from: d.id, to: d.supersedes, dashes: [5, 5], color: '#dc3545', width: 2, label: 'supersedes' }] : []);
-                const edges = [...relatedEdges, ...supersedesEdges];
-                requestAnimationFrame(() => {
-                    decisionMap.nodes = nodes;
-                    decisionMap.edges = edges;
-                });
-            }
+            updateDecisionMapWithFiltered(filteredDecisions);
             // If a single decision is matched, select it everywhere
             if (filteredDecisions.length === 1) {
                 handleDecisionSelection(filteredDecisions[0].id, true); // Animate
             }
+        });
+        
+        // Add event listener for search panel filter changes
+        searchPanel.addEventListener('filter-change', (e) => {
+            const { filters } = e.detail;
+            
+            // Apply all filters from search panel
+            const filteredDecisions = allDecisions.filter(decision => {
+                // Search term filter
+                if (filters.searchTerm) {
+                    const searchTerm = filters.searchTerm.toLowerCase();
+                    const matchesSearch = decision.title.toLowerCase().includes(searchTerm) ||
+                        decision.id.toString().includes(searchTerm) ||
+                        (decision.author && decision.author.toLowerCase().includes(searchTerm));
+                    if (!matchesSearch) return false;
+                }
+                
+                // Impact filter
+                if (filters.minImpact > 0) {
+                    const impactScore = calculateImpactScore(decision);
+                    if (impactScore < filters.minImpact) return false;
+                }
+                
+                // Days back filter
+                if (filters.daysBack > 0) {
+                    const decisionDate = new Date(decision.date);
+                    const cutoffDate = new Date();
+                    cutoffDate.setDate(cutoffDate.getDate() - filters.daysBack);
+                    if (decisionDate < cutoffDate) return false;
+                }
+                
+                return true;
+            });
+            
+            // Update the search panel with filtered data
+            searchPanel.filteredDecisions = filteredDecisions;
+            
+            // Update the log and map
+            renderDecisionLog(filteredDecisions);
+            updateDecisionMapWithFiltered(filteredDecisions);
+        });
+        
+        // Add event listener for category filtering
+        searchPanel.addEventListener('category-filter', (e) => {
+            const { category } = e.detail;
+            const filteredDecisions = allDecisions.filter(d => inferCategory(d) === category);
+            
+            // Update the search panel with filtered data
+            searchPanel.filteredDecisions = filteredDecisions;
+            
+            // Update the log and map
+            renderDecisionLog(filteredDecisions);
+            updateDecisionMapWithFiltered(filteredDecisions);
+        });
+        
+        // Add event listener for status filtering
+        searchPanel.addEventListener('status-filter', (e) => {
+            const { status } = e.detail;
+            const filteredDecisions = allDecisions.filter(d => d.status === status);
+            
+            // Update the search panel with filtered data
+            searchPanel.filteredDecisions = filteredDecisions;
+            
+            // Update the log and map
+            renderDecisionLog(filteredDecisions);
+            updateDecisionMapWithFiltered(filteredDecisions);
+        });
+        
+        // Add event listeners for clustering controls
+        searchPanel.addEventListener('clustering-toggle', (e) => {
+            const decisionMap = document.getElementById('decision-map');
+            if (decisionMap) {
+                if (e.detail.enabled) {
+                    decisionMap.enableCategoryClustering();
+                } else {
+                    decisionMap.disableClustering();
+                }
+            }
+        });
+        
+        searchPanel.addEventListener('view-change', (e) => {
+            const view = e.detail.view;
+            const decisionMap = document.getElementById('decision-map');
+            
+            if (decisionMap) {
+                // First disable any existing clustering
+                decisionMap.disableClustering();
+                
+                if (view === 'category') {
+                    decisionMap.enableCategoryClustering();
+                } else if (view === 'architecture') {
+                    // TODO: Implement architecture clustering in Phase 2
+                    console.log('Architecture view not yet implemented');
+                } else {
+                    // Flat view - clustering already disabled
+                }
+            }
+        });
+    }
+    
+    // Add event listeners for center panel tabs
+    const centerTabs = document.querySelectorAll('.center-tab');
+    if (centerTabs.length > 0) {
+        centerTabs.forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                const targetView = e.target.dataset.view;
+                switchCenterView(targetView);
+            });
+        });
+    }
+    
+    // Add event listeners for controls panel tabs
+    const controlsTabs = document.querySelectorAll('.controls-tab');
+    if (controlsTabs.length > 0) {
+        controlsTabs.forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                const targetTab = e.target.dataset.tab;
+                switchControlsTab(targetTab);
+            });
+        });
+    }
+    
+    // Add event listeners for architecture map
+    const architectureMap = document.getElementById('architecture-map');
+    if (architectureMap) {
+        architectureMap.addEventListener('component-click', (e) => {
+            const componentId = e.detail.componentId;
+            console.log('Architecture component clicked:', componentId);
+            
+            // Find decisions that affect this component
+            const affectingDecisions = allDecisions.filter(d => 
+                d.affected_components && d.affected_components.includes(componentId)
+            );
+            
+            if (affectingDecisions.length > 0) {
+                // Switch back to decisions view and select the first affecting decision
+                switchCenterView('decisions');
+                handleDecisionSelection(affectingDecisions[0].id, true);
+            }
+        });
+    }
+    
+    // Add event listeners for new Phase 3 components
+    const advancedFilter = document.getElementById('advanced-filter');
+    if (advancedFilter) {
+        advancedFilter.addEventListener('filter-change', (e) => {
+            const { filteredDecisions } = e.detail;
+            
+            // Update decision log with filtered results
+            renderDecisionLog(filteredDecisions);
+            
+            // Update decision map with filtered results
+            const decisionMap = document.getElementById('decision-map');
+            if (decisionMap) {
+                updateDecisionMapWithFiltered(filteredDecisions);
+            }
+            
+            // Update architecture map
+            const architectureMap = document.getElementById('architecture-map');
+            if (architectureMap) {
+                architectureMap.decisions = filteredDecisions;
+            }
+        });
+    }
+    
+    const pathwayExplorer = document.getElementById('pathway-explorer');
+    if (pathwayExplorer) {
+        pathwayExplorer.addEventListener('pathway-click', (e) => {
+            const { pathway } = e.detail;
+            
+            // Highlight pathway decisions in the map
+            const decisionMap = document.getElementById('decision-map');
+            if (decisionMap) {
+                pathway.decisions.forEach((decision, index) => {
+                    setTimeout(() => {
+                        decisionMap.selectNode(decision.id);
+                        if (index === 0) {
+                            decisionMap.focusOnNode(decision.id);
+                        }
+                    }, index * 500);
+                });
+            }
+        });
+        
+        pathwayExplorer.addEventListener('decision-select', (e) => {
+            const { decisionId } = e.detail;
+            handleDecisionSelection(decisionId, true);
         });
     }
     

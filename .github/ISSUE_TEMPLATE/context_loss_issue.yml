@@ -1,0 +1,87 @@
+name: 🔄 AI Context Loss Issue
+description: Report problems with maintaining context across AI tool conversations
+title: "[Context Loss] "
+labels: ["ai-context", "bug"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Help us improve context persistence in AI workflows. This template is for reporting specific issues with losing or transferring context between AI conversations.
+
+  - type: input
+    id: ai_tool
+    attributes:
+      label: AI Tool
+      description: Which AI tool were you using when context was lost?
+      placeholder: "Cursor, Claude, v0, etc."
+    validations:
+      required: true
+
+  - type: textarea
+    id: context_lost
+    attributes:
+      label: Context That Was Lost
+      description: Describe what context/conversation history disappeared
+      placeholder: "Example: 2 hours of architecture discussion about database choices, component design decisions, etc."
+    validations:
+      required: true
+
+  - type: textarea
+    id: export_attempt
+    attributes:
+      label: Context Export Attempt
+      description: Did you try to export context from Decision Tapestry? What happened?
+      placeholder: "Example: Tried to export decision summary but it didn't include all the AI reasoning..."
+    validations:
+      required: false
+
+  - type: textarea
+    id: recovery_process
+    attributes:
+      label: Recovery Process
+      description: How did you try to recover the lost context?
+      placeholder: "Example: Had to re-explain the entire project architecture to get AI back up to speed..."
+    validations:
+      required: false
+
+  - type: input
+    id: time_lost
+    attributes:
+      label: Time Lost
+      description: Approximately how much time did you lose due to context loss?
+      placeholder: "Example: 30 minutes, 2 hours, etc."
+    validations:
+      required: false
+
+  - type: textarea
+    id: ideal_solution
+    attributes:
+      label: Ideal Solution
+      description: How do you think Decision Tapestry could have prevented this context loss?
+      placeholder: "Example: Automatic context backup, better AI tool integration, richer export format..."
+    validations:
+      required: false
+
+  - type: textarea
+    id: workaround
+    attributes:
+      label: Current Workaround
+      description: How are you currently working around this limitation?
+      placeholder: "Example: Copy-pasting decision summaries into new AI chats, keeping detailed notes..."
+    validations:
+      required: false
+
+  - type: dropdown
+    id: frequency
+    attributes:
+      label: How Often Does This Happen?
+      description: How frequently do you experience this context loss issue?
+      options:
+        - "Multiple times per day"
+        - "Once per day"
+        - "A few times per week"
+        - "Once per week"
+        - "Rarely"
+    validations:
+      required: true

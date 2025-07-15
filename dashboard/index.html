@@ -19,12 +19,17 @@
     <script type="module" src="./decision-detail-panel.mjs"></script>
     <script type="module" src="./tab-control.mjs"></script>
     <script type="module" src="./decision-map.mjs"></script>
+    <script type="module" src="./architecture-map.mjs"></script>
+    <script type="module" src="./pathway-explorer.mjs"></script>
+</script>
+    <script type="module" src="./advanced-filter.mjs"></script>
     <script type="module" src="./charter-map.mjs"></script>
 </head>
 
 <body>
     <div class="dashboard">
         <button id="theme-toggle-btn" style="position: fixed; top: 1rem; right: 2rem; z-index: 1000; padding: 0.5rem 1rem; border-radius: 6px; border: none; background: #eee; color: #333; cursor: pointer; font-weight: bold;">🌙 Dark Mode</button>
+        
         <div id="left-panel" class="panel">
             <tab-control></tab-control>
             <decision-detail-panel id="decision-detail"
@@ -50,8 +55,32 @@
                 </div>
             </div>
         </div>
-        <decision-map id="decision-map" class="panel"></decision-map>
-        <search-panel id="controls-panel" class="panel"></search-panel>
+        <div id="center-panel" class="panel">
+            <div class="center-panel-header">
+                <div class="center-tabs">
+                    <button class="center-tab active" data-view="decisions">Decisions</button>
+                    <button class="center-tab" data-view="architecture">Architecture</button>
+                </div>
+            </div>
+            <div class="center-panel-content">
+                <decision-map id="decision-map" class="center-view active" data-view="decisions"></decision-map>
+                <architecture-map id="architecture-map" class="center-view" data-view="architecture"></architecture-map>
+            </div>
+        </div>
+        <div id="controls-panel" class="panel">
+            <div class="controls-header">
+                <div class="controls-tabs">
+                    <button class="controls-tab active" data-tab="search">Search</button>
+                    <button class="controls-tab" data-tab="filters">Filters</button>
+                    <button class="controls-tab" data-tab="patterns">Patterns</button>
+                </div>
+            </div>
+            <div class="controls-content">
+                <search-panel id="search-controls" class="controls-view active" data-tab="search"></search-panel>
+                <advanced-filter id="advanced-filter" class="controls-view" data-tab="filters"></advanced-filter>
+                <pathway-explorer id="pathway-explorer" class="controls-view" data-tab="patterns"></pathway-explorer>
+            </div>
+        </div>
         <div id="decision-log" class="panel-content tab-content active">
             <h2>Decision Log</h2>
             <div id="decision-log-container" style="height: calc(100% - 40px);">

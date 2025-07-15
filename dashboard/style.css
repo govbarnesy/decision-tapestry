@@ -63,11 +63,31 @@ body.dark-theme {
 .dashboard {
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
-    grid-template-rows: auto 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
     height: 100vh;
     gap: 1rem;
     padding: 1rem;
     box-sizing: border-box;
+}
+
+#left-panel {
+    grid-column: 1 / 2;
+    grid-row: 1 / -1;
+}
+
+#center-panel {
+    grid-column: 2 / 3;
+    grid-row: 1 / -1;
+}
+
+#controls-panel {
+    grid-column: 3 / 4;
+    grid-row: 1 / 2;
+}
+
+#decision-log {
+    grid-column: 3 / 4;
+    grid-row: 2 / 3;
 }
 
 .panel {
@@ -436,4 +456,107 @@ h2, h3, h4, p, .panel-content, .log-item, .tab-button {
 /* Ensure decision map nodes maintain consistent font weight */
 #decision-map * {
     font-weight: normal !important;
+}
+
+/* Center Panel Styles */
+.center-panel-header {
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--tab-bg);
+}
+
+.center-tabs {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.center-tab {
+    padding: 0.5rem 1rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 4px 4px 0 0;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    transition: all 0.2s ease;
+}
+
+.center-tab:hover {
+    background: var(--tab-active-bg);
+    color: var(--text-main);
+}
+
+.center-tab.active {
+    background: var(--accent);
+    color: white;
+}
+
+.center-panel-content {
+    position: relative;
+    height: calc(100% - 50px);
+}
+
+.center-view {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+.center-view.active {
+    display: block;
+}
+
+/* Controls Panel Styles */
+.controls-header {
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--tab-bg);
+}
+
+.controls-tabs {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.controls-tab {
+    padding: 0.5rem 1rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 4px 4px 0 0;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    transition: all 0.2s ease;
+}
+
+.controls-tab:hover {
+    background: var(--tab-active-bg);
+    color: var(--text-main);
+}
+
+.controls-tab.active {
+    background: var(--accent);
+    color: white;
+}
+
+.controls-content {
+    position: relative;
+    height: calc(100% - 50px);
+}
+
+.controls-view {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    overflow-y: auto;
+}
+
+.controls-view.active {
+    display: block;
 }

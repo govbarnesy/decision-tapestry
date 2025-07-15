@@ -1,0 +1,152 @@
+name: = Bug Report
+description: Report a bug or issue with Decision Tapestry
+title: "[Bug] "
+labels: ["bug"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug! Please provide as much detail as possible to help us fix it quickly.
+
+  - type: textarea
+    id: bug_description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is
+      placeholder: "Example: Real-time updates stop working after 30 minutes..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps_to_reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: Steps to reproduce the behavior
+      placeholder: |
+        1. Start Decision Tapestry with 'decision-tapestry start'
+        2. Create a new decision
+        3. Add a task
+        4. See error...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: Expected Behavior
+      description: What you expected to happen
+      placeholder: "Task should appear in real-time across all connected clients..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual_behavior
+    attributes:
+      label: Actual Behavior
+      description: What actually happened
+      placeholder: "Task only appears after browser refresh..."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      description: Which part of Decision Tapestry is affected?
+      options:
+        - "Dashboard (web interface)"
+        - "CLI commands"
+        - "Real-time updates / WebSocket"
+        - "AI activity tracking"
+        - "File watching"
+        - "Installation / Setup"
+        - "Documentation"
+        - "Other"
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Decision Tapestry Version
+      description: What version of Decision Tapestry are you using?
+      placeholder: "Run: decision-tapestry --version"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating System
+      description: What operating system are you using?
+      options:
+        - "macOS"
+        - "Windows"
+        - "Linux (Ubuntu)"
+        - "Linux (other)"
+        - "Other"
+    validations:
+      required: true
+
+  - type: input
+    id: node_version
+    attributes:
+      label: Node.js Version
+      description: What version of Node.js are you using?
+      placeholder: "Run: node --version"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: browser
+    attributes:
+      label: Browser (for dashboard issues)
+      description: Which browser are you using for the dashboard?
+      options:
+        - "Chrome"
+        - "Firefox"
+        - "Safari"
+        - "Edge"
+        - "Other"
+        - "N/A (CLI issue)"
+    validations:
+      required: false
+
+  - type: textarea
+    id: ai_tools_context
+    attributes:
+      label: AI Tools Being Used
+      description: If relevant, which AI tools are you using with Decision Tapestry?
+      placeholder: "Cursor, Claude, v0, Windsurf, etc."
+    validations:
+      required: false
+
+  - type: textarea
+    id: console_logs
+    attributes:
+      label: Console Logs / Error Messages
+      description: Any error messages or console output
+      placeholder: "Paste any error messages, console logs, or stack traces here..."
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional Context
+      description: Add any other context about the problem
+      placeholder: "Screenshots, project size, team setup, etc."
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      description: Please confirm you've checked these items
+      options:
+        - label: "I've searched existing issues for this bug"
+        - label: "I've tried restarting Decision Tapestry"
+        - label: "I've checked the troubleshooting guide"
+        - label: "I can consistently reproduce this issue"

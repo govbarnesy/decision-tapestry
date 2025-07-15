@@ -1,0 +1,65 @@
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # 🚀 AI Workflow Success Story
+        
+        Share how Decision Tapestry improved your AI development workflow!
+
+  - type: input
+    id: project_type
+    attributes:
+      label: Project Type
+      description: What kind of project were you working on?
+      placeholder: "Web app, API, mobile app, data science, etc."
+
+  - type: input
+    id: ai_tools_used
+    attributes:
+      label: AI Tools Used
+      description: Which AI tools did you use with Decision Tapestry?
+      placeholder: "Cursor, Claude, v0, Windsurf, etc."
+
+  - type: textarea
+    id: before_decision_tapestry
+    attributes:
+      label: Before Decision Tapestry
+      description: What was your AI development workflow like before?
+      placeholder: "Describe the challenges, context loss, time wasted, etc."
+
+  - type: textarea
+    id: after_decision_tapestry
+    attributes:
+      label: After Decision Tapestry
+      description: How did Decision Tapestry change your workflow?
+      placeholder: "Describe the improvements, time saved, better organization, etc."
+
+  - type: input
+    id: time_saved
+    attributes:
+      label: Time Saved
+      description: Approximately how much time did Decision Tapestry save you?
+      placeholder: "Hours per day, days per week, etc."
+
+  - type: textarea
+    id: key_features
+    attributes:
+      label: Most Valuable Features
+      description: Which Decision Tapestry features were most helpful?
+      placeholder: "Context persistence, AI tracking, decision history, etc."
+
+  - type: textarea
+    id: tips_for_others
+    attributes:
+      label: Tips for Other Developers
+      description: What advice would you give to developers starting with AI + Decision Tapestry?
+      placeholder: "Best practices, setup tips, workflow recommendations, etc."
+
+  - type: checkboxes
+    id: permissions
+    attributes:
+      label: Sharing Permissions
+      options:
+        - label: "You can feature this story in marketing materials"
+        - label: "You can contact me for more details"
+        - label: "You can use this anonymously"

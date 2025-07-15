@@ -1,0 +1,120 @@
+name: 🤖 AI Workflow Feedback
+description: Share your experience using Decision Tapestry with AI tools like Claude, Cursor, v0, or Windsurf
+title: "[AI Workflow] "
+labels: ["ai-workflow", "feedback"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for trying Decision Tapestry with AI tools! Your feedback helps us improve AI-human collaboration workflows.
+
+  - type: dropdown
+    id: ai_tools
+    attributes:
+      label: AI Tools Used
+      description: Which AI tools are you using with Decision Tapestry?
+      multiple: true
+      options:
+        - Claude (Anthropic)
+        - Cursor
+        - GitHub Copilot
+        - v0 (Vercel)
+        - Windsurf (Codeium)
+        - Lovable
+        - Other (specify in description)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: use_case
+    attributes:
+      label: Primary Use Case
+      description: What type of project are you working on?
+      options:
+        - Web application development
+        - API/Backend development
+        - Mobile app development
+        - Data science/ML project
+        - DevOps/Infrastructure
+        - UI/UX design
+        - Other (specify in description)
+    validations:
+      required: true
+
+  - type: textarea
+    id: context_problem
+    attributes:
+      label: Context Management Challenge
+      description: Describe any issues with maintaining context across AI conversations
+      placeholder: "Example: I lost my architecture discussion when Cursor hit the context limit..."
+    validations:
+      required: false
+
+  - type: textarea
+    id: decision_tracking
+    attributes:
+      label: Decision Tracking Experience
+      description: How well did Decision Tapestry help you track AI-suggested decisions?
+      placeholder: "Example: Great for tracking which AI suggested what, but hard to see conflicts..."
+    validations:
+      required: false
+
+  - type: textarea
+    id: real_time_monitoring
+    attributes:
+      label: Real-time AI Monitoring
+      description: How useful was the real-time activity tracking for AI agents?
+      placeholder: "Example: Loved seeing AI activity badges, but wish I could pause AI mid-task..."
+    validations:
+      required: false
+
+  - type: dropdown
+    id: workflow_improvement
+    attributes:
+      label: Workflow Improvement
+      description: How much did Decision Tapestry improve your AI development workflow?
+      options:
+        - "🚀 Dramatically - saved hours of re-explaining context"
+        - "✅ Significantly - much better organization"
+        - "📈 Moderately - some nice improvements"
+        - "🤔 Slightly - minimal difference"
+        - "❌ Not at all - didn't help"
+    validations:
+      required: true
+
+  - type: textarea
+    id: specific_features
+    attributes:
+      label: Most Valuable Features
+      description: Which Decision Tapestry features were most valuable for AI collaboration?
+      placeholder: "Example: Persistent context export, AI activity tracking, decision conflict resolution..."
+    validations:
+      required: false
+
+  - type: textarea
+    id: missing_features
+    attributes:
+      label: Missing Features
+      description: What features would make AI collaboration even better?
+      placeholder: "Example: Direct AI tool integration, automatic context sync, AI suggestion voting..."
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional Context
+      description: Anything else you'd like to share about your AI workflow experience?
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: sharing_permission
+    attributes:
+      label: Sharing Permission
+      description: Can we feature your feedback in marketing materials? (completely optional)
+      options:
+        - label: "Yes, you can quote this feedback (anonymously)"
+        - label: "Yes, you can quote this feedback (with attribution)"
+        - label: "Yes, you can contact me for a case study"

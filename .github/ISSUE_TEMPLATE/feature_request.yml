@@ -1,0 +1,132 @@
+name: ( Feature Request
+description: Suggest a new feature or enhancement for Decision Tapestry
+title: "[Feature] "
+labels: ["enhancement"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a feature! Please provide detailed information to help us understand your needs.
+
+  - type: textarea
+    id: feature_description
+    attributes:
+      label: Feature Description
+      description: A clear and concise description of the feature you'd like to see
+      placeholder: "I would like Decision Tapestry to..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem_solving
+    attributes:
+      label: Problem This Solves
+      description: What problem does this feature solve? What pain point does it address?
+      placeholder: "Currently, when I'm working with AI tools, I have to..."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: feature_category
+    attributes:
+      label: Feature Category
+      description: What category does this feature fall into?
+      options:
+        - "AI Tool Integration"
+        - "Real-time Collaboration"
+        - "Dashboard / UI"
+        - "CLI Commands"
+        - "Context Management"
+        - "Decision Tracking"
+        - "Export / Import"
+        - "Analytics / Reporting"
+        - "Performance"
+        - "Developer Experience"
+        - "Other"
+    validations:
+      required: true
+
+  - type: textarea
+    id: use_case
+    attributes:
+      label: Use Case / User Story
+      description: Describe how you would use this feature
+      placeholder: "As a developer using Cursor, I want to... so that I can..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed_solution
+    attributes:
+      label: Proposed Solution
+      description: How do you envision this feature working?
+      placeholder: "This could work by adding a button that... or implementing an API that..."
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternative Solutions
+      description: Have you considered any alternative approaches?
+      placeholder: "Other tools that solve this, workarounds you're currently using, etc."
+    validations:
+      required: false
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature for your workflow?
+      options:
+        - "=% Critical - blocking my workflow"
+        - "=È High - would significantly improve my workflow"
+        - " Medium - would be a nice improvement"
+        - "=¡ Low - interesting but not urgent"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: team_impact
+    attributes:
+      label: Team Impact
+      description: How many people would benefit from this feature?
+      options:
+        - "Just me"
+        - "My team (2-5 people)"
+        - "My organization (6-20 people)"
+        - "Many developers (20+ people)"
+        - "Entire community"
+    validations:
+      required: true
+
+  - type: textarea
+    id: ai_tools_context
+    attributes:
+      label: AI Tools Context
+      description: If this relates to AI tools, which ones are you using?
+      placeholder: "Cursor, Claude, v0, Windsurf, GitHub Copilot, etc."
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: contribution_willingness
+    attributes:
+      label: Contribution
+      description: Would you be willing to help with this feature?
+      options:
+        - label: "I could help design the feature"
+        - label: "I could help test the feature"
+        - label: "I could contribute code"
+        - label: "I could help with documentation"
+        - label: "I could provide user feedback"
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional Context
+      description: Any other information that would help us understand this request
+      placeholder: "Screenshots, examples from other tools, links to related discussions, etc."
+    validations:
+      required: false

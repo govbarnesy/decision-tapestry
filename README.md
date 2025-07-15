@@ -52,9 +52,35 @@ Open http://localhost:8080 to view your decision dashboard.
   - Auto-focus on active decisions
   - WebSocket-based synchronization
 ✅ **Dark/Light Themes** - Automatic system preference detection  
+✅ **AI-Human Collaboration** - Persistent context for AI development workflows
+  - Never lose context when AI tools hit token limits
+  - Real-time monitoring of AI agent activities
+  - Track decisions across multiple AI conversations
+  - Export project context to any AI tool
 ✅ **AI-Powered Planning** - Context-aware project onboarding  
 ✅ **Quality Automation** - Pre-commit hooks and CI/CD  
 ✅ **Historical Analysis** - Extract decisions from existing codebases
+
+## 🤖 AI Development Workflow
+
+**Stop losing hours to AI context limits.** Decision Tapestry maintains persistent project context across all your AI tool conversations.
+
+### The Problem
+- Hit Cursor's context limit and lose 3 hours of architecture discussion
+- Explain the same project structure to Claude repeatedly  
+- v0 forgets your design decisions from previous sessions
+- Multiple AI tools give conflicting suggestions without context
+
+### The Solution
+```bash
+# Track AI activity in real-time
+decision-tapestry activity start
+
+# Export context to any AI tool
+decision-tapestry plan --context-export
+```
+
+**Perfect for teams using:** Cursor • Claude • v0 • Windsurf • GitHub Copilot • Lovable
 
 ### 🆕 New in v1.7.0: Enhanced Real-time Experience
 - **Live Dashboard Updates**: All changes appear instantly without browser refresh

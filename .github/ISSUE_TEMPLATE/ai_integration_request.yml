@@ -1,0 +1,113 @@
+name: 🔌 AI Tool Integration Request
+description: Request integration with a specific AI development tool
+title: "[Integration] "
+labels: ["ai-integration", "enhancement"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Request integration with AI tools to improve context sharing and workflow automation.
+
+  - type: input
+    id: ai_tool_name
+    attributes:
+      label: AI Tool Name
+      description: Which AI tool would you like to see integrated?
+      placeholder: "Cursor, Claude, v0, Windsurf, GitHub Copilot, etc."
+    validations:
+      required: true
+
+  - type: input
+    id: tool_website
+    attributes:
+      label: Tool Website/Documentation
+      description: Link to the AI tool's website or API documentation
+      placeholder: "https://..."
+    validations:
+      required: false
+
+  - type: dropdown
+    id: integration_type
+    attributes:
+      label: Integration Type
+      description: What type of integration would be most valuable?
+      multiple: true
+      options:
+        - "Automatic context export to AI tool"
+        - "Real-time activity tracking from AI tool"
+        - "Decision import from AI conversations"
+        - "Bidirectional context sync"
+        - "AI tool activity webhooks"
+        - "Custom integration (describe below)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: use_case
+    attributes:
+      label: Use Case
+      description: Describe how you currently use this AI tool and how Decision Tapestry integration would help
+      placeholder: "Example: I use Cursor for coding but lose context every few hours. Integration would let me export project decisions directly to new Cursor chats..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: current_workflow
+    attributes:
+      label: Current Workflow
+      description: Describe your current workflow with this AI tool
+      placeholder: "Example: Start Cursor chat → Code for 2 hours → Hit context limit → Copy decision summary → Start new chat → Re-explain everything..."
+    validations:
+      required: false
+
+  - type: textarea
+    id: ideal_workflow
+    attributes:
+      label: Ideal Workflow with Integration
+      description: How would the integrated workflow look?
+      placeholder: "Example: Start Cursor chat → Auto-import project context from Decision Tapestry → Code with full context → Automatically track decisions → Never lose context..."
+    validations:
+      required: true
+
+  - type: input
+    id: team_size
+    attributes:
+      label: Team Size
+      description: How many people on your team use this AI tool?
+      placeholder: "1-2 people, 3-5 people, 6+ people"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority for Your Workflow
+      description: How important is this integration for your development workflow?
+      options:
+        - "🔥 Critical - would dramatically improve our workflow"
+        - "📈 High - would solve major pain points"
+        - "✅ Medium - would be a nice improvement"
+        - "💡 Low - interesting but not urgent"
+    validations:
+      required: true
+
+  - type: textarea
+    id: technical_details
+    attributes:
+      label: Technical Details
+      description: Any technical details about the AI tool's API or integration possibilities?
+      placeholder: "Example: Tool has REST API, supports webhooks, has VS Code extension, etc."
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: contribution_interest
+    attributes:
+      label: Contribution Interest
+      description: Would you be interested in helping with this integration?
+      options:
+        - label: "I'd like to help design the integration"
+        - label: "I could help test the integration"
+        - label: "I could contribute code/documentation"
+        - label: "I could provide feedback during development"

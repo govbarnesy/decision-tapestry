@@ -54,6 +54,11 @@
               "required": ["description"]
             }
           },
+          "category": {
+            "type": "string",
+            "enum": ["Infrastructure", "Developer Experience", "UI/UX", "Architecture", "Process", "Quality", "Integration", "Other"],
+            "description": "Category for clustering and navigation purposes"
+          },
           "notes": { 
             "type": "string",
             "description": "Additional notes or context"
@@ -133,6 +138,11 @@
               },
               "required": ["description"]
             }
+          },
+          "category": {
+            "type": "string",
+            "enum": ["Infrastructure", "Developer Experience", "UI/UX", "Architecture", "Process", "Quality", "Integration", "Other"],
+            "description": "Category for clustering and navigation purposes"
           },
           "notes": { 
             "type": "string",
