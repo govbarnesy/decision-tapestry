@@ -1,4 +1,10 @@
 import { LitElement, css, html } from 'https://esm.sh/lit@3';
+import { 
+    extractDate, 
+    getAvailableDates,
+    getCommitCount,
+    getLastFileChangeDate
+} from '../utils/time-filtering-utils.mjs';
 
 /**
  * A component that provides search and filtering controls with fun visualizations.
@@ -10,18 +16,21 @@ class SearchPanel extends LitElement {
     static properties = {
         decisions: { type: Array },
         filteredDecisions: { type: Array },
-        filters: { type: Object }
+        filters: { type: Object },
+        dateFilterType: { type: String }
     };
     
     constructor() {
         super();
         this.decisions = [];
         this.filteredDecisions = [];
+        this.dateFilterType = 'decision'; // decision, first_commit, last_commit, any
         this.filters = {
             searchTerm: '',
             minImpact: 0,
             daysBack: 0,
-            dateRange: { start: 0, end: 0 }
+            dateRange: { start: 0, end: 0 },
+            recentFileActivity: 0
         };
     }
     
@@ -286,6 +295,61 @@ class SearchPanel extends LitElement {
             color: var(--text-secondary);
             margin-top: 0.25rem;
         }
+        
+        .date-type-selector {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .date-type-button {
+            padding: 4px 8px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: var(--panel-bg);
+            color: var(--text-secondary);
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex: 1;
+            text-align: center;
+        }
+        
+        .date-type-button:hover {
+            border-color: var(--accent);
+            color: var(--text-main);
+        }
+        
+        .date-type-button.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+        
+        .activity-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 4px;
+        }
+        
+        .activity-indicator.recent {
+            background: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+        }
+        
+        .activity-indicator.moderate {
+            background: rgba(255, 193, 7, 0.1);
+            color: #ffc107;
+        }
+        
+        .activity-indicator.old {
+            background: rgba(108, 117, 125, 0.1);
+            color: #6c757d;
+        }
     `;
 
     _handleInput(e) {
@@ -305,6 +369,18 @@ class SearchPanel extends LitElement {
     
     _handleDaysChange(e) {
         this.filters.daysBack = parseInt(e.target.value);
+        this.requestUpdate();
+        this._emitFilterChange();
+    }
+    
+    _handleFileActivityChange(e) {
+        this.filters.recentFileActivity = parseInt(e.target.value);
+        this.requestUpdate();
+        this._emitFilterChange();
+    }
+    
+    _handleDateTypeChange(dateType) {
+        this.dateFilterType = dateType;
         this.requestUpdate();
         this._emitFilterChange();
     }
@@ -338,7 +414,10 @@ class SearchPanel extends LitElement {
     
     _emitFilterChange() {
         this.dispatchEvent(new CustomEvent('filter-change', {
-            detail: { filters: this.filters },
+            detail: { 
+                filters: this.filters,
+                dateFilterType: this.dateFilterType
+            },
             bubbles: true,
             composed: true,
         }));
@@ -366,15 +445,48 @@ class SearchPanel extends LitElement {
         if (this.decisions.length === 0) return 365;
         
         const now = new Date();
-        const oldestDate = this.decisions.reduce((oldest, decision) => {
-            const decisionDate = new Date(decision.date);
-            return decisionDate < oldest ? decisionDate : oldest;
-        }, now);
+        let oldestDate = now;
+        
+        // Check all date types based on current filter
+        this.decisions.forEach(decision => {
+            const date = extractDate(decision.date, this.dateFilterType === 'any' ? 'decision' : this.dateFilterType);
+            if (date && date < oldestDate) {
+                oldestDate = date;
+            }
+        });
         
         const diffTime = Math.abs(now - oldestDate);
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
         
         return Math.max(diffDays, 30);
+    }
+    
+    _getDateTypeCounts() {
+        const counts = {
+            decision: 0,
+            first_commit: 0,
+            last_commit: 0
+        };
+        
+        this.decisions.forEach(decision => {
+            const dates = getAvailableDates(decision);
+            if (dates.decision) counts.decision++;
+            if (dates.first_commit) counts.first_commit++;
+            if (dates.last_commit) counts.last_commit++;
+        });
+        
+        return counts;
+    }
+    
+    _getFileActivityLevel(decision) {
+        const lastChange = getLastFileChangeDate(decision);
+        if (!lastChange) return null;
+        
+        const daysAgo = Math.floor((new Date() - lastChange) / (1000 * 60 * 60 * 24));
+        
+        if (daysAgo <= 7) return 'recent';
+        if (daysAgo <= 30) return 'moderate';
+        return 'old';
     }
     
     _getStatusData() {
@@ -656,6 +768,42 @@ class SearchPanel extends LitElement {
                         <span>Time Range</span>
                         <span class="slider-value">${this._getDateRangeLabel()}</span>
                     </div>
+                    
+                    <div class="date-type-selector">
+                        ${(() => {
+                            const counts = this._getDateTypeCounts();
+                            return html`
+                                <button 
+                                    class="date-type-button ${this.dateFilterType === 'decision' ? 'active' : ''}"
+                                    @click=${() => this._handleDateTypeChange('decision')}
+                                    title="${counts.decision} decisions have this date type"
+                                >
+                                    Decision (${counts.decision})
+                                </button>
+                                <button 
+                                    class="date-type-button ${this.dateFilterType === 'first_commit' ? 'active' : ''}"
+                                    @click=${() => this._handleDateTypeChange('first_commit')}
+                                    title="${counts.first_commit} decisions have this date type"
+                                >
+                                    First Commit (${counts.first_commit})
+                                </button>
+                                <button 
+                                    class="date-type-button ${this.dateFilterType === 'last_commit' ? 'active' : ''}"
+                                    @click=${() => this._handleDateTypeChange('last_commit')}
+                                    title="${counts.last_commit} decisions have this date type"
+                                >
+                                    Last Commit (${counts.last_commit})
+                                </button>
+                                <button 
+                                    class="date-type-button ${this.dateFilterType === 'any' ? 'active' : ''}"
+                                    @click=${() => this._handleDateTypeChange('any')}
+                                >
+                                    Any
+                                </button>
+                            `;
+                        })()}
+                    </div>
+                    
                     <div class="range-slider-container">
                         <div class="range-slider">
                             <div class="range-track" style="
@@ -680,6 +828,23 @@ class SearchPanel extends LitElement {
                             >
                         </div>
                     </div>
+                </div>
+                
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>Recent File Activity</span>
+                        <span class="slider-value">
+                            ${this.filters.recentFileActivity === 0 ? 'Off' : `≤ ${this.filters.recentFileActivity} days`}
+                        </span>
+                    </div>
+                    <input 
+                        type="range" 
+                        min="0" 
+                        max="90" 
+                        .value=${this.filters.recentFileActivity}
+                        @input=${this._handleFileActivityChange}
+                        title="Filter by decisions with file changes within the specified days"
+                    >
                 </div>
             </div>
             
@@ -729,7 +894,7 @@ class SearchPanel extends LitElement {
                 ` : ''}
                 
                 <div class="chart-section">
-                    <div class="chart-section-title">Components</div>
+                    <div class="chart-section-title">Components & Activity</div>
                     <div class="pie-charts">
                         <div class="pie-chart-item">
                             ${this._renderMiniPieChart(dataSource.filter(d => d.affected_components?.length > 0).length, totalDecisions, ['#fd7e14', '#e9ecef'])}
@@ -740,6 +905,24 @@ class SearchPanel extends LitElement {
                             ${this._renderMiniPieChart(dataSource.filter(d => d.related_to?.length > 0).length, totalDecisions, ['#17a2b8', '#e9ecef'])}
                             <div class="chart-label">Has Relations</div>
                             <div class="chart-value">${dataSource.filter(d => d.related_to?.length > 0).length}</div>
+                        </div>
+                        <div class="pie-chart-item">
+                            ${this._renderMiniPieChart(dataSource.filter(d => getCommitCount(d) > 0).length, totalDecisions, ['#28a745', '#e9ecef'])}
+                            <div class="chart-label">Has Commits</div>
+                            <div class="chart-value">${dataSource.filter(d => getCommitCount(d) > 0).length}</div>
+                        </div>
+                        <div class="pie-chart-item">
+                            ${(() => {
+                                const recentDecisions = dataSource.filter(d => {
+                                    const activity = this._getFileActivityLevel(d);
+                                    return activity === 'recent';
+                                });
+                                return html`
+                                    ${this._renderMiniPieChart(recentDecisions.length, totalDecisions, ['#28a745', '#e9ecef'])}
+                                    <div class="chart-label">Recent Activity</div>
+                                    <div class="chart-value">${recentDecisions.length}</div>
+                                `;
+                            })()}
                         </div>
                     </div>
                 </div>

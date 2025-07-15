@@ -1,4 +1,6 @@
 import { LitElement, css, html } from 'https://esm.sh/lit@3';
+import './author-filter.mjs';
+import { extractUniqueAuthors, getAuthorKey } from '../utils/github-ui-utils.mjs';
 
 /**
  * @class AdvancedFilter
@@ -334,22 +336,11 @@ class AdvancedFilter extends LitElement {
                 
                 <!-- Authors -->
                 <div class="filter-group">
-                    <div class="filter-group-title">Authors</div>
-                    <div>
-                        <div class="filter-checkbox-group">
-                            ${this._getUniqueAuthors().map(author => html`
-                                <div class="filter-checkbox">
-                                    <input 
-                                        type="checkbox" 
-                                        id="author-${author}"
-                                        .checked=${this.filters.authors.includes(author)}
-                                        @change=${() => this._toggleAuthor(author)}
-                                    >
-                                    <label for="author-${author}">${author}</label>
-                                </div>
-                            `)}
-                        </div>
-                    </div>
+                    <author-filter
+                        .authors="${extractUniqueAuthors(this.decisions)}"
+                        .selectedAuthors="${this.filters.authors}"
+                        @author-filter-change="${this._handleAuthorFilterChange}"
+                    ></author-filter>
                 </div>
                 
                 <!-- Categories -->
@@ -396,6 +387,71 @@ class AdvancedFilter extends LitElement {
                                 No
                             </button>
                         </div>
+                    </div>
+                </div>
+                
+                <!-- GitHub Activity Filters -->
+                <div class="filter-group">
+                    <div class="filter-group-title">GitHub Activity</div>
+                    <div>
+                        <!-- Pull Requests Toggle -->
+                        <label style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.25rem; display: block;">Pull Requests</label>
+                        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                            <button 
+                                class="toggle-button ${this.filters.hasPullRequests === null ? 'active' : ''}"
+                                @click=${() => this._updateFilter('hasPullRequests', null)}
+                            >
+                                All
+                            </button>
+                            <button 
+                                class="toggle-button ${this.filters.hasPullRequests === true ? 'active' : ''}"
+                                @click=${() => this._updateFilter('hasPullRequests', true)}
+                            >
+                                Yes
+                            </button>
+                            <button 
+                                class="toggle-button ${this.filters.hasPullRequests === false ? 'active' : ''}"
+                                @click=${() => this._updateFilter('hasPullRequests', false)}
+                            >
+                                No
+                            </button>
+                        </div>
+                        
+                        <!-- Issues Toggle -->
+                        <label style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.25rem; display: block;">Issues</label>
+                        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                            <button 
+                                class="toggle-button ${this.filters.hasIssues === null ? 'active' : ''}"
+                                @click=${() => this._updateFilter('hasIssues', null)}
+                            >
+                                All
+                            </button>
+                            <button 
+                                class="toggle-button ${this.filters.hasIssues === true ? 'active' : ''}"
+                                @click=${() => this._updateFilter('hasIssues', true)}
+                            >
+                                Yes
+                            </button>
+                            <button 
+                                class="toggle-button ${this.filters.hasIssues === false ? 'active' : ''}"
+                                @click=${() => this._updateFilter('hasIssues', false)}
+                            >
+                                No
+                            </button>
+                        </div>
+                        
+                        <!-- Minimum Commits -->
+                        <label style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.25rem; display: block;">
+                            Minimum Commits: ${this.filters.minCommits}
+                        </label>
+                        <input 
+                            type="range" 
+                            min="0" 
+                            max="20" 
+                            .value=${this.filters.minCommits}
+                            @input=${(e) => this._updateFilter('minCommits', parseInt(e.target.value))}
+                            style="width: 100%;"
+                        >
                     </div>
                 </div>
                 
@@ -472,9 +528,15 @@ class AdvancedFilter extends LitElement {
         }
         
         if (this.filters.authors.length > 0) {
+            const authorNames = this.filters.authors.map(author => {
+                if (author && typeof author === 'object' && 'display_name' in author) {
+                    return author.display_name || author.github_username;
+                }
+                return author;
+            });
             tags.push(html`
                 <span class="filter-tag">
-                    Author: ${this.filters.authors.join(', ')}
+                    Author: ${authorNames.join(', ')}
                     <span class="filter-tag-remove" @click=${() => this._removeFilter('authors')}>×</span>
                 </span>
             `);
@@ -530,6 +592,33 @@ class AdvancedFilter extends LitElement {
             `);
         }
         
+        if (this.filters.hasPullRequests !== null) {
+            tags.push(html`
+                <span class="filter-tag">
+                    PRs: ${this.filters.hasPullRequests ? 'Yes' : 'No'}
+                    <span class="filter-tag-remove" @click=${() => this._removeFilter('hasPullRequests')}>×</span>
+                </span>
+            `);
+        }
+        
+        if (this.filters.hasIssues !== null) {
+            tags.push(html`
+                <span class="filter-tag">
+                    Issues: ${this.filters.hasIssues ? 'Yes' : 'No'}
+                    <span class="filter-tag-remove" @click=${() => this._removeFilter('hasIssues')}>×</span>
+                </span>
+            `);
+        }
+        
+        if (this.filters.minCommits > 0) {
+            tags.push(html`
+                <span class="filter-tag">
+                    Min Commits: ${this.filters.minCommits}
+                    <span class="filter-tag-remove" @click=${() => this._removeFilter('minCommits')}>×</span>
+                </span>
+            `);
+        }
+        
         return tags;
     }
 
@@ -543,7 +632,10 @@ class AdvancedFilter extends LitElement {
             daysBack: 0, // 0 = all time
             minImpact: 0,
             hasComponents: null, // null = all, true = yes, false = no
-            searchTerm: ''
+            searchTerm: '',
+            hasPullRequests: null, // null = all, true = yes, false = no
+            hasIssues: null, // null = all, true = yes, false = no
+            minCommits: 0
         };
     }
 
@@ -626,6 +718,12 @@ class AdvancedFilter extends LitElement {
         this._emitFilterChange();
     }
 
+    _handleAuthorFilterChange(e) {
+        this.filters.authors = e.detail.selectedAuthors;
+        this.requestUpdate();
+        this._emitFilterChange();
+    }
+
     _toggleCategory(category) {
         if (this.filters.categories.includes(category)) {
             this.filters.categories = this.filters.categories.filter(c => c !== category);
@@ -666,6 +764,15 @@ class AdvancedFilter extends LitElement {
             case 'hasComponents':
                 this.filters.hasComponents = null;
                 break;
+            case 'hasPullRequests':
+                this.filters.hasPullRequests = null;
+                break;
+            case 'hasIssues':
+                this.filters.hasIssues = null;
+                break;
+            case 'minCommits':
+                this.filters.minCommits = 0;
+                break;
         }
         this.requestUpdate();
         this._emitFilterChange();
@@ -685,9 +792,16 @@ class AdvancedFilter extends LitElement {
                 return false;
             }
             
-            // Author filter
-            if (this.filters.authors.length > 0 && !this.filters.authors.includes(decision.author)) {
-                return false;
+            // Author filter - handle both string and GitHub user objects
+            if (this.filters.authors.length > 0) {
+                const matchesAuthor = this.filters.authors.some(filterAuthor => {
+                    const filterKey = getAuthorKey(filterAuthor);
+                    const decisionKey = getAuthorKey(decision.author);
+                    return filterKey === decisionKey;
+                });
+                if (!matchesAuthor) {
+                    return false;
+                }
             }
             
             // Category filter - use inferred category
@@ -741,6 +855,30 @@ class AdvancedFilter extends LitElement {
                 }
             }
             
+            // GitHub PR filter
+            if (this.filters.hasPullRequests !== null) {
+                const hasPRs = decision.github_metadata?.pull_requests?.length > 0;
+                if (this.filters.hasPullRequests !== hasPRs) {
+                    return false;
+                }
+            }
+            
+            // GitHub Issues filter
+            if (this.filters.hasIssues !== null) {
+                const hasIssues = decision.github_metadata?.issues?.length > 0;
+                if (this.filters.hasIssues !== hasIssues) {
+                    return false;
+                }
+            }
+            
+            // Minimum commits filter
+            if (this.filters.minCommits > 0) {
+                const commitCount = decision.github_metadata?.commits?.length || 0;
+                if (commitCount < this.filters.minCommits) {
+                    return false;
+                }
+            }
+            
             return true;
         });
     }
@@ -774,6 +912,9 @@ class AdvancedFilter extends LitElement {
         if (this.filters.daysBack > 0) count++;
         if (this.filters.minImpact > 0) count++;
         if (this.filters.hasComponents !== null) count++;
+        if (this.filters.hasPullRequests !== null) count++;
+        if (this.filters.hasIssues !== null) count++;
+        if (this.filters.minCommits > 0) count++;
         
         return count;
     }

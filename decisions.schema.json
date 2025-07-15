@@ -49,7 +49,7 @@
               "type": "object",
               "properties": {
                 "description": { "type": "string" },
-                "status": { "type": "string", "enum": ["Pending", "In Progress", "Done", "Blocked"] }
+                "status": { "type": "string", "enum": ["Pending", "In Progress", "Completed", "Done", "Blocked"] }
               },
               "required": ["description"]
             }
@@ -82,17 +82,89 @@
             "description": "Brief title describing the decision"
           },
           "author": { 
-            "type": "string",
-            "description": "Person who made or documented this decision"
+            "oneOf": [
+              {
+                "type": "string",
+                "description": "Plain text author name (legacy format)"
+              },
+              {
+                "type": "object",
+                "description": "GitHub user object with enhanced metadata",
+                "properties": {
+                  "github_username": {
+                    "type": "string",
+                    "description": "GitHub username"
+                  },
+                  "display_name": {
+                    "type": "string",
+                    "description": "Display name for the user"
+                  },
+                  "avatar_url": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "URL to user's GitHub avatar"
+                  },
+                  "profile_url": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "URL to user's GitHub profile"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "User's email address (if available)"
+                  }
+                },
+                "required": ["github_username", "display_name"],
+                "additionalProperties": false
+              }
+            ],
+            "description": "Person who made or documented this decision (string or GitHub user object)"
           },
           "date": { 
-            "type": "string", 
-            "format": "date-time",
-            "description": "ISO 8601 timestamp when the decision was made"
+            "oneOf": [
+              {
+                "type": "string", 
+                "format": "date-time",
+                "description": "ISO 8601 timestamp when the decision was made (manual entry)"
+              },
+              {
+                "type": "object",
+                "description": "Enhanced date object with Git metadata",
+                "properties": {
+                  "decision_date": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "When the decision was made"
+                  },
+                  "first_commit_date": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Date of first commit implementing this decision"
+                  },
+                  "last_commit_date": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Date of most recent commit related to this decision"
+                  },
+                  "git_derived": {
+                    "type": "boolean",
+                    "description": "Whether dates were derived from Git history"
+                  },
+                  "commit_count": {
+                    "type": "integer",
+                    "description": "Number of commits related to this decision"
+                  }
+                },
+                "required": ["decision_date"],
+                "additionalProperties": false
+              }
+            ],
+            "description": "When the decision was made (string or enhanced date object)"
           },
           "status": { 
             "type": "string", 
-            "enum": ["Accepted", "Superseded", "Rejected", "Proposed"],
+            "enum": ["Accepted", "Superseded", "Rejected", "Proposed", "Done", "Completed", "Pending"],
             "description": "Current status of the decision"
           },
           "project": { 
@@ -134,7 +206,7 @@
               "type": "object",
               "properties": {
                 "description": { "type": "string" },
-                "status": { "type": "string", "enum": ["Pending", "In Progress", "Done", "Blocked"] }
+                "status": { "type": "string", "enum": ["Pending", "In Progress", "Completed", "Done", "Blocked"] }
               },
               "required": ["description"]
             }
@@ -147,6 +219,86 @@
           "notes": { 
             "type": "string",
             "description": "Additional notes or context about this decision"
+          },
+          "github_metadata": {
+            "type": "object",
+            "description": "GitHub-specific metadata for this decision",
+            "properties": {
+              "repository": {
+                "type": "string",
+                "description": "GitHub repository (owner/repo format)"
+              },
+              "pull_requests": {
+                "type": "array",
+                "description": "Related GitHub pull requests",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "number": { "type": "integer" },
+                    "title": { "type": "string" },
+                    "url": { "type": "string", "format": "uri" },
+                    "status": { "type": "string", "enum": ["open", "closed", "merged"] }
+                  },
+                  "required": ["number", "title", "url", "status"]
+                }
+              },
+              "issues": {
+                "type": "array",
+                "description": "Related GitHub issues",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "number": { "type": "integer" },
+                    "title": { "type": "string" },
+                    "url": { "type": "string", "format": "uri" },
+                    "status": { "type": "string", "enum": ["open", "closed"] }
+                  },
+                  "required": ["number", "title", "url", "status"]
+                }
+              },
+              "commits": {
+                "type": "array",
+                "description": "Key commits implementing this decision",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "sha": { "type": "string" },
+                    "message": { "type": "string" },
+                    "url": { "type": "string", "format": "uri" },
+                    "date": { "type": "string", "format": "date-time" },
+                    "author": { "type": "string" }
+                  },
+                  "required": ["sha", "message", "url", "date"]
+                }
+              },
+              "file_status": {
+                "type": "object",
+                "description": "Status of affected components in repository",
+                "properties": {
+                  "created": {
+                    "type": "array",
+                    "description": "Files created by this decision",
+                    "items": { "type": "string" }
+                  },
+                  "modified": {
+                    "type": "array",
+                    "description": "Files modified by this decision",
+                    "items": { "type": "string" }
+                  },
+                  "deleted": {
+                    "type": "array",
+                    "description": "Files deleted by this decision",
+                    "items": { "type": "string" }
+                  },
+                  "missing": {
+                    "type": "array",
+                    "description": "Files that no longer exist in repository",
+                    "items": { "type": "string" }
+                  }
+                }
+              }
+            },
+            "additionalProperties": false
           }
         },
         "required": ["id", "title", "status"]

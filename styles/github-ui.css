@@ -1,0 +1,280 @@
+/**
+ * GitHub UI Components Styles
+ * Styles for GitHub avatar, author cards, and related components
+ */
+
+/* GitHub-specific color variables */
+:root {
+    --github-black: #24292e;
+    --github-blue: #0366d6;
+    --github-green: #28a745;
+    --github-red: #dc3545;
+    --github-purple: #6f42c1;
+    --github-gray: #6a737d;
+    --github-bg-gray: #f6f8fa;
+    --github-border: #e1e4e8;
+    
+    /* Status colors */
+    --pr-merged: #6f42c1;
+    --pr-open: #28a745;
+    --pr-closed: #dc3545;
+    --issue-open: #28a745;
+    --issue-closed: #dc3545;
+}
+
+/* Dark theme overrides */
+body.dark-theme {
+    --github-black: #f0f6fc;
+    --github-blue: #58a6ff;
+    --github-green: #56d364;
+    --github-red: #f85149;
+    --github-purple: #bc8cff;
+    --github-gray: #8b949e;
+    --github-bg-gray: #161b22;
+    --github-border: #30363d;
+}
+
+/* Avatar hover effects */
+.github-avatar-hover {
+    position: relative;
+    overflow: visible;
+}
+
+.github-avatar-hover::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border: 2px solid var(--github-blue);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.github-avatar-hover:hover::after {
+    opacity: 1;
+}
+
+/* Author card animations */
+.author-card-enter {
+    animation: slideInUp 0.3s ease-out;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* GitHub link styles */
+.github-link {
+    color: var(--github-blue);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.github-link:hover {
+    color: var(--github-blue);
+    text-decoration: underline;
+}
+
+.github-link-external::after {
+    content: '↗';
+    margin-left: 4px;
+    font-size: 0.8em;
+}
+
+/* PR/Issue badges */
+.github-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.github-badge.pr-merged {
+    background: rgba(111, 66, 193, 0.1);
+    color: var(--pr-merged);
+}
+
+.github-badge.pr-open {
+    background: rgba(40, 167, 69, 0.1);
+    color: var(--pr-open);
+}
+
+.github-badge.pr-closed {
+    background: rgba(220, 53, 69, 0.1);
+    color: var(--pr-closed);
+}
+
+.github-badge.issue-open {
+    background: rgba(40, 167, 69, 0.1);
+    color: var(--issue-open);
+}
+
+.github-badge.issue-closed {
+    background: rgba(220, 53, 69, 0.1);
+    color: var(--issue-closed);
+}
+
+/* File status indicators */
+.file-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+}
+
+.file-status-icon {
+    width: 14px;
+    height: 14px;
+    border-radius: 2px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+}
+
+.file-status-icon.created {
+    background: var(--github-green);
+}
+
+.file-status-icon.modified {
+    background: var(--github-blue);
+}
+
+.file-status-icon.deleted {
+    background: var(--github-red);
+}
+
+.file-status-icon.missing {
+    background: var(--github-gray);
+}
+
+/* Tooltip styles */
+.github-tooltip {
+    position: absolute;
+    z-index: 1000;
+    padding: 8px 12px;
+    background: var(--github-black);
+    color: white;
+    font-size: 12px;
+    border-radius: 6px;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.github-tooltip.show {
+    opacity: 0.9;
+}
+
+.github-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    border-top-color: var(--github-black);
+}
+
+/* Loading states */
+.github-loading {
+    position: relative;
+    overflow: hidden;
+}
+
+.github-loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.4) 50%,
+        transparent 100%
+    );
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    to {
+        left: 100%;
+    }
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+    .github-author-card {
+        font-size: 14px;
+    }
+    
+    .github-badge {
+        font-size: 11px;
+        padding: 2px 6px;
+    }
+    
+    .file-status {
+        font-size: 11px;
+    }
+    
+    .file-status-icon {
+        width: 12px;
+        height: 12px;
+    }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+    .author-card-enter {
+        animation: none;
+    }
+    
+    .github-loading::after {
+        animation: none;
+    }
+    
+    * {
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .github-badge {
+        border: 1px solid currentColor;
+    }
+    
+    .github-avatar-hover::after {
+        border-width: 3px;
+    }
+}
+
+/* Print styles */
+@media print {
+    .github-link-external::after {
+        content: ' (' attr(href) ')';
+        font-size: 0.8em;
+    }
+    
+    .github-tooltip {
+        display: none;
+    }
+}

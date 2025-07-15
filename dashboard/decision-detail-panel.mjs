@@ -1,5 +1,8 @@
 import { unsafeHTML } from 'https://esm.sh/lit/directives/unsafe-html.js';
 import { LitElement, css, html } from 'https://esm.sh/lit@3';
+import './avatar-display.mjs';
+import './commit-timeline.mjs';
+import './file-status-display.mjs';
 
 /**
  * @class DecisionDetailPanel
@@ -51,6 +54,138 @@ class DecisionDetailPanel extends LitElement {
             0% { transform: scale(1); opacity: 1; }
             50% { transform: scale(1.05); opacity: 0.8; }
             100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Author section styles */
+        .author-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(0, 82, 204, 0.05);
+            border-radius: 8px;
+            margin: 12px 0;
+        }
+
+        .author-info {
+            flex: 1;
+        }
+
+        .author-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin: 0 0 4px 0;
+        }
+
+        .author-username {
+            font-size: 14px;
+            color: var(--text-secondary);
+            opacity: 0.8;
+        }
+
+        .author-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-top: 8px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .github-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: #24292e;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 13px;
+            transition: background 0.2s ease;
+        }
+
+        .github-link:hover {
+            background: #1a1e22;
+        }
+
+        /* GitHub metadata sections */
+        .github-metadata-section {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 2px solid var(--border);
+        }
+
+        .pr-issue-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .pr-issue-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            text-decoration: none;
+            color: var(--text-main);
+            transition: all 0.2s ease;
+        }
+
+        .pr-issue-item:hover {
+            border-color: var(--accent);
+            transform: translateX(4px);
+        }
+
+        .pr-issue-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .pr-issue-badge.merged {
+            background: rgba(111, 66, 193, 0.1);
+            color: #6f42c1;
+        }
+
+        .pr-issue-badge.open {
+            background: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+        }
+
+        .pr-issue-badge.closed {
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+
+        .pr-issue-number {
+            font-family: monospace;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .pr-issue-title {
+            flex: 1;
+            font-size: 14px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
     `;
 
@@ -111,6 +246,89 @@ class DecisionDetailPanel extends LitElement {
         return emojis[state] || '⚙️';
     }
 
+    _renderAuthorSection(author) {
+        if (!author) return '';
+
+        const isGitHubUser = author && typeof author === 'object' && 'github_username' in author;
+        const displayName = isGitHubUser ? (author.display_name || author.github_username) : author;
+
+        return html`
+            <div class="author-section">
+                <github-avatar 
+                    .author="${author}" 
+                    size="large"
+                ></github-avatar>
+                <div class="author-info">
+                    <h3 class="author-name">${displayName}</h3>
+                    ${isGitHubUser ? html`
+                        <div class="author-username">@${author.github_username}</div>
+                        <div class="author-meta">
+                            ${author.email ? html`
+                                <div class="meta-item">
+                                    <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                                        <path d="M1.75 2A1.75 1.75 0 000 3.75v.736a.75.75 0 000 .027v7.737C0 13.216.784 14 1.75 14h12.5A1.75 1.75 0 0016 12.25v-8.5A1.75 1.75 0 0014.25 2H1.75zM14.5 4.07v-.32a.25.25 0 00-.25-.25H1.75a.25.25 0 00-.25.25v.32L8 7.88l6.5-3.81zm-13 1.74v6.441c0 .138.112.25.25.25h12.5a.25.25 0 00.25-.25V5.809L8.38 9.397a.75.75 0 01-.76 0L1.5 5.809z"/>
+                                    </svg>
+                                    ${author.email}
+                                </div>
+                            ` : ''}
+                            ${author.profile_url ? html`
+                                <a href="${author.profile_url}" target="_blank" rel="noopener noreferrer" class="github-link">
+                                    <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+                                    </svg>
+                                    View GitHub Profile
+                                </a>
+                            ` : ''}
+                        </div>
+                    ` : ''}
+                </div>
+            </div>
+        `;
+    }
+
+    _renderPRsAndIssues(githubMetadata) {
+        if (!githubMetadata) return '';
+        
+        const prs = githubMetadata.pull_requests || [];
+        const issues = githubMetadata.issues || [];
+        
+        if (prs.length === 0 && issues.length === 0) return '';
+        
+        return html`
+            <div class="github-metadata-section">
+                ${prs.length > 0 ? html`
+                    <h3>Related Pull Requests</h3>
+                    <div class="pr-issue-list">
+                        ${prs.map(pr => html`
+                            <a href="${pr.url}" target="_blank" rel="noopener noreferrer" class="pr-issue-item">
+                                <span class="pr-issue-badge ${pr.status}">
+                                    ${pr.status === 'merged' ? 'Merged' : pr.status}
+                                </span>
+                                <span class="pr-issue-number">#${pr.number}</span>
+                                <span class="pr-issue-title">${pr.title}</span>
+                            </a>
+                        `)}
+                    </div>
+                ` : ''}
+                
+                ${issues.length > 0 ? html`
+                    <h3>Related Issues</h3>
+                    <div class="pr-issue-list">
+                        ${issues.map(issue => html`
+                            <a href="${issue.url}" target="_blank" rel="noopener noreferrer" class="pr-issue-item">
+                                <span class="pr-issue-badge ${issue.status}">
+                                    ${issue.status}
+                                </span>
+                                <span class="pr-issue-number">#${issue.number}</span>
+                                <span class="pr-issue-title">${issue.title}</span>
+                            </a>
+                        `)}
+                    </div>
+                ` : ''}
+            </div>
+        `;
+    }
+
     render() {
         if (!this.decision) {
             return html`
@@ -121,8 +339,14 @@ class DecisionDetailPanel extends LitElement {
             `;
         }
 
-        const { id, title, status, date, rationale, tradeoffs, tasks, affected_components } = this.decision;
+        const { id, title, status, date, author, rationale, tradeoffs, tasks, affected_components, github_metadata } = this.decision;
         const statusClass = 'status-' + (status?.toLowerCase().replace(' ', '-') || '');
+        const decisionDate = date && typeof date === 'object' && 'decision_date' in date 
+            ? new Date(date.decision_date.replace(' ', 'T'))
+            : new Date(date.replace(' ', 'T'));
+        
+        // Author section HTML
+        const authorHtml = this._renderAuthorSection(author);
         
         // Activity badge HTML
         const activityHtml = this.currentActivity ? html`
@@ -158,24 +382,45 @@ class DecisionDetailPanel extends LitElement {
             </ul>
         ` : '';
 
-        const affectedComponentsHtml = affected_components?.length > 0 ? html`
+        // Handle file status display with GitHub metadata
+        const fileStatusHtml = github_metadata?.file_status ? html`
+            <file-status-display
+                .fileStatus="${github_metadata.file_status}"
+                .affectedComponents="${affected_components || []}"
+            ></file-status-display>
+        ` : (affected_components?.length > 0 ? html`
             <h3>Affected Components</h3>
             <ul>
                 ${affected_components.map(c => html`<li>${c}</li>`)}
             </ul>
+        ` : '');
+
+        // Render commit timeline if available
+        const commitTimelineHtml = github_metadata?.commits?.length > 0 ? html`
+            <div class="github-metadata-section">
+                <commit-timeline
+                    .commits="${github_metadata.commits}"
+                ></commit-timeline>
+            </div>
         ` : '';
+
+        // Render PRs and Issues
+        const prsAndIssuesHtml = this._renderPRsAndIssues(github_metadata);
 
         return html`
             <h2>Decision #${id}: ${title}</h2>
             <p><strong>Status:</strong> <span class="${statusClass}">${status}</span></p>
             ${activityHtml}
-            <p><strong>Date:</strong> ${new Date(date.replace(' ', 'T')).toLocaleString()}</p>
+            ${authorHtml}
+            <p><strong>Date:</strong> ${decisionDate.toLocaleString()}</p>
             <h3>Rationale</h3>
             <ul>${rationaleHtml}</ul>
             <h3>Tradeoffs</h3>
             <ul>${tradeoffsHtml}</ul>
             ${tasksHtml}
-            ${affectedComponentsHtml}
+            ${fileStatusHtml}
+            ${commitTimelineHtml}
+            ${prsAndIssuesHtml}
         `;
     }
 }

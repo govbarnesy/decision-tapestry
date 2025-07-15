@@ -30,6 +30,10 @@ const CWD = fs.existsSync(userDataPath) ? userDataPath : process.cwd();
 
 // Serve the static frontend from the dashboard directory
 app.use(express.static(path.join(__dirname, '../dashboard')));
+// Serve utils directory
+app.use('/utils', express.static(path.join(__dirname, '../utils')));
+// Serve styles directory
+app.use('/styles', express.static(path.join(__dirname, '../styles')));
 app.use(express.json());
 
 // Serve CSS files with the correct MIME type
@@ -43,10 +47,252 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../dashboard', 'index.html'));
 });
 
+// Track connected clients and agents
+const connectedClients = new Set();
+const connectedAgents = new Map();
+
 wss.on('connection', (ws) => {
   console.log('Client connected');
-  ws.on('close', () => console.log('Client disconnected'));
+  connectedClients.add(ws);
+  
+  // Send initial agent status to new client
+  const agentStatuses = Array.from(connectedAgents.values());
+  if (agentStatuses.length > 0) {
+    ws.send(JSON.stringify({
+      type: 'agent_status_list',
+      agents: agentStatuses
+    }));
+  }
+  
+  ws.on('message', (message) => {
+    try {
+      const data = JSON.parse(message);
+      handleWebSocketMessage(ws, data);
+    } catch (error) {
+      console.error('Invalid WebSocket message:', error.message);
+    }
+  });
+  
+  ws.on('close', () => {
+    console.log('Client disconnected');
+    connectedClients.delete(ws);
+    
+    // Remove agent if it was an agent connection
+    for (const [agentId, agentData] of connectedAgents) {
+      if (agentData.ws === ws) {
+        connectedAgents.delete(agentId);
+        console.log(`Agent ${agentId} disconnected`);
+        
+        // Broadcast agent disconnection
+        broadcast({
+          type: 'agent_disconnected',
+          agentId: agentId,
+          timestamp: new Date().toISOString()
+        });
+        break;
+      }
+    }
+  });
 });
+
+/**
+ * Handle WebSocket messages from agents and clients
+ */
+function handleWebSocketMessage(ws, data) {
+  const { type, agentId } = data;
+  
+  switch (type) {
+    case 'agent_register':
+      handleAgentRegistration(ws, data);
+      break;
+      
+    case 'agent_status':
+      handleAgentStatus(ws, data);
+      break;
+      
+    case 'agent_heartbeat':
+      handleAgentHeartbeat(ws, data);
+      break;
+      
+    case 'task_completion':
+      handleTaskCompletion(ws, data);
+      break;
+      
+    case 'decision_update':
+      handleDecisionUpdate(ws, data);
+      break;
+      
+    case 'agent_error':
+      handleAgentError(ws, data);
+      break;
+      
+    case 'get_agent_status':
+      handleGetAgentStatus(ws, data);
+      break;
+      
+    default:
+      console.warn(`Unknown message type: ${type}`);
+  }
+}
+
+/**
+ * Handle agent registration
+ */
+function handleAgentRegistration(ws, data) {
+  const { agentId, decisionId } = data;
+  
+  // Store agent connection
+  connectedAgents.set(agentId, {
+    ws: ws,
+    agentId: agentId,
+    decisionId: decisionId,
+    status: 'initializing',
+    registeredAt: new Date().toISOString(),
+    lastHeartbeat: new Date().toISOString()
+  });
+  
+  console.log(`Agent ${agentId} registered for decision ${decisionId}`);
+  
+  // Broadcast agent registration to all clients
+  broadcast({
+    type: 'agent_register',
+    agentId: agentId,
+    decisionId: decisionId,
+    timestamp: new Date().toISOString()
+  });
+}
+
+/**
+ * Handle agent status updates
+ */
+function handleAgentStatus(ws, data) {
+  const { agentId } = data;
+  
+  if (connectedAgents.has(agentId)) {
+    const agentData = connectedAgents.get(agentId);
+    
+    // Update agent status
+    connectedAgents.set(agentId, {
+      ...agentData,
+      status: data.status,
+      message: data.message,
+      currentTask: data.currentTask,
+      lastUpdate: new Date().toISOString()
+    });
+    
+    // Broadcast status update to all clients
+    broadcast({
+      type: 'agent_status',
+      ...data
+    });
+  }
+}
+
+/**
+ * Handle agent heartbeat
+ */
+function handleAgentHeartbeat(ws, data) {
+  const { agentId } = data;
+  
+  if (connectedAgents.has(agentId)) {
+    const agentData = connectedAgents.get(agentId);
+    
+    // Update last heartbeat
+    connectedAgents.set(agentId, {
+      ...agentData,
+      lastHeartbeat: new Date().toISOString()
+    });
+  }
+}
+
+/**
+ * Handle task completion
+ */
+function handleTaskCompletion(ws, data) {
+  const { agentId, taskDescription, decisionId } = data;
+  
+  console.log(`Agent ${agentId} completed task: ${taskDescription}`);
+  
+  // Broadcast task completion
+  broadcast({
+    type: 'task_completion',
+    agentId: agentId,
+    taskDescription: taskDescription,
+    decisionId: decisionId,
+    timestamp: new Date().toISOString()
+  });
+}
+
+/**
+ * Handle decision update
+ */
+function handleDecisionUpdate(ws, data) {
+  const { agentId, decisionId, message } = data;
+  
+  console.log(`Agent ${agentId} updated decision ${decisionId}: ${message}`);
+  
+  // Broadcast decision update
+  broadcast({
+    type: 'decision_update',
+    agentId: agentId,
+    decisionId: decisionId,
+    message: message,
+    timestamp: new Date().toISOString()
+  });
+}
+
+/**
+ * Handle agent error
+ */
+function handleAgentError(ws, data) {
+  const { agentId, decisionId, message } = data;
+  
+  console.error(`Agent ${agentId} error: ${message}`);
+  
+  // Update agent status
+  if (connectedAgents.has(agentId)) {
+    const agentData = connectedAgents.get(agentId);
+    connectedAgents.set(agentId, {
+      ...agentData,
+      status: 'error',
+      lastError: message,
+      lastUpdate: new Date().toISOString()
+    });
+  }
+  
+  // Broadcast error
+  broadcast({
+    type: 'agent_error',
+    agentId: agentId,
+    decisionId: decisionId,
+    message: message,
+    timestamp: new Date().toISOString()
+  });
+}
+
+/**
+ * Handle get agent status request
+ */
+function handleGetAgentStatus(ws, data) {
+  const { agentId } = data;
+  
+  if (agentId) {
+    // Send specific agent status
+    const agentData = connectedAgents.get(agentId);
+    ws.send(JSON.stringify({
+      type: 'agent_status_response',
+      agentId: agentId,
+      status: agentData || null
+    }));
+  } else {
+    // Send all agent statuses
+    const allAgents = Array.from(connectedAgents.values());
+    ws.send(JSON.stringify({
+      type: 'agent_status_list',
+      agents: allAgents
+    }));
+  }
+}
 
 function broadcast(data) {
   console.log('Broadcasting to clients:', data);

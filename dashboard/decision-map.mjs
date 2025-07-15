@@ -561,7 +561,16 @@ class DecisionMap extends LitElement {
                     }
                 }
             },
-            physics: { forceAtlas2Based: { gravitationalConstant: -50, centralGravity: 0.005, springLength: 230 } },
+            physics: { 
+                forceAtlas2Based: { 
+                    gravitationalConstant: -80, 
+                    centralGravity: 0.003, 
+                    springLength: 350,
+                    springConstant: 0.2,
+                    damping: 0.4,
+                    avoidOverlap: 0.5
+                } 
+            },
             interaction: {
                 dragNodes: true,
                 dragView: true,

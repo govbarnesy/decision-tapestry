@@ -299,6 +299,62 @@ class AgentStatusPanel extends LitElement {
         
         // Trigger re-render
         this.requestUpdate();
+        
+        // Log activity for debugging
+        console.log(`[Agent Status] ${agentId}: ${activity.message || activity.status}`);
+    }
+    
+    /**
+     * Handle agent status message from WebSocket
+     */
+    handleAgentStatusMessage(message) {
+        const { agentId, status, message: statusMessage, currentTask, decisionId } = message;
+        
+        this.updateAgentActivity(agentId, {
+            state: status,
+            message: statusMessage,
+            taskDescription: currentTask,
+            decisionId: decisionId
+        });
+    }
+    
+    /**
+     * Handle agent registration
+     */
+    handleAgentRegistration(message) {
+        const { agentId, decisionId } = message;
+        
+        this.updateAgentActivity(agentId, {
+            state: 'initializing',
+            message: 'Agent registered',
+            decisionId: decisionId
+        });
+    }
+    
+    /**
+     * Handle agent completion
+     */
+    handleAgentCompletion(message) {
+        const { agentId, decisionId, completedTasks, totalTasks } = message;
+        
+        this.updateAgentActivity(agentId, {
+            state: 'completed',
+            message: `Completed ${completedTasks}/${totalTasks} tasks`,
+            decisionId: decisionId
+        });
+    }
+    
+    /**
+     * Handle agent error
+     */
+    handleAgentError(message) {
+        const { agentId, decisionId, message: errorMessage } = message;
+        
+        this.updateAgentActivity(agentId, {
+            state: 'error',
+            message: errorMessage,
+            decisionId: decisionId
+        });
     }
     
     handleAgentClick(agentId, activity) {

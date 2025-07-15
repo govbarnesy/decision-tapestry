@@ -4,6 +4,16 @@ import { spawn } from 'child_process';
 import fs from 'fs/promises';
 import path from 'path';
 import Ajv from 'ajv';
+import { 
+    startAgent, 
+    showAgentStatus, 
+    coordinateAgents, 
+    runAgentTests, 
+    showAgentHelp,
+    launchAgents,
+    executeAgentTask,
+    monitorAgents
+} from './agent-commands.mjs';
 
 const commands = {
     init: {
@@ -33,6 +43,10 @@ const commands = {
     activity: {
         description: "Manage Claude Code activity tracking (start, end, status).",
         action: manageActivity
+    },
+    agent: {
+        description: "Manage AI agents for decision implementation (start, status, coordinate, test).",
+        action: manageAgent
     },
     help: {
         description: "Show this help message.",
@@ -201,6 +215,13 @@ function showHelp() {
     console.log("  1. decision-tapestry init      # Create a new decisions.yml");
     console.log("  2. decision-tapestry validate  # Check your file is valid");
     console.log("  3. decision-tapestry start     # Open the dashboard");
+    console.log("");
+    console.log("🤖 Agent Commands:");
+    console.log("  • decision-tapestry agent start <decision-id>    # Start an agent");
+    console.log("  • decision-tapestry agent status                 # Show agent status");
+    console.log("  • decision-tapestry agent coordinate <id1> <id2> # Coordinate agents");
+    console.log("  • decision-tapestry agent test                   # Run agent tests");
+    console.log("  • decision-tapestry agent help                   # Agent help");
 }
 
 async function analyzeProject() {
@@ -622,4 +643,44 @@ async function manageActivity() {
             console.log("  decision-tapestry activity end");
             break;
     }
-} 
+}
+
+async function manageAgent() {
+    const agentArgs = process.argv.slice(3);
+    const subcommand = agentArgs[0] || 'help';
+    
+    switch (subcommand) {
+        case 'start':
+            await startAgent();
+            break;
+            
+        case 'status':
+            await showAgentStatus();
+            break;
+            
+        case 'coordinate':
+            await coordinateAgents();
+            break;
+            
+        case 'launch':
+            await launchAgents();
+            break;
+            
+        case 'task':
+            await executeAgentTask();
+            break;
+            
+        case 'monitor':
+            await monitorAgents();
+            break;
+            
+        case 'test':
+            await runAgentTests();
+            break;
+            
+        case 'help':
+        default:
+            await showAgentHelp();
+            break;
+    }
+}

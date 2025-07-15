@@ -1,46 +1,336 @@
 decisions:
+  - id: 65
+    title: Implement GitHub author enhancement with API integration
+    author: Agent A
+    date: "2025-07-15T22:15:00Z"
+    status: Completed
+    project: Decision Tapestry
+    rationale:
+      - Authors need GitHub avatars and usernames for better recognition and trust
+      - GitHub user data provides richer context than plain text names
+      - OneOf schema approach allows progressive enhancement while maintaining backward compatibility
+      - Enhanced author objects support display_name, avatar_url, profile_url, and email
+      - Caching strategy prevents API rate limiting issues
+    tradeoffs:
+      - GitHub API rate limiting requires careful caching strategy
+      - Adds external dependency on GitHub service availability
+      - Complex authentication setup for GitHub access
+      - Schema migration complexity for existing author strings
+      - Need fallback handling for non-GitHub authors
+    tasks:
+      - description: Create GitHub API client with authentication and rate limiting
+        status: Completed
+      - description: Implement GitHub user lookup service with caching
+        status: Completed
+      - description: Support oneOf author schema (string | GitHub user object)
+        status: Completed
+      - description: Create progressive author enhancement (string → GitHub object)
+        status: Completed
+      - description: Add graceful fallback for non-GitHub users
+        status: Completed
+      - description: Implement author caching to prevent rate limiting
+        status: Completed
+    affected_components:
+      - services/github-service.mjs
+      - services/author-service.mjs
+      - decisions.schema.json
+      - config/github-config.mjs
+      - utils/author-migration.mjs
+    related_to:
+      - 66
+      - 67
+      - 68
+      - 61
+  - id: 66
+    title: Implement Git history analysis for commit-based decision dating
+    author: Agent B
+    date: "2025-07-15T22:16:00Z"
+    status: Completed
+    project: Decision Tapestry
+    rationale:
+      - Decisions should use actual Git commit dates for accurate historical timeline
+      - Enhanced date schema supports both manual dates and Git-derived metadata
+      - OneOf date approach allows decision_date, first_commit_date, last_commit_date
+      - File status tracking shows created, modified, deleted, and missing components
+      - Commit metadata provides rich context with sha, message, url, and author
+    tradeoffs:
+      - Performance impact of Git history analysis on large repositories
+      - Complexity of matching decisions to specific commits
+      - Handling of renamed or moved files over time
+      - Large repositories may have slow Git operations
+      - Enhanced date objects increase data complexity
+    tasks:
+      - description: Support oneOf date schema (string | enhanced date object)
+        status: Completed
+      - description: Create Git history analyzer for file creation dates
+        status: Completed
+      - description: Implement commit time lookup for affected_components
+        status: Completed
+      - description: Add file status tracking (created, modified, deleted, missing)
+        status: Completed
+      - description: Create commit-to-decision matching service
+        status: Completed
+      - description: Generate github_metadata.commits array with key commits
+        status: Completed
+      - description: Add github_metadata.file_status for component tracking
+        status: Completed
+      - description: Add performance optimization for large repositories
+        status: Completed
+    affected_components:
+      - services/git-analyzer.mjs
+      - services/file-tracker.mjs
+      - services/decision-enhancer.mjs
+      - services/git-performance.mjs
+      - utils/git-utils.mjs
+      - utils/commit-matcher.mjs
+    related_to:
+      - 65
+      - 67
+      - 68
+      - 61
+  - id: 67
+    title: Create GitHub UI components for author visualization
+    author: Agent C
+    date: "2025-07-15T22:17:00Z"
+    status: Completed
+    project: Decision Tapestry
+    rationale:
+      - GitHub avatars make authors instantly recognizable
+      - Author cards provide quick access to GitHub profiles
+      - Visual author filtering is more intuitive than text lists
+      - Components must handle both string authors and GitHub user objects
+      - Enhanced UI should display GitHub metadata like PRs, issues, and commits
+    tradeoffs:
+      - Complex UI components increase maintenance overhead
+      - Visual complexity might overwhelm some users
+      - Requires graceful fallback for non-GitHub authors
+      - Additional CSS and component complexity
+      - Need to handle mixed author formats in same view
+    tasks:
+      - description: Create GitHub avatar component with fallback for string authors
+        status: Completed
+      - description: Update decision-log to show GitHub avatars and enhanced dates
+        status: Completed
+      - description: Add author cards with GitHub profile links and metadata
+        status: Completed
+      - description: Enhance advanced filters with avatar-based author selection
+        status: Completed
+      - description: Add GitHub user display to decision detail panel
+        status: Completed
+      - description: Display github_metadata.commits timeline in decision details
+        status: Completed
+      - description: Show github_metadata.file_status in affected components
+        status: Completed
+      - description: Add GitHub PR/issue links to decision detail panel
+        status: Completed
+    affected_components:
+      - dashboard/avatar-display.mjs
+      - dashboard/github-author-card.mjs
+      - dashboard/author-filter.mjs
+      - dashboard/commit-timeline.mjs
+      - dashboard/file-status-display.mjs
+      - dashboard/decision-log.mjs
+      - dashboard/advanced-filter.mjs
+      - dashboard/decision-detail-panel.mjs
+      - styles/github-ui.css
+      - utils/github-ui-utils.mjs
+    related_to:
+      - 65
+      - 66
+      - 68
+      - 61
+  - id: 68
+    title: Enhance time filtering with commit-based date ranges
+    author: Agent D
+    date: "2025-07-15T22:18:00Z"
+    status: Completed
+    project: Decision Tapestry
+    rationale:
+      - Filtering by actual commit dates provides more accurate results
+      - Enhanced date schema allows filtering by decision_date, first_commit_date, or last_commit_date
+      - File activity indicators show recent changes using github_metadata.file_status
+      - Commit timeline visualization reveals development patterns from github_metadata.commits
+      - Integration with Git history makes filtering more meaningful
+    tradeoffs:
+      - Increased complexity in date filtering logic
+      - Performance considerations with large Git histories
+      - UI complexity with multiple date filtering options
+      - Potential confusion between decision date and commit date
+      - Need to handle both string dates and enhanced date objects
+    tasks:
+      - description: Support filtering by enhanced date objects (decision_date, first_commit_date, last_commit_date)
+        status: Completed
+      - description: Update search panel for commit-based date filtering
+        status: Completed
+      - description: Add 'last file change' filter using github_metadata.file_status
+        status: Completed
+      - description: Create commit timeline visualization from github_metadata.commits
+        status: Completed
+      - description: Add file activity indicators using github_metadata.file_status
+        status: Completed
+      - description: Add commit count indicators (github_metadata.commits.length)
+        status: Completed
+      - description: Integrate with Git history analysis service
+        status: Completed
+      - description: Add filtering by GitHub PR/issue activity
+        status: Completed
+    affected_components:
+      - dashboard/enhanced-time-filter.mjs
+      - dashboard/commit-timeline-viz.mjs
+      - dashboard/time-range-picker.mjs
+      - dashboard/commit-activity-heatmap.mjs
+      - utils/time-filtering-utils.mjs
+      - styles/time-filter.css
+      - dashboard/search-panel.mjs
+      - dashboard/advanced-filter.mjs
+    related_to:
+      - 65
+      - 66
+      - 67
+      - 61
+  - id: 62
+    title: Integrate GitHub MVP components into unified experience
+    author: Claude & Chris Barnes
+    date: "2025-07-15T22:19:00Z"
+    status: Completed
+    project: Decision Tapestry
+    rationale:
+      - Individual components need integration for seamless user experience
+      - Enhanced schema validation ensures oneOf author and date objects work correctly
+      - Testing ensures GitHub integration works with rate limiting and fallbacks
+      - Final integration validates the parallel development approach
+      - Quality assurance across all GitHub features and metadata
+    tradeoffs:
+      - Integration complexity increases with multiple moving parts
+      - Testing matrix grows with GitHub service dependencies
+      - Performance optimization needed across all components
+      - Documentation and examples needed for new features
+      - Schema validation complexity with oneOf patterns
+    tasks:
+      - description: Integrate GitHub API client with UI components
+        status: Completed
+      - description: Connect Git history analysis with time filtering
+        status: Completed
+      - description: Test oneOf schema validation (author and date objects)
+        status: Completed
+      - description: Validate github_metadata structure and display
+        status: Completed
+      - description: Test GitHub integration with rate limiting scenarios
+        status: Completed
+      - description: Verify graceful fallback when GitHub unavailable
+        status: Completed
+      - description: Validate backward compatibility with existing string authors/dates
+        status: Completed
+      - description: Test progressive enhancement (string → GitHub object migration)
+        status: Completed
+      - description: Performance testing with large repositories
+        status: Completed
+      - description: Create documentation for GitHub integration features
+        status: Completed
+    affected_components:
+      - All GitHub integration components
+      - decisions.schema.json
+      - Integration tests
+      - Documentation
+      - Schema validation utilities
+    related_to:
+      - 65
+      - 66
+      - 67
+      - 68
+      - 61
+    notes: |
+      This decision depends on the completion of decisions 65-68 and represents the 
+      final integration phase of the GitHub MVP. Success criteria include:
+      - Authors display GitHub avatars and usernames (oneOf: string | GitHub user object)
+      - Decisions filter by actual commit dates (oneOf: string | enhanced date object)
+      - File creation dates auto-populate from Git history
+      - GitHub metadata (PRs, issues, commits, file_status) displays correctly
+      - Graceful fallback when GitHub unavailable
+      - Backward compatibility maintained with existing string authors/dates
+      - Progressive enhancement working (string → GitHub object migration)
+  - id: 61
+    title: Implement comprehensive search and filtering with inferred categorization
+    author: Claude & Chris Barnes
+    date: "2025-07-15T22:00:00Z"
+    status: Accepted
+    project: Decision Tapestry
+    rationale:
+      - Dashboard needed intuitive search and filtering capabilities for decision discovery
+      - Manual categorization was impractical - inferred categories provide automatic classification
+      - Mobile-first design ensures usability across all device types
+      - Interactive visualizations make data exploration engaging and informative
+      - Dual-range sliders provide flexible time period selection
+    tradeoffs:
+      - Inferred categorization may not be 100% accurate for all decision types
+      - Complex UI components increase maintenance overhead
+      - Performance considerations with large datasets
+      - Visual complexity might overwhelm some users
+    tasks:
+      - description: Implement enhanced search panel with impact and time sliders
+        status: Done
+      - description: Add inferred category system based on keyword analysis
+        status: Done
+      - description: Create advanced filtering component with mobile-first design
+        status: Done
+      - description: Fix node click event handling in decision map
+        status: Done
+      - description: Add time distribution normalization for large gaps
+        status: Done
+      - description: Implement dual-range slider for time period selection
+        status: Done
+      - description: Add interactive pie charts for category and status visualization
+        status: Done
+      - description: Create overview chart showing filtered vs total decisions
+        status: Done
+    affected_components:
+      - dashboard/search-panel.mjs
+      - dashboard/advanced-filter.mjs
+      - dashboard/decision-map.mjs
+      - dashboard/app.mjs
+      - dashboard/index.html
+      - dashboard/style.css
+    related_to:
+      - 1
+      - 60
   - id: 53
-    title: "Use Redis for session storage"
-    author: "Quick Capture"
+    title: Use Redis for session storage
+    author: Quick Capture
     date: "2025-07-12T15:38:47.284Z"
     status: Done
     rationale:
-      - "Captured during development workflow using decision-tapestry capture command"
-      - "Redis provides fast, persistent session storage for web applications"
-      - "Enables horizontal scaling by externalizing session state"
-      - "Built-in expiration handling for session cleanup"
+      - Captured during development workflow using decision-tapestry capture command
+      - Redis provides fast, persistent session storage for web applications
+      - Enables horizontal scaling by externalizing session state
+      - Built-in expiration handling for session cleanup
     tradeoffs:
-      - "Adds Redis dependency and infrastructure complexity"
-      - "Requires Redis availability for application to function"
-      - "Additional network latency compared to in-memory sessions"
-      - "Need Redis backup/replication strategy for production"
+      - Adds Redis dependency and infrastructure complexity
+      - Requires Redis availability for application to function
+      - Additional network latency compared to in-memory sessions
+      - Need Redis backup/replication strategy for production
     tasks:
-      - description: "Setup Redis infrastructure"
+      - description: Setup Redis infrastructure
         status: Done
-      - description: "Configure session storage middleware"
+      - description: Configure session storage middleware
         status: Done
-      - description: "Add Redis health checks"
+      - description: Add Redis health checks
         status: Done
-      - description: "Update deployment documentation"
+      - description: Update deployment documentation
         status: Done
-      - description: "Performance monitoring setup"
+      - description: Performance monitoring setup
         status: Done
     related_to:
-      - 54   # UX Pain Points - created using the new capture command feature
+      - 54
   - id: 1
     title: Establish a System for a Durable, Shared Memory
     author: Clyde
-    date: '2025-06-20T10:00:00Z'
+    date: "2025-06-20T10:00:00Z"
     status: Done
     project: Decision Tapestry
     superseded_by: null
     rationale:
-      - >-
-        To effectively collaborate on complex system design, we need a mechanism
-        to record not just *what* was changed, but *why* it was changed.
-      - >-
-        This system serves as a shared memory, preventing knowledge loss and
-        ensuring design choices are durable and understood over time.
+      - To effectively collaborate on complex system design, we need a mechanism to record not just *what* was changed, but *why* it was changed.
+      - This system serves as a shared memory, preventing knowledge loss and ensuring design choices are durable and understood over time.
     tradeoffs:
       - Initial setup requires a small time investment.
       - The process adds a minor documentation step to our workflow.
@@ -50,20 +340,14 @@ decisions:
   - id: 2
     title: Formalize Standard Debugging Procedure
     author: Clyde & AI Assistant
-    date: '2025-06-20T11:00:00Z'
+    date: "2025-06-20T11:00:00Z"
     status: Done
     project: Collaboration Process
     rationale:
-      - >-
-        To accelerate debugging and prevent wasted cycles, we need a standard
-        for reporting bugs in generated artifacts.
-      - >-
-        Clear, actionable bug reports are essential for our collaborative
-        efficiency.
+      - To accelerate debugging and prevent wasted cycles, we need a standard for reporting bugs in generated artifacts.
+      - Clear, actionable bug reports are essential for our collaborative efficiency.
     tradeoffs:
-      - >-
-        This adds a minor step to bug reporting, but it will save significant
-        time in the long run by eliminating guesswork.
+      - This adds a minor step to bug reporting, but it will save significant time in the long run by eliminating guesswork.
     supersedes: null
     related_to:
       - 1
@@ -72,22 +356,15 @@ decisions:
   - id: 3
     title: Evolve Decision Tapestry for Prompt Integration
     author: Clyde & AI Assistant
-    date: '2025-06-21T09:00:00Z'
+    date: "2025-06-21T09:00:00Z"
     status: Superseded
     superseded_by: 4
     project: Decision Tapestry
     rationale:
-      - >-
-        To make our system more dynamic and less manual, we need to integrate it
-        directly with our workflow—the prompts we exchange.
-      - >-
-        This will transform it from a passive documentation tool into an active
-        collaboration partner.
+      - To make our system more dynamic and less manual, we need to integrate it directly with our workflow—the prompts we exchange.
+      - This will transform it from a passive documentation tool into an active collaboration partner.
     tradeoffs:
-      - >-
-        This will introduce significant complexity, requiring us to venture into
-        natural language processing and more complex data handling than our
-        current YAML file.
+      - This will introduce significant complexity, requiring us to venture into natural language processing and more complex data handling than our current YAML file.
     related_to:
       - 1
     affected_components:
@@ -96,20 +373,14 @@ decisions:
   - id: 4
     title: Defer Prompt Integration to Maintain Simplicity
     author: Clyde & AI Assistant
-    date: '2025-06-21T10:00:00Z'
+    date: "2025-06-21T10:00:00Z"
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        The complexity introduced by prompt integration (even manual) outweighs
-        the immediate benefits.
-      - >-
-        We are making a conscious decision to prioritize the simplicity and
-        maintainability of the core system.
+      - The complexity introduced by prompt integration (even manual) outweighs the immediate benefits.
+      - We are making a conscious decision to prioritize the simplicity and maintainability of the core system.
     tradeoffs:
-      - >-
-        We lose the ability to directly visualize the link between our
-        conversations and our decisions for now.
+      - We lose the ability to directly visualize the link between our conversations and our decisions for now.
     supersedes: 3
     related_to:
       - 3
@@ -120,13 +391,11 @@ decisions:
   - id: 5
     title: Explore Future Enhancements for Decision Tapestry
     author: Clyde & AI Assistant
-    date: '2025-06-21T11:00:00Z'
+    date: "2025-06-21T11:00:00Z"
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        To proactively consider the future evolution of the system and gather
-        user-centered ideas for improvement.
+      - To proactively consider the future evolution of the system and gather user-centered ideas for improvement.
     tradeoffs: []
     supersedes: null
     related_to:
@@ -140,17 +409,13 @@ decisions:
   - id: 6
     title: Implement Live Charter Map Highlighting
     author: Clyde & AI Assistant
-    date: '2025-06-21T12:00:00Z'
+    date: "2025-06-21T12:00:00Z"
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        To provide a live, at-a-glance view of our current collaboration phase,
-        directly linking our decisions to our process.
+      - To provide a live, at-a-glance view of our current collaboration phase, directly linking our decisions to our process.
     tradeoffs:
-      - >-
-        Adds a minor amount of complexity by coupling the two map generation
-        scripts.
+      - Adds a minor amount of complexity by coupling the two map generation scripts.
     supersedes: null
     related_to:
       - 5
@@ -161,21 +426,14 @@ decisions:
   - id: 7
     title: Redesign Charter Map for Non-Linear Process
     author: Clyde & AI Assistant
-    date: '2025-06-21T13:00:00Z'
+    date: "2025-06-21T13:00:00Z"
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        The current hierarchical layout of the charter map creates a misleading
-        linear visual, which does not accurately represent our iterative,
-        non-linear workflow.
-      - >-
-        A physics-based layout will provide a more honest and intuitive
-        visualization of our process.
+      - The current hierarchical layout of the charter map creates a misleading linear visual, which does not accurately represent our iterative, non-linear workflow.
+      - A physics-based layout will provide a more honest and intuitive visualization of our process.
     tradeoffs:
-      - >-
-        The exact layout will be less deterministic, but this is an acceptable
-        tradeoff for a more accurate representation.
+      - The exact layout will be less deterministic, but this is an acceptable tradeoff for a more accurate representation.
     supersedes: null
     related_to:
       - 5
@@ -184,14 +442,11 @@ decisions:
   - id: 8
     title: Explore Timeline Visualization for Decision History
     author: Clyde & AI Assistant
-    date: '2025-06-21T14:00:00Z'
+    date: "2025-06-21T14:00:00Z"
     status: Superseded
     project: Decision Tapestry
     rationale:
-      - >-
-        A timeline view could provide a powerful chronological perspective on
-        our decision-making process, complementing the structural view of the
-        graph.
+      - A timeline view could provide a powerful chronological perspective on our decision-making process, complementing the structural view of the graph.
       - Provide a sense of decision-making velocity.
       - Serve as a chronological reference point.
     superseded_by: 9
@@ -204,20 +459,14 @@ decisions:
   - id: 9
     title: Replace Interactive Timeline with a Simple Chronological Log
     author: Clyde & AI Assistant
-    date: '2025-06-21T15:00:00Z'
+    date: "2025-06-21T15:00:00Z"
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        The interactive timeline proved to be overly complex for the core job of
-        quickly referencing past decisions.
-      - >-
-        A simple, scannable HTML list provides better usability and maintains
-        system simplicity.
+      - The interactive timeline proved to be overly complex for the core job of quickly referencing past decisions.
+      - A simple, scannable HTML list provides better usability and maintains system simplicity.
     tradeoffs:
-      - >-
-        Removes the interactive/visual element, but this is an acceptable
-        tradeoff for improved readability and focus.
+      - Removes the interactive/visual element, but this is an acceptable tradeoff for improved readability and focus.
     supersedes: 8
     related_to:
       - 5
@@ -228,18 +477,14 @@ decisions:
   - id: 10
     title: Increase Timestamp Precision for Decision Log
     author: Clyde & AI Assistant
-    date: '2025-06-21T16:00:00Z'
+    date: "2025-06-21T16:00:00Z"
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        As decision-making velocity increases, a simple date is insufficient for
-        accurate chronological ordering.
+      - As decision-making velocity increases, a simple date is insufficient for accurate chronological ordering.
       - Full ISO 8601 timestamps provide the necessary granularity.
     tradeoffs:
-      - >-
-        Requires a one-time migration of existing data and slightly more verbose
-        entries going forward.
+      - Requires a one-time migration of existing data and slightly more verbose entries going forward.
     supersedes: null
     related_to:
       - 9
@@ -251,18 +496,14 @@ decisions:
   - id: 11
     title: Consolidate All Visualizations into a Single Dashboard
     author: Clyde & AI Assistant
-    date: '2025-06-21T17:00:00Z'
+    date: "2025-06-21T17:00:00Z"
     status: Done
     project: Decision Tapestry
     rationale:
       - A fragmented, multi-tab experience is inefficient.
-      - >-
-        Consolidating the decision map, charter map, and chronological log into
-        a single dashboard view will create a cohesive and more usable tool.
+      - Consolidating the decision map, charter map, and chronological log into a single dashboard view will create a cohesive and more usable tool.
     tradeoffs:
-      - >-
-        This will require a significant refactoring of the generation scripts
-        and build process.
+      - This will require a significant refactoring of the generation scripts and build process.
     supersedes: null
     related_to:
       - 5
@@ -272,16 +513,12 @@ decisions:
   - id: 12
     title: Add Interactive Decision Detail Panel
     author: Clyde & AI Assistant
-    date: '2025-06-21T18:00:00Z'
+    date: "2025-06-21T18:00:00Z"
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        The dashboard needs a way to view the full details of a selected
-        decision without leaving the page.
-      - >-
-        An interactive detail panel that responds to clicks on the decision map
-        will provide this functionality.
+      - The dashboard needs a way to view the full details of a selected decision without leaving the page.
+      - An interactive detail panel that responds to clicks on the decision map will provide this functionality.
     tradeoffs:
       - Adds more complexity to the client-side JavaScript of the dashboard.
     supersedes: null
@@ -292,16 +529,12 @@ decisions:
   - id: 13
     title: Redesign Dashboard with Three-Column Layout
     author: Clyde & AI Assistant
-    date: '2025-06-21T19:00:00Z'
+    date: "2025-06-21T19:00:00Z"
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        The two-column layout is less intuitive and failed to properly display
-        all necessary information.
-      - >-
-        A three-column layout with the decision map as the central focus
-        provides a more balanced and usable interface.
+      - The two-column layout is less intuitive and failed to properly display all necessary information.
+      - A three-column layout with the decision map as the central focus provides a more balanced and usable interface.
     tradeoffs:
       - Requires another layout refactoring.
     supersedes: null
@@ -312,20 +545,15 @@ decisions:
   - id: 14
     title: Incorporate Actionable Tasks into Decisions
     author: Clyde & AI Assistant
-    date: '2025-06-21T20:00:00Z'
+    date: "2025-06-21T20:00:00Z"
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        To make our process more transparent and actionable by bridging the gap
-        between high-level decisions and the granular work required to implement
-        them.
+      - To make our process more transparent and actionable by bridging the gap between high-level decisions and the granular work required to implement them.
       - Provides a clear 'definition of done' for each decision.
       - Helps gauge complexity at the start of the decision-making process.
     tradeoffs:
-      - >-
-        Adds a small amount of complexity to the data structure and
-        visualization.
+      - Adds a small amount of complexity to the data structure and visualization.
     related_to:
       - 5
     tasks:
@@ -340,20 +568,14 @@ decisions:
   - id: 15
     title: Establish a Living Product Backlog
     author: Clyde & AI Assistant
-    date: '2025-06-21T21:00:00Z'
+    date: "2025-06-21T21:00:00Z"
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        To create a formalized space for capturing, refining, and prioritizing
-        ideas before they become committed decisions.
-      - >-
-        This document will manage the 'Ideate' phase of our workflow, ensuring
-        strategic alignment on what we build next.
+      - To create a formalized space for capturing, refining, and prioritizing ideas before they become committed decisions.
+      - This document will manage the 'Ideate' phase of our workflow, ensuring strategic alignment on what we build next.
     tradeoffs:
-      - >-
-        Adds another document to maintain, but the benefit of a clear,
-        prioritized backlog outweighs this cost.
+      - Adds another document to maintain, but the benefit of a clear, prioritized backlog outweighs this cost.
     related_to:
       - 5
     tasks:
@@ -366,56 +588,37 @@ decisions:
   - id: 16
     title: Architect the Interactive Backlog Application
     author: Clyde & AI Assistant
-    date: '2025-06-22T10:00:00Z'
+    date: "2025-06-22T10:00:00Z"
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        To evolve the Decision Tapestry from a static site generator into a
-        dynamic, interactive web application, enabling real-time collaboration
-        on the product backlog.
-      - >-
-        This requires a fundamental architectural shift to a client-server
-        model, which will be implemented incrementally to mitigate risk.
+      - To evolve the Decision Tapestry from a static site generator into a dynamic, interactive web application, enabling real-time collaboration on the product backlog.
+      - This requires a fundamental architectural shift to a client-server model, which will be implemented incrementally to mitigate risk.
     tradeoffs:
-      - >-
-        Increases architectural complexity significantly, introducing a
-        persistent server and API layer.
-      - >-
-        The benefits of a fully interactive, self-contained workflow justify the
-        increase in complexity.
+      - Increases architectural complexity significantly, introducing a persistent server and API layer.
+      - The benefits of a fully interactive, self-contained workflow justify the increase in complexity.
     related_to:
       - 15
     tasks:
-      - description: >-
-          [Phase 1] Introduce Express.js and create a basic server to serve
-          static files and a GET /api/data endpoint.
+      - description: "[Phase 1] Introduce Express.js and create a basic server to serve static files and a GET /api/data endpoint."
         status: Done
-      - description: >-
-          [Phase 1] Refactor the frontend to fetch data from the API instead of
-          an injected script tag.
+      - description: "[Phase 1] Refactor the frontend to fetch data from the API instead of an injected script tag."
         status: Done
-      - description: >-
-          [Phase 2] Implement the POST /api/decisions endpoint to enable writing
-          to decisions.yml.
+      - description: "[Phase 2] Implement the POST /api/decisions endpoint to enable writing to decisions.yml."
         status: Done
-      - description: >-
-          [Phase 2] Build the UI components (forms, buttons) to allow promoting
-          backlog items to decisions.
+      - description: "[Phase 2] Build the UI components (forms, buttons) to allow promoting backlog items to decisions."
         status: Done
     affected_components:
       - internal-packages/decision-tapestry/server.mjs
       - internal-packages/decision-tapestry/package.json
   - id: 17
-    title: 'Implement: 1. Enhance Narrative Flow in Visualization'
+    title: "Implement: 1. Enhance Narrative Flow in Visualization"
     author: Clyde & AI Assistant
-    date: '2025-06-22 10:00:00'
+    date: "2025-06-22 10:00:00"
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        Promoted directly from the product backlog to address a prioritized
-        need.
+      - Promoted directly from the product backlog to address a prioritized need.
     tradeoffs:
       - This is being implemented as a new feature.
     tasks:
@@ -423,21 +626,17 @@ decisions:
         status: Done
       - description: Re-center the map on the selected node.
         status: Done
-      - description: >-
-          Use a distinct visual style for 'supersedes' relationships on the
-          decision map.
+      - description: Use a distinct visual style for 'supersedes' relationships on the decision map.
         status: Done
     related_to:
       - 5
     supersedes: null
-  - title: 'Implement: 2. Display Affected Components in Detail Panel'
+  - title: "Implement: 2. Display Affected Components in Detail Panel"
     author: Clyde & AI Assistant
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        Promoted directly from the product backlog to address a prioritized
-        need.
+      - Promoted directly from the product backlog to address a prioritized need.
     tradeoffs:
       - This is being implemented as a new feature.
     tasks:
@@ -451,32 +650,26 @@ decisions:
       - internal-packages/decision-tapestry/generate-dashboard.mjs
     brainstormed_ideas: []
     id: 18
-    date: '2025-06-21T22:18:00.571Z'
+    date: "2025-06-21T22:18:00.571Z"
   - id: 19
     title: Implement an Interactive CLI for Decision Management
     author: Clyde & AI Assistant
-    date: '2025-06-22T14:30:00.000Z'
+    date: "2025-06-22T14:30:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
       - Manually editing decisions.yml is inefficient and prone to errors.
-      - >-
-        A dedicated CLI will provide a structured and streamlined way to manage
-        decisions, tasks, and the product backlog, accelerating our workflow.
+      - A dedicated CLI will provide a structured and streamlined way to manage decisions, tasks, and the product backlog, accelerating our workflow.
     tradeoffs:
-      - >-
-        Introduces a new component (cli.mjs) and dependency (e.g., commander.js)
-        to maintain.
+      - Introduces a new component (cli.mjs) and dependency (e.g., commander.js) to maintain.
     related_to:
       - 16
     tasks:
-      - description: '[Phase 1] Create basic CLI structure with command parsing.'
+      - description: "[Phase 1] Create basic CLI structure with command parsing."
         status: Done
-      - description: '[Phase 1] Implement ''show <id>'' command to display decision details.'
+      - description: "[Phase 1] Implement 'show <id>' command to display decision details."
         status: Done
-      - description: >-
-          [Phase 2] Implement 'task <decision-id> <task-index> <status>' command
-          to update task status.
+      - description: "[Phase 2] Implement 'task <decision-id> <task-index> <status>' command to update task status."
         status: Done
     affected_components:
       - internal-packages/decision-tapestry/cli.mjs
@@ -484,34 +677,26 @@ decisions:
   - id: 20
     title: Implement Real-time UI Updates via WebSockets
     author: Clyde & AI Assistant
-    date: '2025-06-22T15:00:00.000Z'
+    date: "2025-06-22T15:00:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        To improve collaboration, the UI should provide real-time feedback on
-        actions performed via the CLI.
-      - >-
-        A persistent WebSocket connection is more efficient than polling for
-        updates and enables the server to push changes to the client instantly.
+      - To improve collaboration, the UI should provide real-time feedback on actions performed via the CLI.
+      - A persistent WebSocket connection is more efficient than polling for updates and enables the server to push changes to the client instantly.
     tradeoffs:
-      - >-
-        Increases server and client complexity by introducing stateful WebSocket
-        connections.
+      - Increases server and client complexity by introducing stateful WebSocket connections.
       - Adds a new dependency (`ws`) to the project.
     related_to:
       - 16
       - 19
     tasks:
-      - description: '[Phase 1] Add ''ws'' library and set up WebSocket server.'
+      - description: "[Phase 1] Add 'ws' library and set up WebSocket server."
         status: Done
-      - description: '[Phase 1] Create a server endpoint for the CLI to trigger updates.'
+      - description: "[Phase 1] Create a server endpoint for the CLI to trigger updates."
         status: Done
-      - description: >-
-          [Phase 1] Implement client-side logic to connect to WebSocket and
-          handle update messages.
+      - description: "[Phase 1] Implement client-side logic to connect to WebSocket and handle update messages."
         status: Done
-      - description: '[Phase 1] Update CLI to call the new endpoint after modifying a task.'
+      - description: "[Phase 1] Update CLI to call the new endpoint after modifying a task."
         status: Done
     affected_components:
       - internal-packages/decision-tapestry/server.mjs
@@ -521,20 +706,14 @@ decisions:
   - id: 21
     title: Deprecate Static Build Step for a Fully Dynamic Server
     author: Clyde & AI Assistant
-    date: '2025-06-22T15:30:00.000Z'
+    date: "2025-06-22T15:30:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        The introduction of a dynamic server with WebSockets makes the static
-        site generation script (generate-dashboard.mjs) redundant.
-      - >-
-        Removing the build step simplifies the architecture, reduces
-        dependencies, and speeds up the development feedback loop.
+      - The introduction of a dynamic server with WebSockets makes the static site generation script (generate-dashboard.mjs) redundant.
+      - Removing the build step simplifies the architecture, reduces dependencies, and speeds up the development feedback loop.
     tradeoffs:
-      - >-
-        The server is now responsible for serving the initial HTML shell, but
-        this is a minor concern.
+      - The server is now responsible for serving the initial HTML shell, but this is a minor concern.
     related_to:
       - 16
       - 20
@@ -543,30 +722,24 @@ decisions:
         status: Done
       - description: Update `package.json` to remove the `build` script.
         status: Done
-      - description: >-
-          Update `package.json` to reconfigure `nodemon` to restart the server
-          directly.
+      - description: Update `package.json` to reconfigure `nodemon` to restart the server directly.
         status: Done
     affected_components:
       - internal-packages/decision-tapestry/generate-dashboard.mjs
       - internal-packages/decision-tapestry/package.json
       - internal-packages/decision-tapestry/server.mjs
-  - title: 'Implement: 2. Search & Filtering'
+  - title: "Implement: 2. Search & Filtering"
     author: Clyde & AI Assistant
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        Promoted directly from the product backlog to address a prioritized
-        need.
+      - Promoted directly from the product backlog to address a prioritized need.
     tradeoffs:
       - This is being implemented as a new feature.
     tasks:
-      - description: '[Phase 1] Add a search bar input field to the dashboard UI.'
+      - description: "[Phase 1] Add a search bar input field to the dashboard UI."
         status: Done
-      - description: >-
-          [Phase 1] Implement client-side filtering logic for the decision map
-          and log.
+      - description: "[Phase 1] Implement client-side filtering logic for the decision map and log."
         status: Done
     related_to:
       - 5
@@ -575,34 +748,26 @@ decisions:
     affected_components: []
     brainstormed_ideas: []
     id: 22
-    date: '2025-06-22T03:06:47.105Z'
+    date: "2025-06-22T03:06:47.105Z"
   - id: 23
     title: Implement Decision Velocity Analytics
     author: Clyde & AI Assistant
-    date: '2025-06-22T18:00:00.000Z'
+    date: "2025-06-22T18:00:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        To provide a quantitative measure of our project's momentum and
-        visualize trends in our decision-making process over time.
-      - >-
-        To keep the UI clean and avoid major layout changes, the analytics will
-        be displayed in a new tab within the left-hand panel.
+      - To provide a quantitative measure of our project's momentum and visualize trends in our decision-making process over time.
+      - To keep the UI clean and avoid major layout changes, the analytics will be displayed in a new tab within the left-hand panel.
     tradeoffs:
-      - >-
-        Adds a new data visualization component to the dashboard. We will start
-        with a simple text-based display to manage complexity.
+      - Adds a new data visualization component to the dashboard. We will start with a simple text-based display to manage complexity.
     related_to:
       - 5
     tasks:
-      - description: '[Phase 1] Add a new ''Analytics'' tab and content panel to the UI.'
+      - description: "[Phase 1] Add a new 'Analytics' tab and content panel to the UI."
         status: Done
-      - description: >-
-          [Phase 1] Implement client-side logic to calculate decisions made per
-          week.
+      - description: "[Phase 1] Implement client-side logic to calculate decisions made per week."
         status: Done
-      - description: '[Phase 1] Render the calculated analytics in the new tab.'
+      - description: "[Phase 1] Render the calculated analytics in the new tab."
         status: Done
     affected_components:
       - internal-packages/decision-tapestry/dist/index.html
@@ -610,29 +775,23 @@ decisions:
   - id: 24
     title: Enhance Decision Velocity Analytics with Charting and Time Controls
     author: Clyde & AI Assistant
-    date: '2025-06-22T19:00:00.000Z'
+    date: "2025-06-22T19:00:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        A bar chart provides a more intuitive visualization of decision velocity
-        than a plain list.
-      - >-
-        Allowing for different time groupings (days, weeks, months) provides
-        more powerful and flexible analysis.
+      - A bar chart provides a more intuitive visualization of decision velocity than a plain list.
+      - Allowing for different time groupings (days, weeks, months) provides more powerful and flexible analysis.
     tradeoffs:
-      - >-
-        Adds a new dependency (Chart.js) for charting, increasing the
-        client-side footprint.
+      - Adds a new dependency (Chart.js) for charting, increasing the client-side footprint.
       - Increases the complexity of the analytics rendering logic.
     related_to:
       - 23
     tasks:
-      - description: '[Phase 1] Add Chart.js library and a canvas element to the UI.'
+      - description: "[Phase 1] Add Chart.js library and a canvas element to the UI."
         status: Done
-      - description: '[Phase 1] Add day/week/month controls to the Analytics tab.'
+      - description: "[Phase 1] Add day/week/month controls to the Analytics tab."
         status: Done
-      - description: '[Phase 1] Implement logic to group data and render the chart.'
+      - description: "[Phase 1] Implement logic to group data and render the chart."
         status: Done
     affected_components:
       - internal-packages/decision-tapestry/dist/index.html
@@ -640,32 +799,22 @@ decisions:
   - id: 25
     title: Implement Project Health Metrics
     author: Clyde & AI Assistant
-    date: '2025-06-22T20:00:00.000Z'
+    date: "2025-06-22T20:00:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        To provide at-a-glance insights into the health and stability of our
-        decision-making process.
-      - >-
-        The metrics will be displayed in the existing Analytics tab to maintain
-        UI consistency and avoid layout changes.
+      - To provide at-a-glance insights into the health and stability of our decision-making process.
+      - The metrics will be displayed in the existing Analytics tab to maintain UI consistency and avoid layout changes.
     tradeoffs:
-      - >-
-        Starting with a simple text display for the metrics to avoid premature
-        complexity in visualization.
+      - Starting with a simple text display for the metrics to avoid premature complexity in visualization.
     related_to:
       - 23
     tasks:
-      - description: >-
-          [Phase 1] Add a new UI section for Health Metrics in the Analytics
-          tab.
+      - description: "[Phase 1] Add a new UI section for Health Metrics in the Analytics tab."
         status: Done
-      - description: >-
-          [Phase 1] Implement logic to calculate the ratio of Accepted to
-          Superseded decisions.
+      - description: "[Phase 1] Implement logic to calculate the ratio of Accepted to Superseded decisions."
         status: Done
-      - description: '[Phase 1] Render the calculated metrics.'
+      - description: "[Phase 1] Render the calculated metrics."
         status: Done
     affected_components:
       - internal-packages/decision-tapestry/dist/index.html
@@ -673,23 +822,19 @@ decisions:
   - id: 26
     title: Enhance Health Metrics with a Pie Chart Visualization
     author: Clyde & AI Assistant
-    date: '2025-06-22T21:00:00.000Z'
+    date: "2025-06-22T21:00:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        A pie chart provides a more direct and intuitive visualization of the
-        proportion of Accepted vs. Superseded decisions than raw numbers.
+      - A pie chart provides a more direct and intuitive visualization of the proportion of Accepted vs. Superseded decisions than raw numbers.
     tradeoffs:
-      - >-
-        Replaces the simple text display with a chart, which may take up more
-        vertical space.
+      - Replaces the simple text display with a chart, which may take up more vertical space.
     related_to:
       - 25
     tasks:
-      - description: '[Phase 1] Add a new canvas element for the pie chart.'
+      - description: "[Phase 1] Add a new canvas element for the pie chart."
         status: Done
-      - description: '[Phase 1] Implement logic to render a pie chart for health metrics.'
+      - description: "[Phase 1] Implement logic to render a pie chart for health metrics."
         status: Done
     affected_components:
       - internal-packages/decision-tapestry/dist/index.html
@@ -697,45 +842,37 @@ decisions:
   - id: 27
     title: Balance Layout of Analytics Charts
     author: Clyde & AI Assistant
-    date: '2025-06-22T22:00:00.000Z'
+    date: "2025-06-22T22:00:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        To improve the visual presentation and polish of the Analytics tab by
-        ensuring the charts are equally sized and balanced.
+      - To improve the visual presentation and polish of the Analytics tab by ensuring the charts are equally sized and balanced.
     tradeoffs:
       - A minor CSS change with no significant risks.
     related_to:
       - 24
       - 26
     tasks:
-      - description: '[Phase 1] Apply flexbox styles to the analytics chart containers.'
+      - description: "[Phase 1] Apply flexbox styles to the analytics chart containers."
         status: Done
     affected_components:
       - internal-packages/decision-tapestry/dist/index.html
-  - title: 'Implement: Phase 2: Tooling & Portability'
+  - title: "Implement: Phase 2: Tooling & Portability"
     author: Clyde & AI Assistant
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        Promoted directly from the product backlog to address a prioritized
-        need.
+      - Promoted directly from the product backlog to address a prioritized need.
     tradeoffs:
       - This is being implemented as a new feature.
     tasks:
-      - description: '[Phase 1] Create a `cli.mjs` file to handle command-line arguments.'
+      - description: "[Phase 1] Create a `cli.mjs` file to handle command-line arguments."
         status: Done
-      - description: >-
-          [Phase 1] Add a `bin` entry to `package.json` to define the CLI
-          command.
+      - description: "[Phase 1] Add a `bin` entry to `package.json` to define the CLI command."
         status: Done
-      - description: >-
-          [Phase 1] Refactor `server.mjs` to serve the application from the
-          package and read user data from the current directory.
+      - description: "[Phase 1] Refactor `server.mjs` to serve the application from the package and read user data from the current directory."
         status: Done
-      - description: '[Phase 1] Remove the now-redundant `utils.mjs` file.'
+      - description: "[Phase 1] Remove the now-redundant `utils.mjs` file."
         status: Done
     related_to:
       - 5
@@ -744,27 +881,22 @@ decisions:
     affected_components: []
     brainstormed_ideas: []
     id: 28
-    date: '2025-06-22T06:15:06.721Z'
+    date: "2025-06-22T06:15:06.721Z"
   - title: Create VS Code Extension for Enhanced DX
     author: Clyde & AI Assistant
-    date: '2025-06-23T10:00:00.000Z'
+    date: "2025-06-23T10:00:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        To elevate the developer experience by bringing Decision Tapestry
-        directly into the editor, reducing context switching and integrating it
-        seamlessly into the daily workflow.
+      - To elevate the developer experience by bringing Decision Tapestry directly into the editor, reducing context switching and integrating it seamlessly into the daily workflow.
     tradeoffs:
-      - >-
-        This introduces a new, separate artifact to build and maintain (the VS
-        Code extension) and will require learning the VS Code API.
+      - This introduces a new, separate artifact to build and maintain (the VS Code extension) and will require learning the VS Code API.
     tasks:
-      - description: '[Phase 1] Research the VS Code API for webviews and custom panels.'
+      - description: "[Phase 1] Research the VS Code API for webviews and custom panels."
         status: Done
-      - description: '[Phase 1] Design the UI for the extension panel.'
+      - description: "[Phase 1] Design the UI for the extension panel."
         status: Pending
-      - description: '[Phase 1] Implement a basic webview to render the existing dashboard.'
+      - description: "[Phase 1] Implement a basic webview to render the existing dashboard."
         status: Done
     related_to:
       - 28
@@ -774,52 +906,36 @@ decisions:
     brainstormed_ideas: []
     id: 29
   - id: 30
-    title: 'Implement: Command Palette Integration for Decision Creation'
+    title: "Implement: Command Palette Integration for Decision Creation"
     author: Clyde & AI Assistant
-    date: '2025-06-24T10:00:00.000Z'
+    date: "2025-06-24T10:00:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        To accelerate the workflow for creating new decisions by allowing users
-        to scaffold them directly from the VS Code Command Palette.
-      - >-
-        Reduces friction and encourages more consistent use of the decision log.
-        Part of the Phase 2 roadmap.
+      - To accelerate the workflow for creating new decisions by allowing users to scaffold them directly from the VS Code Command Palette.
+      - Reduces friction and encourages more consistent use of the decision log. Part of the Phase 2 roadmap.
     tradeoffs:
-      - >-
-        Adds more commands to the extension, requiring clear naming to avoid
-        clutter.
+      - Adds more commands to the extension, requiring clear naming to avoid clutter.
     related_to:
       - 29
     tasks:
-      - description: >-
-          [Phase 1] Add a "createDecision" command to the extension's
-          package.json.
+      - description: "[Phase 1] Add a \"createDecision\" command to the extension's package.json."
         status: Done
-      - description: >-
-          [Phase 1] Implement the command logic in extension.ts to prompt for a
-          title.
+      - description: "[Phase 1] Implement the command logic in extension.ts to prompt for a title."
         status: Done
-      - description: >-
-          [Phase 1] Implement logic to read, update, and write to the
-          decisions.yml file with a new decision stub.
+      - description: "[Phase 1] Implement logic to read, update, and write to the decisions.yml file with a new decision stub."
         status: Done
-      - description: >-
-          [Phase 1] Open decisions.yml and move the cursor to the new entry
-          after creation.
+      - description: "[Phase 1] Open decisions.yml and move the cursor to the new entry after creation."
         status: Done
     affected_components:
       - vscode-extension/package.json
       - vscode-extension/src/extension.ts
-  - title: 'Implement: Phase 1: Foundational CLI Tool (Complete)'
+  - title: "Implement: Phase 1: Foundational CLI Tool (Complete)"
     author: Clyde & AI Assistant
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        Promoted directly from the product backlog to address a prioritized
-        need.
+      - Promoted directly from the product backlog to address a prioritized need.
     tradeoffs:
       - This is being implemented as a new feature.
     tasks: []
@@ -830,15 +946,13 @@ decisions:
     affected_components: []
     brainstormed_ideas: []
     id: 31
-    date: '2025-06-23T06:14:11.055Z'
-  - title: 'Implement: Phase 2: Enhanced Developer Experience (Next Up)'
+    date: "2025-06-23T06:14:11.055Z"
+  - title: "Implement: Phase 2: Enhanced Developer Experience (Next Up)"
     author: Clyde & AI Assistant
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        Promoted directly from the product backlog to address a prioritized
-        need.
+      - Promoted directly from the product backlog to address a prioritized need.
     tradeoffs:
       - This is being implemented as a new feature.
     tasks: []
@@ -849,271 +963,186 @@ decisions:
     affected_components: []
     brainstormed_ideas: []
     id: 32
-    date: '2025-06-23T06:14:23.682Z'
+    date: "2025-06-23T06:14:23.682Z"
   - id: 33
-    title: 'Implement: Code-to-Decision Linking via Gutter Indicators'
+    title: "Implement: Code-to-Decision Linking via Gutter Indicators"
     author: Clyde & AI Assistant
-    date: '2025-06-25T14:00:00.000Z'
+    date: "2025-06-25T14:00:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        To provide immediate, in-context visibility into why a piece of code was
-        changed by linking it directly to the decision that prompted it.
-      - >-
-        This is a core feature of the "Enhanced Developer Experience" phase,
-        bridging the gap between the code and the narrative behind it.
+      - To provide immediate, in-context visibility into why a piece of code was changed by linking it directly to the decision that prompted it.
+      - This is a core feature of the "Enhanced Developer Experience" phase, bridging the gap between the code and the narrative behind it.
     tradeoffs:
       - Can add minor visual clutter to the editor gutter.
-      - >-
-        The initial implementation will rely on exact path matching in
-        `affected_components`, which may need to be refined later for more
-        complex scenarios.
+      - The initial implementation will rely on exact path matching in `affected_components`, which may need to be refined later for more complex scenarios.
     related_to:
       - 29
     tasks:
-      - description: '[Phase 1] Create an SVG icon for the gutter indicator.'
+      - description: "[Phase 1] Create an SVG icon for the gutter indicator."
         status: Done
-      - description: '[Phase 1] Implement a CodelensProvider to find and mark affected code.'
+      - description: "[Phase 1] Implement a CodelensProvider to find and mark affected code."
         status: Done
-      - description: '[Phase 1] Register the new provider in the main extension file.'
+      - description: "[Phase 1] Register the new provider in the main extension file."
         status: Done
     affected_components:
       - vscode-extension/src/extension.ts
       - vscode-extension/src/CodelensProvider.ts
       - vscode-extension/media/icon.svg
   - id: 34
-    title: 'Refactor: Implement Debounced File Watching for Real-time UI Updates'
+    title: "Refactor: Implement Debounced File Watching for Real-time UI Updates"
     author: Clyde & AI Assistant
-    date: '2025-06-25T16:00:00.000Z'
+    date: "2025-06-25T16:00:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        The existing real-time update mechanism, which relies on `fs.watchFile`,
-        has proven to be unreliable. A more robust solution is needed to ensure
-        the UI is always in sync with the data.
-      - >-
-        Using `fs.watch` with a debounce mechanism provides a more resilient and
-        efficient system that is not prone to multiple-trigger errors from file
-        saves.
+      - The existing real-time update mechanism, which relies on `fs.watchFile`, has proven to be unreliable. A more robust solution is needed to ensure the UI is always in sync with the data.
+      - Using `fs.watch` with a debounce mechanism provides a more resilient and efficient system that is not prone to multiple-trigger errors from file saves.
     tradeoffs:
       - Adds a small amount of complexity (the debounce logic) to the server.
     supersedes: 20
     related_to:
       - 20
     tasks:
-      - description: '[Phase 1] Replace `fs.watchFile` with `fs.watch` in `server.mjs`.'
+      - description: "[Phase 1] Replace `fs.watchFile` with `fs.watch` in `server.mjs`."
         status: Done
-      - description: '[Phase 1] Implement a debounce function for the WebSocket broadcast.'
+      - description: "[Phase 1] Implement a debounce function for the WebSocket broadcast."
         status: Done
-      - description: '[Phase 1] Verify the real-time update is now reliable.'
+      - description: "[Phase 1] Verify the real-time update is now reliable."
         status: Done
     affected_components:
       - internal-packages/decision-tapestry/server.mjs
   - id: 35
-    title: 'Enhance: Make CodeLens Command Interactive'
+    title: "Enhance: Make CodeLens Command Interactive"
     author: Clyde & AI Assistant
-    date: '2025-06-25T18:00:00.000Z'
+    date: "2025-06-25T18:00:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        The current CodeLens is not context-aware; it just opens the dashboard.
-        A more useful implementation would show the specific, relevant decisions
-        and allow the user to focus on one.
-      - >-
-        This improves the user workflow by taking them directly to the
-        information they need, fulfilling the core goal of the Code-to-Decision
-        linking feature.
+      - The current CodeLens is not context-aware; it just opens the dashboard. A more useful implementation would show the specific, relevant decisions and allow the user to focus on one.
+      - This improves the user workflow by taking them directly to the information they need, fulfilling the core goal of the Code-to-Decision linking feature.
     tradeoffs:
-      - >-
-        Adds a small amount of complexity to the extension's command handling
-        logic.
+      - Adds a small amount of complexity to the extension's command handling logic.
     related_to:
       - 33
     tasks:
-      - description: >-
-          [Phase 1] Update CodelensProvider to pass decision details to a new
-          command.
+      - description: "[Phase 1] Update CodelensProvider to pass decision details to a new command."
         status: Done
-      - description: >-
-          [Phase 1] Implement the new command to show a Quick Pick menu for
-          multiple decisions.
+      - description: "[Phase 1] Implement the new command to show a Quick Pick menu for multiple decisions."
         status: Done
-      - description: >-
-          [Phase 1] Implement logic to pass the selected decision ID to the
-          webview.
+      - description: "[Phase 1] Implement logic to pass the selected decision ID to the webview."
         status: Done
     affected_components:
       - vscode-extension/src/extension.ts
       - vscode-extension/src/CodelensProvider.ts
       - vscode-extension/src/WebViewPanel.ts
   - id: 36
-    title: 'Enhance: Integrate Dashboard Components for Better UX'
+    title: "Enhance: Integrate Dashboard Components for Better UX"
     author: Clyde & AI Assistant
-    date: '2025-06-25T19:00:00.000Z'
+    date: "2025-06-25T19:00:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        To create a more cohesive and intuitive user experience by deeply
-        linking the interactive components of the dashboard.
-      - >-
-        When a user interacts with one part of the UI (like the search bar or
-        decision log), other parts of the UI (like the map) should react
-        intelligently.
+      - To create a more cohesive and intuitive user experience by deeply linking the interactive components of the dashboard.
+      - When a user interacts with one part of the UI (like the search bar or decision log), other parts of the UI (like the map) should react intelligently.
     tradeoffs:
-      - >-
-        Adds more event listeners and client-side logic to the application,
-        slightly increasing complexity.
+      - Adds more event listeners and client-side logic to the application, slightly increasing complexity.
     related_to:
       - 12
     tasks:
-      - description: '[Phase 1] Implement search-to-select functionality in the search bar.'
+      - description: "[Phase 1] Implement search-to-select functionality in the search bar."
         status: Done
-      - description: '[Phase 1] Implement log-to-select functionality in the decision log.'
+      - description: "[Phase 1] Implement log-to-select functionality in the decision log."
         status: Done
-      - description: '[Phase 1] Implement log scrolling and highlighting on selection.'
+      - description: "[Phase 1] Implement log scrolling and highlighting on selection."
         status: Done
     affected_components:
       - internal-packages/decision-tapestry/dist/app.mjs
       - internal-packages/decision-tapestry/dist/index.html
   - id: 37
-    title: 'Fix: Make File Watcher Resilient to Rename Events'
+    title: "Fix: Make File Watcher Resilient to Rename Events"
     author: Clyde & AI Assistant
-    date: '2025-06-25T20:00:00.000Z'
+    date: "2025-06-25T20:00:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        The file watcher was only listening for 'change' events, causing it to
-        fail when editors use a "save-and-rename" strategy, which fires a
-        'rename' event.
-      - >-
-        This fix makes the real-time update mechanism more resilient by handling
-        both event types, ensuring reliability across different platforms and
-        editors.
+      - The file watcher was only listening for 'change' events, causing it to fail when editors use a "save-and-rename" strategy, which fires a 'rename' event.
+      - This fix makes the real-time update mechanism more resilient by handling both event types, ensuring reliability across different platforms and editors.
     tradeoffs:
       - None. This is a direct bug fix.
     related_to:
       - 34
     tasks:
-      - description: >-
-          [Phase 1] Update the fs.watch callback to handle both "change" and
-          "rename" events.
+      - description: "[Phase 1] Update the fs.watch callback to handle both \"change\" and \"rename\" events."
         status: Done
     affected_components:
       - internal-packages/decision-tapestry/server.mjs
   - id: 38
-    title: 'Implement: Dockerize the Decision Tapestry Application'
+    title: "Implement: Dockerize the Decision Tapestry Application"
     author: Clyde & AI Assistant
-    date: '2025-06-26T10:00:00.000Z'
+    date: "2025-06-26T10:00:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        To fulfill the "Universal Portability" goal of the project by packaging
-        the application into a self-contained Docker image.
-      - >-
-        This will allow any developer to run the tool without needing a local
-        Node.js installation, making it accessible to a much wider audience.
+      - To fulfill the "Universal Portability" goal of the project by packaging the application into a self-contained Docker image.
+      - This will allow any developer to run the tool without needing a local Node.js installation, making it accessible to a much wider audience.
     tradeoffs:
       - Adds a new artifact (`Dockerfile`) to maintain.
-      - >-
-        Users will need to have Docker installed on their system to use this
-        distribution method.
+      - Users will need to have Docker installed on their system to use this distribution method.
     related_to:
       - 28
     tasks:
-      - description: >-
-          [Phase 1] Create a multi-stage Dockerfile to build and run the
-          application.
+      - description: "[Phase 1] Create a multi-stage Dockerfile to build and run the application."
         status: Done
-      - description: '[Phase 2] Add a .dockerignore file to keep the image lean.'
+      - description: "[Phase 2] Add a .dockerignore file to keep the image lean."
         status: Done
-      - description: >-
-          [Phase 3] Update the README with instructions on how to build and run
-          the Docker image.
+      - description: "[Phase 3] Update the README with instructions on how to build and run the Docker image."
         status: Done
     affected_components:
       - internal-packages/decision-tapestry/Dockerfile
       - internal-packages/decision-tapestry/.dockerignore
       - internal-packages/decision-tapestry/README.md
   - id: 39
-    title: 'Fix: Correct fs Module Import for Synchronous Methods'
+    title: "Fix: Correct fs Module Import for Synchronous Methods"
     author: Clyde & AI Assistant
-    date: '2025-06-26T12:00:00.000Z'
+    date: "2025-06-26T12:00:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        The server was crashing with a TypeError because `fs.existsSync` was
-        being called on the `fs/promises` module, which does not contain
-        synchronous methods.
-      - >-
-        This fix corrects the module imports to use both the core `fs` module
-        for synchronous calls and the `fs/promises` module for async operations,
-        resolving the startup crash.
+      - The server was crashing with a TypeError because `fs.existsSync` was being called on the `fs/promises` module, which does not contain synchronous methods.
+      - This fix corrects the module imports to use both the core `fs` module for synchronous calls and the `fs/promises` module for async operations, resolving the startup crash.
     tradeoffs:
-      - >-
-        Introduces a second `fs` import, which is a minor code complexity but
-        necessary for correctness.
+      - Introduces a second `fs` import, which is a minor code complexity but necessary for correctness.
     related_to:
       - 38
     tasks:
-      - description: '[Phase 1] Update `server.mjs` to import both `fs` and `fs/promises`.'
+      - description: "[Phase 1] Update `server.mjs` to import both `fs` and `fs/promises`."
         status: Done
-      - description: '[Phase 1] Update file operations to use the correct module alias.'
+      - description: "[Phase 1] Update file operations to use the correct module alias."
         status: Done
     affected_components:
       - internal-packages/decision-tapestry/server.mjs
-  - title: 'Implement: Future Architecture: Granular Data Binding'
+  - title: "Implement: Future Architecture: Granular Data Binding"
     author: Clyde & AI Assistant
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        The frontend architecture has been successfully refactored to use Lit
-        components for all major UI areas, including the decision map, log,
-        analytics, and health metrics.
-      - >-
-        This migration has resulted in significantly improved performance,
-        maintainability, and user experience.
-      - >-
-        The new architecture enables robust, granular updates to only the
-        components that have changed, eliminating unnecessary re-renders and UI
-        glitches.
-      - >-
-        The codebase is now more modular, testable, and easier to extend for
-        future features.
+      - The frontend architecture has been successfully refactored to use Lit components for all major UI areas, including the decision map, log, analytics, and health metrics.
+      - This migration has resulted in significantly improved performance, maintainability, and user experience.
+      - The new architecture enables robust, granular updates to only the components that have changed, eliminating unnecessary re-renders and UI glitches.
+      - The codebase is now more modular, testable, and easier to extend for future features.
     tradeoffs:
-      - Minimal DOM Diffing (Vanilla JS): >-
-          Can be complex to implement correctly. Prone to bugs and difficult to
-          maintain as the UI grows.
-      - Lightweight Frontend Library (e.g., Preact, Lit): >-
-          Required a one-time effort to refactor the rendering logic into
-          components and integrate the new library, but the benefits have proven
-          substantial.
-      - Full Frontend Framework (e.g., React, Vue): >-
-          Not pursued, as Lit provided the right balance of power and simplicity
-          for our needs.
+      - Minimal DOM Diffing (Vanilla JS): Can be complex to implement correctly. Prone to bugs and difficult to maintain as the UI grows.
+      - Lightweight Frontend Library (e.g., Preact, Lit): Required a one-time effort to refactor the rendering logic into components and integrate the new library, but the benefits have proven substantial.
+      - Full Frontend Framework (e.g., React, Vue): Not pursued, as Lit provided the right balance of power and simplicity for our needs.
     tasks:
-      - description: >-
-          [Phase 1] Spike: Introduce Lit dependency and convert the "Health
-          Metrics" panel to a Lit component to validate the approach.
+      - description: "[Phase 1] Spike: Introduce Lit dependency and convert the \"Health Metrics\" panel to a Lit component to validate the approach."
         status: Done
-      - description: >-
-          [Phase 2] Systematically convert all major UI sections (graph, log,
-          search) into Lit components.
+      - description: "[Phase 2] Systematically convert all major UI sections (graph, log, search) into Lit components."
         status: Done
-      - description: >-
-          [Phase 2] Create a root `<dashboard-app>` component to manage state
-          and orchestrate child components.
+      - description: "[Phase 2] Create a root `<dashboard-app>` component to manage state and orchestrate child components."
         status: Done
-      - description: >-
-          [Phase 3] Refactor data flow to pass data down via properties,
-          enabling automatic, efficient DOM updates.
+      - description: "[Phase 3] Refactor data flow to pass data down via properties, enabling automatic, efficient DOM updates."
         status: Done
     related_to:
       - 5
@@ -1124,11 +1153,11 @@ decisions:
       - internal-packages/decision-tapestry/dist/index.html
       - package.json
     id: 40
-    date: '2025-06-23T07:41:44.867Z'
+    date: "2025-06-23T07:41:44.867Z"
   - id: 41
     title: Integrate VS Code Extension with New Architecture
     author: Clyde
-    date: '2024-06-26T00:00:00Z'
+    date: "2024-06-26T00:00:00Z"
     status: Done
     project: Decision Tapestry
     related_to:
@@ -1149,13 +1178,12 @@ decisions:
       - vscode-extension/src/extension.ts
       - vscode-extension/src/CodelensProvider.ts
       - decision-tapestry/shared/yaml-utils.js
-    notes: >
-      The extension now uses the shared YAML utility and is fully integrated
-      with the monorepo and backend. All features have been tested and verified.
+    notes: |
+      The extension now uses the shared YAML utility and is fully integrated with the monorepo and backend. All features have been tested and verified.
   - id: 42
     title: Automate Release and Publishing Workflow
     author: Clyde & AI Assistant
-    date: '2025-06-26T15:00:00Z'
+    date: "2025-06-26T15:00:00Z"
     status: Done
     project: Decision Tapestry
     rationale:
@@ -1178,21 +1206,18 @@ decisions:
       - vscode-extension/package.json
       - CHANGELOG.md
       - README.md
-    notes: >
-      This decision will enable automated, reliable, and scalable release
-      workflows for both the main app and the VS Code extension.
+    notes: |
+      This decision will enable automated, reliable, and scalable release workflows for both the main app and the VS Code extension.
   - id: 43
     title: Migrate Legacy Data and Features to New Architecture
     author: Clyde & AI Assistant
-    date: '2025-06-27T10:00:00Z'
+    date: "2025-06-27T10:00:00Z"
     status: Done
     project: Decision Tapestry
     rationale:
       - Preserve historical decisions and backlog items for continuity.
       - Ensure no loss of critical features or data during migration.
-      - >-
-        Confirmed that all legacy data and features are now migrated and in use
-        in the new architecture.
+      - Confirmed that all legacy data and features are now migrated and in use in the new architecture.
     tradeoffs:
       - Required data transformation scripts and manual QA.
       - Some legacy features were reimagined for the new system.
@@ -1209,22 +1234,19 @@ decisions:
       - server/
       - cli/
       - shared/
-    notes: >
-      All legacy data and features have been migrated. The new monorepo is now
-      the single source of truth for Decision Tapestry.
+    notes: |
+      All legacy data and features have been migrated. The new monorepo is now the single source of truth for Decision Tapestry.
   - id: 44
     title: Automate Release and Publishing Workflow
     author: Clyde & AI Assistant
-    date: '2025-06-27T12:00:00Z'
+    date: "2025-06-27T12:00:00Z"
     status: Done
     project: Decision Tapestry
     rationale:
       - Reduces manual errors and accelerates release cycles.
       - Ensures consistent versioning and changelog generation.
       - Critical for scaling and open-source collaboration.
-      - >-
-        Will use semantic-release for fully automated versioning, changelog, and
-        publishing.
+      - Will use semantic-release for fully automated versioning, changelog, and publishing.
     tradeoffs:
       - Requires CI/CD setup and maintenance.
       - Initial configuration may be time-consuming.
@@ -1234,24 +1256,16 @@ decisions:
       - 28
       - 42
     tasks:
-      - description: >-
-          Set up semantic-release for the main app (npm publishing, changelog,
-          versioning).
+      - description: Set up semantic-release for the main app (npm publishing, changelog, versioning).
         status: Done
-      - description: >-
-          Set up semantic-release for the VS Code extension (npm and VS Code
-          Marketplace publishing).
+      - description: Set up semantic-release for the VS Code extension (npm and VS Code Marketplace publishing).
         status: Done
         notes: "VS Code extension removed in Decision #45, no longer applicable"
-      - description: >-
-          Update GitHub Actions workflow to run semantic-release on main branch
-          merges.
+      - description: Update GitHub Actions workflow to run semantic-release on main branch merges.
         status: Done
       - description: Configure changelog generation and version bumps for all packages.
         status: Done
-      - description: >-
-          Document the release process and conventional commit requirements for
-          contributors.
+      - description: Document the release process and conventional commit requirements for contributors.
         status: Done
     affected_components:
       - .github/workflows/
@@ -1259,50 +1273,31 @@ decisions:
       - vscode-extension/package.json
       - CHANGELOG.md
       - README.md
-    notes: >
-      This decision enabled automated, reliable, and scalable release
-      workflows for the main app using semantic-release for versioning, 
-      changelog, and publishing to npm. All automation is now complete and operational. 
-      Real-time testing update!
+    notes: |
+      This decision enabled automated, reliable, and scalable release workflows for the main app using semantic-release for versioning,  changelog, and publishing to npm. All automation is now complete and operational.  Real-time testing update!
   - id: 45
     title: Refactor to Flat Repo Structure and Remove VS Code Extension
     author: Clyde & AI Assistant
-    date: '2025-06-30T00:00:00Z'
+    date: "2025-06-30T00:00:00Z"
     status: Done
     project: Decision Tapestry
     rationale:
       - Simplifies the codebase by removing unnecessary monorepo complexity.
-      - >-
-        Reduces maintenance overhead and onboarding friction for new
-        contributors.
-      - >-
-        Focuses development on the core Decision Tapestry app, improving
-        velocity and clarity.
-      - >-
-        Removes the VS Code extension to streamline the project and avoid
-        confusion until it is ready for dedicated support.
+      - Reduces maintenance overhead and onboarding friction for new contributors.
+      - Focuses development on the core Decision Tapestry app, improving velocity and clarity.
+      - Removes the VS Code extension to streamline the project and avoid confusion until it is ready for dedicated support.
     tradeoffs:
-      - >-
-        Loses the ability to develop and release the VS Code extension in
-        parallel for now.
-      - >-
-        Requires migration of all app code and configuration to the root
-        directory.
-      - >-
-        Some documentation and workflow updates required to match the new
-        structure.
+      - Loses the ability to develop and release the VS Code extension in parallel for now.
+      - Requires migration of all app code and configuration to the root directory.
+      - Some documentation and workflow updates required to match the new structure.
     tasks:
       - description: Remove the vscode-extension directory and all related files.
         status: Done
       - description: Move all app code and config from decision-tapestry/ to the root.
         status: Done
-      - description: >-
-          Update all scripts, workflows, and documentation to match the new
-          structure.
+      - description: Update all scripts, workflows, and documentation to match the new structure.
         status: Done
-      - description: >-
-          Test and verify CI/CD, Docker, and npm publishing in the new
-          structure.
+      - description: Test and verify CI/CD, Docker, and npm publishing in the new structure.
         status: Done
     affected_components:
       - vscode-extension/
@@ -1320,15 +1315,12 @@ decisions:
       - 44
       - 41
       - 29
-    notes: >
-      This decision marks a major simplification and modernization of the
-      Decision Tapestry project, making it easier to maintain, contribute to,
-      and automate. The VS Code extension may be reintroduced as a separate
-      project in the future when ready for dedicated support.
+    notes: |
+      This decision marks a major simplification and modernization of the Decision Tapestry project, making it easier to maintain, contribute to, and automate. The VS Code extension may be reintroduced as a separate project in the future when ready for dedicated support.
   - id: 46
     title: Automate Release and Publishing Workflow
     author: Clyde
-    date: '2025-06-30T00:00:00Z'
+    date: "2025-06-30T00:00:00Z"
     status: Done
     project: Decision Tapestry
     rationale:
@@ -1346,88 +1338,57 @@ decisions:
       - 42
       - 44
       - 45
-    notes: >
-      This decision marks the completion of the automation of release and
-      publishing workflows, including CI/CD, semantic-release, and npm/Docker
-      publishing. The system now supports fully automated, reliable, and
-      scalable releases for the main app.
+    notes: |
+      This decision marks the completion of the automation of release and publishing workflows, including CI/CD, semantic-release, and npm/Docker publishing. The system now supports fully automated, reliable, and scalable releases for the main app.
   - id: 47
     title: Provide a Template decisions.yml for New Projects
     author: Clyde & AI Assistant
-    created: '2025-07-01T00:00:00Z'
+    created: "2025-07-01T00:00:00Z"
     status: Done
     rationale:
-      - >-
-        Ensure that new users and AI agents have a clear, canonical starting
-        point for structuring decision logs and backlogs.
-      - >-
-        Promote consistency and best practices across all projects using
-        Decision Tapestry.
-      - >-
-        Make onboarding and automation easier by providing a ready-to-use
-        template.
+      - Ensure that new users and AI agents have a clear, canonical starting point for structuring decision logs and backlogs.
+      - Promote consistency and best practices across all projects using Decision Tapestry.
+      - Make onboarding and automation easier by providing a ready-to-use template.
     tradeoffs:
-      - >-
-        Adds a small maintenance burden to keep the template up to date with
-        evolving schema and best practices.
+      - Adds a small maintenance burden to keep the template up to date with evolving schema and best practices.
     tasks:
-      - description: >-
-          Draft a template decisions.yml file that matches the current best
-          practices and schema.
+      - description: Draft a template decisions.yml file that matches the current best practices and schema.
         status: Done
-      - description: >-
-          Add the template to the package (e.g., as decisions.template.yml or in
-          docs/).
+      - description: Add the template to the package (e.g., as decisions.template.yml or in docs/).
         status: Done
       - description: Reference the template in the README and CLI help output.
         status: Done
-      - description: >-
-          Ensure the template is updated whenever the schema or conventions
-          change.
+      - description: Ensure the template is updated whenever the schema or conventions change.
         status: Pending
-      - description: >-
-          Add allowed status values as comments in the template for tasks,
-          backlog items, and decisions.
+      - description: Add allowed status values as comments in the template for tasks, backlog items, and decisions.
         status: Done
-      - description: >-
-          Create a machine-readable JSON schema for decisions.yml
-          (decisions.schema.json).
+      - description: Create a machine-readable JSON schema for decisions.yml (decisions.schema.json).
         status: Done
-    notes: >
-      The template is now available as decisions.template.yml and referenced in
-      onboarding prompts and documentation. All new projects can start from this
-      canonical schema example.
-    date: '2025-07-03T20:21:46.410Z'
+    notes: |
+      The template is now available as decisions.template.yml and referenced in onboarding prompts and documentation. All new projects can start from this canonical schema example.
+    date: "2025-07-03T20:21:46.410Z"
   - id: 48
     title: Use Contextual Onboarding CLI to Generate Cursor Planning Prompt
     author: Clyde & AI Assistant
-    date: '2024-07-03T00:00:00Z'
+    date: "2024-07-03T00:00:00Z"
     status: Done
     project: Decision Tapestry
     rationale:
       - Ensures onboarding is tailored to the user's actual project context.
-      - >-
-        Leverages the power of AI chat (Cursor) for flexible, collaborative
-        planning.
+      - Leverages the power of AI chat (Cursor) for flexible, collaborative planning.
       - Reduces friction and cognitive load for new users.
       - Makes Decision Tapestry more adaptable across diverse project types.
     tradeoffs:
-      - >-
-        Relies on users being comfortable with copy-pasting prompts into Cursor
-        or another AI chat.
+      - Relies on users being comfortable with copy-pasting prompts into Cursor or another AI chat.
       - Less "hands-on" than a fully interactive CLI wizard.
     tasks:
-      - description: >-
-          Implement CLI command to inspect project and generate onboarding
-          prompt.
+      - description: Implement CLI command to inspect project and generate onboarding prompt.
         status: Done
       - description: Output prompt to console and (optionally) to a file.
         status: Done
       - description: Update documentation to reflect new onboarding flow.
         status: Done
-      - description: >-
-          Reference the canonical schema and allowed status values in the
-          onboarding prompt.
+      - description: Reference the canonical schema and allowed status values in the onboarding prompt.
         status: Done
       - description: Add schema validation to the CLI (validate command).
         status: Done
@@ -1440,30 +1401,21 @@ decisions:
       - decisions.yml
       - decisions.schema.json
       - decisions.template.yml
-    notes: >
-      The CLI 'plan' command now generates a context-aware onboarding prompt for
-      Cursor chat, including a live schema example from @decisions.template.yml.
-      The onboarding experience also features a modern ASCII art banner in the
-      'init' command, and schema validation is available via the CLI.
+    notes: |
+      The CLI 'plan' command now generates a context-aware onboarding prompt for Cursor chat, including a live schema example from @decisions.template.yml. The onboarding experience also features a modern ASCII art banner in the 'init' command, and schema validation is available via the CLI.
   - id: 49
     title: Restore Map-to-Log Scroll Synchronization in UI
     author: Clyde & AI Assistant
-    date: '2024-07-03T00:00:00Z'
+    date: "2024-07-03T00:00:00Z"
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        Restore the intuitive UX where clicking a decision on the map scrolls
-        the log to the corresponding item.
-      - >-
-        This feature was present before the migration and is important for
-        usability and navigation.
+      - Restore the intuitive UX where clicking a decision on the map scrolls the log to the corresponding item.
+      - This feature was present before the migration and is important for usability and navigation.
     tradeoffs:
       - Adds a small amount of code to the decision-log-panel component.
     tasks:
-      - description: >-
-          Implement scroll-into-view for selected decision in the log when
-          selectedId changes.
+      - description: Implement scroll-into-view for selected decision in the log when selectedId changes.
         status: Done
     affected_components:
       - dashboard/decision-log.mjs
@@ -1472,20 +1424,16 @@ decisions:
       - 16
       - 17
       - 18
-    notes: >
-      The log now smoothly scrolls to the selected decision when a node is
-      clicked on the map, restoring pre-migration behavior and improving user
-      experience.
+    notes: |
+      The log now smoothly scrolls to the selected decision when a node is clicked on the map, restoring pre-migration behavior and improving user experience.
   - id: 50
     title: Add Dark/Light Theme Toggle to UI
     author: Clyde & AI Assistant
-    date: '2024-07-03T00:00:00Z'
+    date: "2024-07-03T00:00:00Z"
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        Improve accessibility and user comfort by allowing users to choose
-        between dark and light themes.
+      - Improve accessibility and user comfort by allowing users to choose between dark and light themes.
       - Modernize the UI to meet user expectations for theme customization.
     tradeoffs:
       - Adds complexity to CSS and UI state management.
@@ -1506,20 +1454,16 @@ decisions:
     related_to:
       - 14
       - 49
-    notes: >
-      Theme toggle is fully implemented with localStorage persistence and system
-      preference detection. Users can switch between dark and light modes with a
-      fixed-position toggle button.
+    notes: |
+      Theme toggle is fully implemented with localStorage persistence and system preference detection. Users can switch between dark and light modes with a fixed-position toggle button.
   - id: 51
     title: Implement Comprehensive Development Automation and Quality Infrastructure
     author: Clyde & AI Assistant
-    date: '2025-07-12T14:45:00Z'
+    date: "2025-07-12T14:45:00Z"
     status: Done
     project: Decision Tapestry
     rationale:
-      - >-
-        Automate repetitive development tasks to improve productivity and reduce
-        human error.
+      - Automate repetitive development tasks to improve productivity and reduce human error.
       - Establish consistent code quality standards across all contributions.
       - Implement robust CI/CD pipeline for reliable releases and deployments.
       - Modernize configuration to follow current best practices.
@@ -1530,13 +1474,9 @@ decisions:
     tasks:
       - description: Fix ESLint configuration with modern flat config format.
         status: Done
-      - description: >-
-          Update Jest configuration to use current syntax (remove deprecated
-          globals).
+      - description: Update Jest configuration to use current syntax (remove deprecated globals).
         status: Done
-      - description: >-
-          Set up pre-commit hooks with Husky and lint-staged for automatic code
-          quality.
+      - description: Set up pre-commit hooks with Husky and lint-staged for automatic code quality.
         status: Done
       - description: Create comprehensive GitHub Actions workflow for CI/CD.
         status: Done
@@ -1559,26 +1499,16 @@ decisions:
       - 107
       - 44
       - 46
-    notes: >
-      This decision marks the completion of a comprehensive automation overhaul
-      including: - Pre-commit quality checks via Husky and lint-staged - Modern
-      ESLint flat config with TypeScript support   - Updated Jest configuration
-      using current best practices - Multi-platform CI/CD pipeline with semantic
-      release - Development mode with concurrent server and test watching -
-      Comprehensive documentation of automation features All background agent
-      automation tasks from backlog item 107 are now complete.
+    notes: |
+      This decision marks the completion of a comprehensive automation overhaul including: - Pre-commit quality checks via Husky and lint-staged - Modern ESLint flat config with TypeScript support   - Updated Jest configuration using current best practices - Multi-platform CI/CD pipeline with semantic release - Development mode with concurrent server and test watching - Comprehensive documentation of automation features All background agent automation tasks from backlog item 107 are now complete.
   - id: 52
     title: Utilize Background Agents for Automation and Quality
     author: Clyde & AI Assistant
-    created: '2025-06-26T14:00:00Z'
+    created: "2025-06-26T14:00:00Z"
     status: Done
     rationale:
-      - >-
-        Automate repetitive and continuous tasks to improve developer
-        productivity and code quality.
-      - >-
-        Ensure tests, linting, and backlog/decision sync are always up-to-date
-        without manual intervention.
+      - Automate repetitive and continuous tasks to improve developer productivity and code quality.
+      - Ensure tests, linting, and backlog/decision sync are always up-to-date without manual intervention.
       - Reduce human error and accelerate feedback cycles.
     tradeoffs:
       - Requires initial setup and monitoring of background agents.
@@ -1586,31 +1516,24 @@ decisions:
     tasks:
       - description: Set up background agents to run tests automatically on file changes.
         status: Done
-      - description: >-
-          Set up agents to monitor and enforce code quality (lint, format) in
-          the background.
+      - description: Set up agents to monitor and enforce code quality (lint, format) in the background.
         status: Done
-      - description: >-
-          Implement agents to watch decisions.yml and PRODUCT-BACKLOG.md for
-          changes and trigger dashboard/UI updates or notifications.
+      - description: Implement agents to watch decisions.yml and PRODUCT-BACKLOG.md for changes and trigger dashboard/UI updates or notifications.
         status: Done
       - description: Document the background agent setup and usage for contributors.
         status: Done
     related_to:
-      - 107  # Original backlog item this decision implements
-      - 51   # Comprehensive Development Automation (closely related automation work)
-      - 44   # Automate Release and Publishing Workflow
-      - 46   # Automate Release and Publishing Workflow (completed)
-    notes: >
-      Background agents can be used for continuous testing, CI/CD automation,
-      code quality checks, and backlog/decision sync. This will help maintain a
-      high-quality, responsive development workflow as the project scales.
-      This decision represents the promoted implementation of backlog item #107.
-    date: '2025-07-12T14:53:45.842Z'
+      - 107
+      - 51
+      - 44
+      - 46
+    notes: |
+      Background agents can be used for continuous testing, CI/CD automation, code quality checks, and backlog/decision sync. This will help maintain a high-quality, responsive development workflow as the project scales. This decision represents the promoted implementation of backlog item #107.
+    date: "2025-07-12T14:53:45.842Z"
   - id: 54
     title: Resolve Critical UX Pain Points for Real-World Development Workflows
     author: Clyde & AI Assistant
-    date: '2025-07-12T15:40:00Z'
+    date: "2025-07-12T15:40:00Z"
     status: Done
     project: Decision Tapestry
     rationale:
@@ -1641,29 +1564,24 @@ decisions:
     affected_components:
       - README.md
       - docs/troubleshooting.md
-      - docs/installation.md  
+      - docs/installation.md
       - docs/collaboration-charter.md
       - docs/development.md
       - cli/cli.mjs
       - decisions.yml
     related_to:
-      - 51  # Comprehensive Development Automation
-      - 48  # Contextual Onboarding CLI
-      - 47  # Template decisions.yml
-    notes: >
-      This decision resolves four critical UX issues identified through real user feedback:
-      1. Manual decision updates → capture command for instant logging
-      2. Unclear onboarding → smart init with project-aware guidance  
-      3. Complex README → 85% reduction with quick-start focus
-      4. No historical context → analyze command for existing projects
-      The result is a seamless development workflow where decision tracking becomes natural rather than burdensome.
+      - 51
+      - 48
+      - 47
+    notes: |
+      This decision resolves four critical UX issues identified through real user feedback: 1. Manual decision updates → capture command for instant logging 2. Unclear onboarding → smart init with project-aware guidance   3. Complex README → 85% reduction with quick-start focus 4. No historical context → analyze command for existing projects The result is a seamless development workflow where decision tracking becomes natural rather than burdensome.
   - id: 55
     title: Implement Real-Time Development Activity Tracking Using Multi-Agent Coordination
     author: Clyde & AI Assistant
-    date: '2025-07-12T15:50:00Z'
+    date: "2025-07-12T15:50:00Z"
     status: Done
-    real_time_test: "Currently selected decision update test - should show immediately"
-    project: Decision Tapestry  
+    real_time_test: Currently selected decision update test - should show immediately
+    project: Decision Tapestry
     rationale:
       - Enable visual feedback on current development work in the decision graph
       - Demonstrate distributed AI development coordination through the system itself
@@ -1715,28 +1633,17 @@ decisions:
       - decisions.yml
       - AGENT_COORDINATION_STATUS.md
     related_to:
-      - 54  # UX Pain Points Resolution
-      - 51  # Development Automation Infrastructure
-      - 52  # Background Agents Implementation
-    notes: >
-      This decision represents a meta-approach to development where we build real-time activity 
-      tracking using coordinated AI agents, with the development process itself becoming a live 
-      demonstration of the capability. The decision graph will show agent coordination, dependencies, 
-      and feature completion in real-time as the system builds itself.
-      
-      COMPLETION STATUS (2025-07-13):
-      ✅ Agent-1 (Infrastructure): WebSocket protocol, activity APIs, persistence - COMPLETE
-      ✅ Agent-2 (Frontend): Visual indicators, dashboard components, animations - COMPLETE  
-      ✅ Agent-3 (Integration): Claude Code hooks, activity detection, CLI - COMPLETE
-      ✅ Agent-4 (Testing): End-to-end validation, performance testing - COMPLETE
-      🔄 Agent-5 (Documentation): Started with CLAUDE.md, coordination patterns pending
-      
-      The system successfully demonstrates real-time AI agent coordination with visual feedback
-      in the decision graph. All core functionality is working and production-ready.
+      - 54
+      - 51
+      - 52
+    notes: |
+      This decision represents a meta-approach to development where we build real-time activity  tracking using coordinated AI agents, with the development process itself becoming a live  demonstration of the capability. The decision graph will show agent coordination, dependencies,  and feature completion in real-time as the system builds itself.
+      COMPLETION STATUS (2025-07-13): ✅ Agent-1 (Infrastructure): WebSocket protocol, activity APIs, persistence - COMPLETE ✅ Agent-2 (Frontend): Visual indicators, dashboard components, animations - COMPLETE   ✅ Agent-3 (Integration): Claude Code hooks, activity detection, CLI - COMPLETE ✅ Agent-4 (Testing): End-to-end validation, performance testing - COMPLETE 🔄 Agent-5 (Documentation): Started with CLAUDE.md, coordination patterns pending
+      The system successfully demonstrates real-time AI agent coordination with visual feedback in the decision graph. All core functionality is working and production-ready.
   - id: 56
     title: Establish Infrastructure for Real-Time Activity Broadcasting
     author: Agent-1 (Infrastructure)
-    date: '2025-07-12T15:50:00Z'
+    date: "2025-07-12T15:50:00Z"
     status: Done
     project: Decision Tapestry - Real-Time Activity
     rationale:
@@ -1750,32 +1657,34 @@ decisions:
     tasks:
       - description: Extend WebSocket protocol with activity message types
         status: Done
-        dependencies: [Decision-55-coordination-protocol]
+        dependencies:
+          - Decision-55-coordination-protocol
       - description: Create /api/activity endpoints for state management
         status: Done
-        dependencies: [WebSocket-protocol-extension]
+        dependencies:
+          - WebSocket-protocol-extension
       - description: Implement activity state persistence layer
         status: Done
-        dependencies: [activity-endpoints]
+        dependencies:
+          - activity-endpoints
       - description: Add real-time broadcast infrastructure for activity updates
         status: Done
-        dependencies: [activity-persistence]
+        dependencies:
+          - activity-persistence
     affected_components:
       - server/server.mjs
       - dashboard/app.mjs
       - decisions.yml
       - AGENT_COORDINATION_STATUS.md
     related_to:
-      - 55  # Parent decision
-      - 20  # Real-time UI Updates via WebSockets (existing foundation)
-    notes: >
-      Agent-1 will build the foundational infrastructure that all other agents depend on.
-      This includes extending the existing WebSocket system to handle activity states,
-      creating APIs for activity management, and ensuring real-time broadcasting works reliably.
+      - 55
+      - 20
+    notes: |
+      Agent-1 will build the foundational infrastructure that all other agents depend on. This includes extending the existing WebSocket system to handle activity states, creating APIs for activity management, and ensuring real-time broadcasting works reliably.
   - id: 57
     title: Create Visual Activity Indicators and Real-Time Dashboard Updates
     author: Agent-2 (Frontend)
-    date: '2025-07-12T15:50:00Z'
+    date: "2025-07-12T15:50:00Z"
     status: Done
     project: Decision Tapestry - Real-Time Activity
     rationale:
@@ -1789,16 +1698,20 @@ decisions:
     tasks:
       - description: Design activity visual indicators (pulsing, badges, colors)
         status: Done
-        dependencies: [Decision-56-activity-api]
+        dependencies:
+          - Decision-56-activity-api
       - description: Implement decision map real-time activity updates
         status: Done
-        dependencies: [visual-indicators-design]
+        dependencies:
+          - visual-indicators-design
       - description: Create agent coordination visualization in dashboard
         status: Done
-        dependencies: [decision-map-updates]
+        dependencies:
+          - decision-map-updates
       - description: Add activity timeline and status display
         status: Done
-        dependencies: [coordination-visualization]
+        dependencies:
+          - coordination-visualization
     affected_components:
       - dashboard/decision-map.mjs
       - dashboard/app.mjs
@@ -1811,17 +1724,15 @@ decisions:
       - dashboard/test-activity.mjs
       - dashboard/index-with-activities.html
     related_to:
-      - 55  # Parent decision
-      - 56  # Infrastructure dependency
-      - 50  # Dark/Light Theme (visual consistency)
-    notes: >
-      Agent-2 will create the visual experience that makes development activity visible and engaging.
-      This includes real-time animations, agent status displays, and coordination visualization
-      that brings the distributed development process to life in the dashboard.
+      - 55
+      - 56
+      - 50
+    notes: |
+      Agent-2 will create the visual experience that makes development activity visible and engaging. This includes real-time animations, agent status displays, and coordination visualization that brings the distributed development process to life in the dashboard.
   - id: 58
     title: Implement Claude Code Integration and Activity Detection
     author: Agent-3 (Integration)
-    date: '2025-07-12T15:50:00Z'
+    date: "2025-07-12T15:50:00Z"
     status: Done
     project: Decision Tapestry - Real-Time Activity
     rationale:
@@ -1835,16 +1746,20 @@ decisions:
     tasks:
       - description: Build Claude Code tool usage monitoring hooks
         status: Done
-        dependencies: [Decision-56-activity-api]
+        dependencies:
+          - Decision-56-activity-api
       - description: Implement activity pattern recognition (working, debugging, testing)
         status: Done
-        dependencies: [tool-monitoring-hooks]
+        dependencies:
+          - tool-monitoring-hooks
       - description: Create decision-to-file mapping logic for context awareness
         status: Done
-        dependencies: [activity-pattern-recognition]
+        dependencies:
+          - activity-pattern-recognition
       - description: Add auto-activity broadcasting to Decision Tapestry
         status: Done
-        dependencies: [decision-file-mapping]
+        dependencies:
+          - decision-file-mapping
     affected_components:
       - claude-code-integration/monitor.mjs
       - claude-code-integration/claude-code-hook.mjs
@@ -1857,22 +1772,15 @@ decisions:
       - claude-code-integration/activity-cli.mjs
       - claude-code-integration/README.md
     related_to:
-      - 55  # Parent decision
-      - 56  # Infrastructure dependency
-      - 54  # UX improvements (capture command integration)
-    notes: >
-      Agent-3 has successfully built the Claude Code integration system that automatically detects
-      and classifies development activity. The system includes:
-      - A monitoring module that hooks into Claude Code tool usage
-      - Intelligent activity pattern recognition (working, debugging, testing, reviewing)
-      - Automatic file-to-decision mapping based on affected_components
-      - Real-time activity broadcasting to the Decision Tapestry server
-      - CLI integration for easy session management
-      The integration is now fully functional and ready for testing with real Claude Code sessions.
+      - 55
+      - 56
+      - 54
+    notes: |
+      Agent-3 has successfully built the Claude Code integration system that automatically detects and classifies development activity. The system includes: - A monitoring module that hooks into Claude Code tool usage - Intelligent activity pattern recognition (working, debugging, testing, reviewing) - Automatic file-to-decision mapping based on affected_components - Real-time activity broadcasting to the Decision Tapestry server - CLI integration for easy session management The integration is now fully functional and ready for testing with real Claude Code sessions.
   - id: 59
     title: Validate Multi-Agent Coordination and End-to-End Activity Flow
     author: Agent-4 (Testing)
-    date: '2025-07-12T15:50:00Z'
+    date: "2025-07-12T15:50:00Z"
     status: Done
     project: Decision Tapestry - Real-Time Activity
     rationale:
@@ -1887,33 +1795,37 @@ decisions:
     tasks:
       - description: Develop end-to-end activity flow testing
         status: Done
-        dependencies: [Decision-56-complete, Decision-57-complete, Decision-58-complete]
+        dependencies:
+          - Decision-56-complete
+          - Decision-57-complete
+          - Decision-58-complete
       - description: Test multi-agent coordination patterns and dependency resolution
         status: Done
-        dependencies: [activity-flow-testing]
+        dependencies:
+          - activity-flow-testing
       - description: Validate real-time performance with multiple concurrent activities
         status: Done
-        dependencies: [coordination-testing]
+        dependencies:
+          - coordination-testing
       - description: Verify user experience and visual feedback quality
         status: Done
-        dependencies: [performance-testing]
+        dependencies:
+          - performance-testing
     affected_components:
       - server/server.mjs (testing endpoints)
       - dashboard/app.mjs (testing real-time updates)
       - All agent deliverables validated
     related_to:
-      - 55  # Parent decision
-      - 56  # Infrastructure testing
-      - 57  # Frontend testing
-      - 58  # Integration testing
-    notes: >
-      Agent-4 will validate that all the pieces work together correctly and that the 
-      meta-coordination approach actually delivers the intended experience. This includes
-      testing the distributed development process itself.
+      - 55
+      - 56
+      - 57
+      - 58
+    notes: |
+      Agent-4 will validate that all the pieces work together correctly and that the  meta-coordination approach actually delivers the intended experience. This includes testing the distributed development process itself.
   - id: 60
     title: Document Distributed AI Development Coordination Patterns
     author: Agent-5 (Meta-Documentation)
-    date: '2025-07-12T15:50:00Z'
+    date: "2025-07-12T15:50:00Z"
     status: Done
     project: Decision Tapestry - Real-Time Activity
     rationale:
@@ -1927,25 +1839,261 @@ decisions:
     tasks:
       - description: Document multi-agent coordination methodology and protocols
         status: Done
-        dependencies: [All-other-agents-active]
+        dependencies:
+          - All-other-agents-active
       - description: Create templates for future distributed AI development
         status: Done
-        dependencies: [methodology-documentation]
+        dependencies:
+          - methodology-documentation
       - description: Capture lessons learned and best practices
         status: Done
-        dependencies: [Decision-59-validation-complete]
+        dependencies:
+          - Decision-59-validation-complete
       - description: Design decision templates for agent coordination patterns
         status: Done
-        dependencies: [lessons-learned]
+        dependencies:
+          - lessons-learned
     affected_components:
       - CLAUDE.md
       - AGENT_COORDINATION_STATUS.md
       - docs/
       - decisions.yml
     related_to:
-      - 55  # Parent decision
-      - All agent decisions # Meta-analysis of coordination
-    notes: >
-      Agent-5 will document the coordination process itself, creating a reusable methodology
-      for distributed AI development that can be applied to future complex development efforts.
+      - 55
+      - All agent decisions
+    notes: |
+      Agent-5 will document the coordination process itself, creating a reusable methodology for distributed AI development that can be applied to future complex development efforts.
+  - id: 69
+    title: Implement Multi-Agent Framework for Parallel Development
+    author: Claude & Chris Barnes
+    date: "2025-07-15T23:00:00Z"
+    status: Completed
+    project: Decision Tapestry
+    rationale:
+      - Enable parallel development through multiple AI agents working on different features
+      - Demonstrate distributed AI coordination capabilities
+      - Accelerate feature development by dividing work across specialized agents
+      - Create reusable framework for future multi-agent development scenarios
+    tradeoffs:
+      - Increased complexity in coordination and communication
+      - Potential for conflicts when agents work on overlapping code
+      - Requires robust testing framework to validate agent work
+      - Performance overhead from agent coordination messages
+    tasks:
+      - description: Create agent framework with message passing and coordination
+        status: Completed
+      - description: Implement agent command system for task assignment
+        status: Completed
+      - description: Build agent test framework for validation
+        status: Completed
+      - description: Create demo agents to showcase capabilities
+        status: Completed
+      - description: Implement Claude agent integration
+        status: Completed
+      - description: Add agent integration tests
+        status: Completed
+    affected_components:
+      - cli/agent-framework.mjs
+      - cli/agent-coordinator.mjs
+      - cli/agent-messaging.mjs
+      - cli/agent-commands.mjs
+      - cli/agent-test-framework.mjs
+      - cli/claude-agent.mjs
+      - cli/demo-agent.mjs
+      - __tests__/agent-integration.test.ts
+      - __tests__/agent-test-utils.js
+      - __tests__/agents/
+    related_to:
+      - 55
+      - 58
+      - 59
+    category: Infrastructure
+    notes: |
+      This framework enables multiple AI agents to work in parallel on different features,
+      with proper coordination, testing, and validation. The system includes message passing,
+      task assignment, and integration testing capabilities.
+  - id: 70
+    title: Enhance Activity System with Agent Activity Feed and Analytics
+    author: Claude & Chris Barnes
+    date: "2025-07-15T23:15:00Z"
+    status: Completed
+    project: Decision Tapestry
+    rationale:
+      - Provide real-time visibility into agent activities across the system
+      - Enable activity pattern analysis and productivity insights
+      - Create comprehensive activity tracking from agents to UI
+      - Support team coordination through activity visualization
+    tradeoffs:
+      - Additional UI components increase dashboard complexity
+      - Real-time updates may impact performance with many agents
+      - Activity data storage grows over time
+      - Analytics calculations add processing overhead
+    tasks:
+      - description: Create agent activity feed component
+        status: Completed
+      - description: Implement activity timeline visualization
+        status: Completed
+      - description: Add activity analytics endpoints
+        status: Completed
+      - description: Build real-time activity updates via WebSocket
+        status: Completed
+      - description: Create activity filtering and search
+        status: Completed
+    affected_components:
+      - dashboard/agent-activity-feed.mjs
+      - dashboard/activity-timeline.mjs
+      - server/server.mjs
+      - cli/test-ui-updates.mjs
+      - __tests__/activity-system-test.mjs
+    related_to:
+      - 55
+      - 56
+      - 57
+      - 69
+    category: UI/UX
+    notes: |
+      Extended the activity system to provide comprehensive visibility into agent operations,
+      including real-time feeds, timelines, and analytics for development coordination.
+  - id: 71
+    title: Implement Advanced Time Filtering and Commit Visualization
+    author: Claude & Chris Barnes
+    date: "2025-07-15T23:30:00Z"
+    status: Completed
+    project: Decision Tapestry
+    rationale:
+      - Enable sophisticated time-based filtering of decisions
+      - Visualize commit activity patterns over time
+      - Provide heatmap visualization for development intensity
+      - Support historical analysis of project evolution
+    tradeoffs:
+      - Complex time calculations may impact performance
+      - Heatmap visualization requires significant data processing
+      - Additional UI components increase interface complexity
+      - Time zone handling adds implementation complexity
+    tasks:
+      - description: Create enhanced time filter component
+        status: Completed
+      - description: Implement time range picker UI
+        status: Completed
+      - description: Build commit activity heatmap visualization
+        status: Completed
+      - description: Add commit timeline visualization
+        status: Completed
+      - description: Integrate with existing filter system
+        status: Completed
+    affected_components:
+      - dashboard/enhanced-time-filter.mjs
+      - dashboard/time-range-picker.mjs
+      - dashboard/commit-activity-heatmap.mjs
+      - dashboard/commit-timeline-viz.mjs
+      - dashboard/commit-timeline.mjs
+    related_to:
+      - 68
+      - 66
+      - 67
+    category: UI/UX
+    notes: |
+      Advanced time-based features that complement the GitHub integration work,
+      providing powerful tools for analyzing development patterns over time.
+  - id: 72
+    title: Create Comprehensive Testing Infrastructure
+    author: Claude & Chris Barnes
+    date: "2025-07-15T23:45:00Z"
+    status: Completed
+    project: Decision Tapestry
+    rationale:
+      - Ensure reliability of complex multi-agent system
+      - Validate frontend integration and real-time features
+      - Test clustering and categorization algorithms
+      - Provide confidence for continuous deployment
+    tradeoffs:
+      - Test execution time increases with comprehensive coverage
+      - Maintenance overhead for test suite
+      - Mock complexity for distributed agent testing
+      - Integration tests require full system setup
+    tasks:
+      - description: Create agent integration test suite
+        status: Completed
+      - description: Implement frontend integration tests
+        status: Completed
+      - description: Add clustering algorithm tests
+        status: Completed
+      - description: Build activity system test harness
+        status: Completed
+      - description: Create visual activity demo for manual testing
+        status: Completed
+    affected_components:
+      - __tests__/agent-integration.test.ts
+      - __tests__/frontend-integration.test.ts
+      - __tests__/clustering-features.test.ts
+      - __tests__/activity-system-test.mjs
+      - __tests__/visual-activity-demo.mjs
+      - __tests__/claude-code-integration-test.mjs
+    related_to:
+      - 69
+      - 70
+      - 51
+    category: Quality
+    notes: |
+      Comprehensive test coverage for all new features including agent framework,
+      frontend components, and real-time activity tracking. Includes both automated
+      and visual testing tools.
+  - id: 73
+    title: Implement GitHub Services and UI Components for Enhanced Metadata
+    author: Claude & Chris Barnes
+    date: "2025-07-15T23:50:00Z"
+    status: Completed
+    project: Decision Tapestry
+    rationale:
+      - Complete the GitHub integration vision with dedicated services
+      - Provide UI components for displaying GitHub metadata
+      - Enable author avatar display and file status visualization
+      - Support Git performance optimization for large repositories
+    tradeoffs:
+      - Additional service layer increases architecture complexity
+      - Git operations may be slow on very large repositories
+      - GitHub API dependencies require error handling
+      - UI components need graceful degradation
+    tasks:
+      - description: Create GitHub service for API interactions
+        status: Completed
+      - description: Implement author service with caching
+        status: Completed
+      - description: Build Git analyzer for history extraction
+        status: Completed
+      - description: Create file tracker for status monitoring
+        status: Completed
+      - description: Implement decision enhancer for metadata
+        status: Completed
+      - description: Add Git performance optimization service
+        status: Completed
+      - description: Create avatar display component
+        status: Completed
+      - description: Build file status display component
+        status: Completed
+    affected_components:
+      - services/github-service.mjs
+      - services/author-service.mjs
+      - services/git-analyzer.mjs
+      - services/file-tracker.mjs
+      - services/decision-enhancer.mjs
+      - services/git-performance.mjs
+      - dashboard/avatar-display.mjs
+      - dashboard/file-status-display.mjs
+      - config/github-config.mjs
+      - utils/author-migration.mjs
+      - utils/commit-matcher.mjs
+      - utils/git-utils.mjs
+      - utils/github-ui-utils.mjs
+      - styles/github-ui.css
+    related_to:
+      - 65
+      - 66
+      - 67
+      - 68
+    category: Integration
+    notes: |
+      This completes the GitHub integration implementation with all necessary services,
+      utilities, and UI components. The system now fully supports GitHub metadata
+      extraction, caching, and visualization with performance optimizations.
 backlog: []
