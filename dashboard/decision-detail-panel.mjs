@@ -20,8 +20,33 @@ class DecisionDetailPanel extends LitElement {
     h2 {
       margin-top: 0;
     }
+    h3 {
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    /* Apply 12px font size and 160% line height to all non-title text */
+    p, ul, ol, li, span:not(.pr-issue-badge):not(.activity-badge) {
+      font-size: 12px !important;
+      line-height: 160% !important;
+    }
+    
+    /* List padding and margin adjustments */
+    ul, ol {
+      padding-left: 0 !important;
+    }
+    
+    li {
+      padding-left: 0 !important;
+      margin-left: 16px !important;
+    }
+    
     .placeholder {
       color: #888;
+    }
+    .placeholder p {
+      font-size: 12px !important;
+      line-height: 160% !important;
     }
     .status-accepted {
       background-color: #28a745;
@@ -69,6 +94,12 @@ class DecisionDetailPanel extends LitElement {
       text-transform: uppercase;
       color: white;
       animation: activityPulse 2s infinite ease-in-out;
+    }
+    
+    /* Activity info text */
+    .activity-badge + div {
+      font-size: 12px !important;
+      line-height: 160% !important;
     }
     .activity-badge.working {
       background-color: #4caf50;
@@ -124,7 +155,8 @@ class DecisionDetailPanel extends LitElement {
     }
 
     .author-username {
-      font-size: 14px;
+      font-size: 12px;
+      line-height: 160%;
       color: var(--text-secondary);
       opacity: 0.8;
     }
@@ -140,7 +172,8 @@ class DecisionDetailPanel extends LitElement {
       display: flex;
       align-items: center;
       gap: 6px;
-      font-size: 13px;
+      font-size: 12px;
+      line-height: 160%;
       color: var(--text-secondary);
     }
 
@@ -153,7 +186,8 @@ class DecisionDetailPanel extends LitElement {
       color: white;
       border-radius: 4px;
       text-decoration: none;
-      font-size: 13px;
+      font-size: 12px;
+      line-height: 160%;
       transition: background 0.2s ease;
     }
 
@@ -221,16 +255,43 @@ class DecisionDetailPanel extends LitElement {
 
     .pr-issue-number {
       font-family: monospace;
-      font-size: 13px;
+      font-size: 12px;
+      line-height: 160%;
       color: var(--text-secondary);
     }
 
     .pr-issue-title {
       flex: 1;
-      font-size: 14px;
+      font-size: 12px;
+      line-height: 160%;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+    }
+    
+    /* Additional GitHub metadata styles */
+    .commit-status,
+    .workflow-runs,
+    .release-info {
+      font-size: 12px !important;
+      line-height: 160% !important;
+    }
+    
+    .status-checks,
+    .status-check,
+    .workflow-details,
+    .release-date,
+    .release-body {
+      font-size: 12px !important;
+      line-height: 160% !important;
+    }
+    
+    /* Ensure all text in decision details has proper sizing */
+    :host > p,
+    :host > div,
+    :host li {
+      font-size: 12px;
+      line-height: 160%;
     }
   `;
 

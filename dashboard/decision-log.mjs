@@ -35,21 +35,24 @@ class DecisionLogPanel extends LitElement {
     }
     .log-item h4 {
       margin: 0 0 0.25rem;
-      font-size: 1em;
+      font-size: 12px;
+      line-height: 160%;
       display: flex;
       align-items: center;
       gap: 8px;
     }
     .log-item p {
       margin: 0;
-      font-size: 0.85em;
+      font-size: 12px;
+      line-height: 160%;
       color: #6c757d;
     }
     .author-info {
       display: flex;
       align-items: center;
       gap: 6px;
-      font-size: 0.85em;
+      font-size: 12px;
+      line-height: 160%;
       color: #6c757d;
       margin-top: 4px;
     }
@@ -60,7 +63,8 @@ class DecisionLogPanel extends LitElement {
       padding: 2px 6px;
       background: rgba(0, 82, 204, 0.1);
       border-radius: 4px;
-      font-size: 0.75em;
+      font-size: 12px;
+      line-height: 160%;
       color: var(--accent);
     }
     .status-accepted {
@@ -83,7 +87,8 @@ class DecisionLogPanel extends LitElement {
       gap: 2px;
       padding: 2px 6px;
       border-radius: 8px;
-      font-size: 10px;
+      font-size: 12px;
+      line-height: 160%;
       font-weight: 600;
       text-transform: uppercase;
       color: white;

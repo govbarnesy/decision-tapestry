@@ -195,3 +195,15 @@
   background: #ffd93d;
   color: black;
 }
+
+/* Typography consistency for GitHub elements */
+.status-check,
+.workflow-details,
+.release-date,
+.release-body pre,
+.workflow-run,
+.check-context,
+.check-state {
+  font-size: 12px !important;
+  line-height: 160% !important;
+}

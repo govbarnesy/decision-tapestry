@@ -569,3 +569,61 @@ body.dark-theme .theme-toggle {
 .controls-view.active {
     display: block;
 }
+
+/* Typography for lists, tasks, commits, and decision logs */
+.task-list,
+.task-list li,
+.task-item,
+.log-item,
+.commit-item,
+.pr-issue-item,
+.workflow-run,
+ul li,
+ol li {
+    font-size: 12px !important;
+    line-height: 160% !important;
+}
+
+/* Specific styles for decision log items */
+.log-item {
+    font-size: 12px !important;
+    line-height: 160% !important;
+}
+
+/* Task list items */
+.task-list li,
+.task-item span {
+    font-size: 12px !important;
+    line-height: 160% !important;
+}
+
+/* Commit timeline items */
+.commit-item .commit-message,
+.commit-item .commit-details {
+    font-size: 12px !important;
+    line-height: 160% !important;
+}
+
+/* PR and issue list items */
+.pr-issue-title,
+.pr-issue-number {
+    font-size: 12px !important;
+    line-height: 160% !important;
+}
+
+/* General list items in panels */
+.panel-content ul li,
+.panel-content ol li {
+    font-size: 12px !important;
+    line-height: 160% !important;
+}
+
+/* List padding and margin adjustments */
+ul {
+    padding-left: 0 !important;
+}
+
+li {
+    padding-left: 0 !important;
+    margin-left: 16px !important;
+}
