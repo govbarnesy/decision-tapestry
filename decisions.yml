@@ -6375,7 +6375,7 @@ decisions:
     title: Create visual DOM editor browser extension
     author: Chris Barnes
     date: "2025-07-16T12:00:00Z"
-    status: Accepted
+    status: In Progress
     rationale:
       - Enable visual editing of any webpage's DOM and CSS
       - Seamless communication to Claude Code for generating production CSS
@@ -6387,23 +6387,38 @@ decisions:
       - Need to handle cross-origin restrictions
     tasks:
       - description: Create Chrome extension structure with Manifest V3
-        status: Pending
+        status: Done
       - description: Implement visual element selection system
-        status: Pending
+        status: Done
       - description: Build live CSS editor interface
-        status: Pending
+        status: Done
       - description: Create WebSocket communication for DOM edits
-        status: Pending
+        status: Done
       - description: Add DOM edits API endpoint to server
-        status: Pending
+        status: Done
+      - description: Implement DOM change detection and filtering
+        status: Done
+      - description: Add Claude Code integration for automated code removal
+        status: Done
+      - description: Create batch editing system for performance
+        status: Done
+      - description: Add keyboard navigation for element selection
+        status: Done
+      - description: Implement Shadow DOM support for Lit components
+        status: Done
       - description: Implement CSS diff generation
-        status: Pending
+        status: In Progress
     affected_components:
       - dom-editor-extension/manifest.json
       - dom-editor-extension/content-script.js
       - dom-editor-extension/background.js
       - dom-editor-extension/popup/
-      - server/dom-edits-api.mjs
+      - dom-editor-extension/devtools.js
+      - dom-editor-extension/devtools.html
+      - dom-editor-extension/panel.js
+      - dom-editor-extension/panel.html
+      - dom-editor-extension/.eslintrc.js
+      - claude-code-integration/dom-editor-integration.mjs
       - server/server.mjs
     category: Developer Experience
   - id: 88
@@ -6424,7 +6439,7 @@ decisions:
       - description: Create context aggregation service
         status: Pending
       - description: Implement DOM edit history tracking
-        status: Pending
+        status: In Progress
       - description: Build Gemini navigation API
         status: Pending
       - description: Create agent orchestration protocol
