@@ -2,12 +2,12 @@ import express from "express";
 import fs from "fs";
 import fsp from "fs/promises";
 import http from "http";
-import yaml from "js-yaml";
 import path from "path";
 import chokidar from "chokidar";
 import { fileURLToPath } from "url";
 import { WebSocketServer } from "ws";
 import { readDecisionsFile, writeDecisionsFile } from "../shared/yaml-utils.js";
+import { initializeGeminiRoutes } from "./gemini-api.mjs";
 
 // Helper to get __dirname in ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -35,6 +35,9 @@ app.use("/utils", express.static(path.join(__dirname, "../utils")));
 // Serve styles directory
 app.use("/styles", express.static(path.join(__dirname, "../styles")));
 app.use(express.json());
+
+// Initialize Gemini API routes
+initializeGeminiRoutes(app);
 
 // Serve CSS files with the correct MIME type
 app.get("/*.css", (req, res) => {
@@ -101,7 +104,7 @@ wss.on("connection", (ws) => {
  * Handle WebSocket messages from agents and clients
  */
 function handleWebSocketMessage(ws, data) {
-  const { type, agentId } = data;
+  const { type } = data;
 
   switch (type) {
     case "agent_register":
@@ -723,7 +726,7 @@ const watcher = chokidar.watch(decisionsPath, {
 });
 
 watcher
-  .on("change", (path, stats) => {
+  .on("change", () => {
     if (debounceTimer) clearTimeout(debounceTimer);
     debounceTimer = setTimeout(() => {
       console.log(
