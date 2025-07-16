@@ -6,6 +6,7 @@ import path from "path";
 import chokidar from "chokidar";
 import { fileURLToPath } from "url";
 import { WebSocketServer } from "ws";
+import { spawn } from "child_process";
 import { readDecisionsFile, writeDecisionsFile } from "../shared/yaml-utils.js";
 import { initializeGeminiRoutes } from "./gemini-api.mjs";
 
@@ -54,6 +55,13 @@ app.get("/", (req, res) => {
 const connectedClients = new Set();
 const connectedAgents = new Map();
 
+// Track DOM editor connections and state
+const domEditorConnections = new Map();
+const domEditorState = {
+  sessions: new Map(), // sessionId -> { url, selectedElement, changes }
+  recentChanges: []    // Recent DOM changes for context
+};
+
 wss.on("connection", (ws) => {
   console.log("Client connected");
   connectedClients.add(ws);
@@ -97,6 +105,23 @@ wss.on("connection", (ws) => {
         break;
       }
     }
+
+    // Remove DOM editor connection if it was a DOM editor connection
+    for (const [sessionId, sessionData] of domEditorConnections) {
+      if (sessionData.ws === ws) {
+        domEditorConnections.delete(sessionId);
+        domEditorState.sessions.delete(sessionId);
+        console.log(`DOM Editor session ${sessionId} disconnected`);
+
+        // Broadcast DOM editor disconnection
+        broadcast({
+          type: "dom_editor_disconnected",
+          sessionId: sessionId,
+          timestamp: new Date().toISOString(),
+        });
+        break;
+      }
+    }
   });
 });
 
@@ -133,6 +158,46 @@ function handleWebSocketMessage(ws, data) {
 
     case "get_agent_status":
       handleGetAgentStatus(ws, data);
+      break;
+
+    case "dom_editor_connect":
+      handleDOMEditorConnect(ws, data);
+      break;
+
+    case "element_selected":
+      handleElementSelected(ws, data);
+      break;
+
+    case "styles_updated":
+      handleStylesUpdated(ws, data);
+      break;
+
+    case "element_removed":
+      handleElementRemoved(ws, data);
+      break;
+
+    case "changes_reset":
+      handleChangesReset(ws, data);
+      break;
+
+    case "page_snapshot":
+      handlePageSnapshot(ws, data);
+      break;
+
+    case "dom_changes_detected":
+      handleDOMChanges(ws, data);
+      break;
+
+    case "request_code_removal":
+      handleCodeRemovalRequest(ws, data);
+      break;
+
+    case "integration_connect":
+      handleIntegrationConnect(ws, data);
+      break;
+
+    case "code_removal_complete":
+      handleCodeRemovalComplete(ws, data);
       break;
 
     default:
@@ -773,6 +838,512 @@ function startPollingFallback() {
   console.log(`[Polling] Started polling fallback for: ${decisionsPath}`);
 }
 
+/**
+ * DOM Editor Message Handlers
+ */
+
+/**
+ * Handle DOM editor connection
+ */
+function handleDOMEditorConnect(ws, data) {
+  const { url } = data;
+  const sessionId = `dom_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  
+  // Store DOM editor connection
+  domEditorConnections.set(sessionId, {
+    ws: ws,
+    url: url,
+    sessionId: sessionId,
+    connectedAt: new Date().toISOString()
+  });
+  
+  // Initialize session state
+  domEditorState.sessions.set(sessionId, {
+    url: url,
+    selectedElement: null,
+    changes: []
+  });
+  
+  console.log(`DOM Editor connected for ${url} (session: ${sessionId})`);
+  
+  // Auto-start Claude Code integration if not already running
+  startClaudeCodeIntegration();
+  
+  // Send session info back to client
+  ws.send(JSON.stringify({
+    type: 'dom_editor_session',
+    sessionId: sessionId,
+    url: url
+  }));
+  
+  // Broadcast to dashboard
+  broadcast({
+    type: 'dom_editor_connected',
+    sessionId: sessionId,
+    url: url,
+    timestamp: new Date().toISOString()
+  });
+}
+
+/**
+ * Handle element selection
+ */
+function handleElementSelected(ws, data) {
+  const { element, url } = data;
+  
+  // Find session for this connection
+  const session = findSessionByWebSocket(ws);
+  if (!session) {
+    console.warn('DOM Editor: No session found for element selection');
+    return;
+  }
+  
+  // Update session state
+  const sessionData = domEditorState.sessions.get(session.sessionId);
+  if (sessionData) {
+    sessionData.selectedElement = element;
+    domEditorState.sessions.set(session.sessionId, sessionData);
+  }
+  
+  console.log(`Element selected: ${element.selector} on ${url}`);
+  
+  // Add to recent changes for context
+  const changeRecord = {
+    type: 'element_selected',
+    element: element,
+    url: url,
+    timestamp: new Date().toISOString(),
+    sessionId: session.sessionId
+  };
+  
+  domEditorState.recentChanges.push(changeRecord);
+  
+  // Keep only last 50 changes
+  if (domEditorState.recentChanges.length > 50) {
+    domEditorState.recentChanges.shift();
+  }
+  
+  // Broadcast to dashboard and other clients
+  broadcast({
+    type: 'dom_element_selected',
+    element: element,
+    url: url,
+    sessionId: session.sessionId,
+    timestamp: new Date().toISOString()
+  });
+}
+
+/**
+ * Handle style updates
+ */
+function handleStylesUpdated(ws, data) {
+  const { element, styles, url } = data;
+  
+  const session = findSessionByWebSocket(ws);
+  if (!session) {
+    console.warn('DOM Editor: No session found for style update');
+    return;
+  }
+  
+  // Update session state
+  const sessionData = domEditorState.sessions.get(session.sessionId);
+  if (sessionData) {
+    sessionData.changes.push({
+      type: 'styles_updated',
+      element: element,
+      styles: styles,
+      timestamp: new Date().toISOString()
+    });
+    domEditorState.sessions.set(session.sessionId, sessionData);
+  }
+  
+  console.log(`Styles updated for ${element.selector}: ${JSON.stringify(styles)}`);
+  
+  // Add to recent changes for context
+  const changeRecord = {
+    type: 'styles_updated',
+    element: element,
+    styles: styles,
+    url: url,
+    timestamp: new Date().toISOString(),
+    sessionId: session.sessionId
+  };
+  
+  domEditorState.recentChanges.push(changeRecord);
+  
+  if (domEditorState.recentChanges.length > 50) {
+    domEditorState.recentChanges.shift();
+  }
+  
+  // Broadcast to dashboard
+  broadcast({
+    type: 'dom_styles_updated',
+    element: element,
+    styles: styles,
+    url: url,
+    sessionId: session.sessionId,
+    timestamp: new Date().toISOString()
+  });
+}
+
+/**
+ * Handle element removal
+ */
+function handleElementRemoved(ws, data) {
+  const { element, url } = data;
+  
+  const session = findSessionByWebSocket(ws);
+  if (!session) {
+    console.warn('DOM Editor: No session found for element removal');
+    return;
+  }
+  
+  // Update session state
+  const sessionData = domEditorState.sessions.get(session.sessionId);
+  if (sessionData) {
+    sessionData.changes.push({
+      type: 'element_removed',
+      element: element,
+      timestamp: new Date().toISOString()
+    });
+    domEditorState.sessions.set(session.sessionId, sessionData);
+  }
+  
+  console.log(`Element removed: ${element.selector} on ${url}`);
+  
+  // Add to recent changes for context
+  const changeRecord = {
+    type: 'element_removed',
+    element: element,
+    url: url,
+    timestamp: new Date().toISOString(),
+    sessionId: session.sessionId
+  };
+  
+  domEditorState.recentChanges.push(changeRecord);
+  
+  if (domEditorState.recentChanges.length > 50) {
+    domEditorState.recentChanges.shift();
+  }
+  
+  // Broadcast to dashboard
+  broadcast({
+    type: 'dom_element_removed',
+    element: element,
+    url: url,
+    sessionId: session.sessionId,
+    timestamp: new Date().toISOString()
+  });
+}
+
+/**
+ * Handle changes reset
+ */
+function handleChangesReset(ws, data) {
+  const { url } = data;
+  
+  const session = findSessionByWebSocket(ws);
+  if (!session) {
+    console.warn('DOM Editor: No session found for changes reset');
+    return;
+  }
+  
+  // Update session state
+  const sessionData = domEditorState.sessions.get(session.sessionId);
+  if (sessionData) {
+    sessionData.changes = [];
+    sessionData.selectedElement = null;
+    domEditorState.sessions.set(session.sessionId, sessionData);
+  }
+  
+  console.log(`Changes reset for ${url}`);
+  
+  // Add to recent changes for context
+  const changeRecord = {
+    type: 'changes_reset',
+    url: url,
+    timestamp: new Date().toISOString(),
+    sessionId: session.sessionId
+  };
+  
+  domEditorState.recentChanges.push(changeRecord);
+  
+  if (domEditorState.recentChanges.length > 50) {
+    domEditorState.recentChanges.shift();
+  }
+  
+  // Broadcast to dashboard
+  broadcast({
+    type: 'dom_changes_reset',
+    url: url,
+    sessionId: session.sessionId,
+    timestamp: new Date().toISOString()
+  });
+}
+
+/**
+ * Handle page snapshot
+ */
+function handlePageSnapshot(ws, data) {
+  const { url, title, styles, elements } = data;
+  
+  const session = findSessionByWebSocket(ws);
+  if (!session) {
+    console.warn('DOM Editor: No session found for page snapshot');
+    return;
+  }
+  
+  console.log(`Page snapshot received for ${url}`);
+  
+  // Store comprehensive page state
+  const snapshot = {
+    type: 'page_snapshot',
+    url: url,
+    title: title,
+    styles: styles,
+    elements: elements,
+    timestamp: new Date().toISOString(),
+    sessionId: session.sessionId
+  };
+  
+  // Add to recent changes for context
+  domEditorState.recentChanges.push(snapshot);
+  
+  if (domEditorState.recentChanges.length > 50) {
+    domEditorState.recentChanges.shift();
+  }
+  
+  // Broadcast to dashboard
+  broadcast({
+    type: 'dom_page_snapshot',
+    ...snapshot
+  });
+}
+
+/**
+ * Handle DOM changes detected by the extension
+ */
+function handleDOMChanges(ws, data) {
+  const { changeHistory } = data;
+  
+  const session = findSessionByWebSocket(ws);
+  if (!session) {
+    console.warn('DOM Editor: No session found for DOM changes');
+    return;
+  }
+  
+  console.log('🔍 DOM Changes Detected:');
+  console.log('Session:', session.sessionId);
+  console.log('Number of changes:', changeHistory ? changeHistory.length : 0);
+  
+  if (changeHistory && changeHistory.length > 0) {
+    changeHistory.forEach((change, index) => {
+      console.log(`  ${index + 1}. ${change.description} (${change.timestamp})`);
+      if (change.type === 'element_removed') {
+        console.log(`     🗑️  REMOVED: ${change.element || 'unknown element'}`);
+      } else if (change.type === 'style_changed') {
+        console.log(`     🎨 STYLED: ${change.element || 'unknown element'}`);
+      }
+    });
+    
+    // Store the most recent change for easy access
+    const latestChange = changeHistory[changeHistory.length - 1];
+    if (latestChange.type === 'element_removed') {
+      console.log(`\n🎯 MOST RECENT REMOVAL: ${latestChange.element || 'unknown element'}`);
+    }
+  } else {
+    console.log('  No changes in history');
+  }
+  
+  // Store changes in session data
+  if (!session.domChanges) {
+    session.domChanges = [];
+  }
+  if (changeHistory) {
+    session.domChanges.push(...changeHistory);
+  }
+  
+  // Broadcast to dashboard
+  broadcast({
+    type: 'dom_changes_detected',
+    sessionId: session.sessionId,
+    changeHistory: changeHistory,
+    timestamp: new Date().toISOString()
+  });
+}
+
+/**
+ * Handle code removal request from DOM editor
+ */
+function handleCodeRemovalRequest(ws, data) {
+  const { element, url } = data;
+  
+  const session = findSessionByWebSocket(ws);
+  if (!session) {
+    console.warn('DOM Editor: No session found for code removal request');
+    ws.send(JSON.stringify({
+      type: 'code_removal_failed',
+      error: 'No active session'
+    }));
+    return;
+  }
+  
+  console.log('\n🔧 CODE REMOVAL REQUEST');
+  console.log('================================');
+  console.log('URL:', url);
+  console.log('Element:', element.tagName + (element.id ? '#' + element.id : ''));
+  console.log('Classes:', element.className);
+  console.log('Text:', element.text?.substring(0, 50) + '...');
+  
+  if (element.context) {
+    console.log('\nContext:');
+    console.log('- Parent chain:', element.context.parentChain?.map(p => p.tagName).join(' > '));
+    console.log('- Sibling position:', element.context.siblingContext?.index + 1, 'of', element.context.siblingContext?.totalSiblings);
+    console.log('- Source file hint:', element.context.filePath || 'Unknown');
+  }
+  
+  console.log('\n📝 Element Details:');
+  console.log('- Selector:', element.selector);
+  console.log('- Inner HTML preview:', element.innerHTML?.substring(0, 100) + '...');
+  console.log('- Outer HTML preview:', element.outerHTML?.substring(0, 100) + '...');
+  
+  // Broadcast code removal request to dashboard/agents
+  broadcast({
+    type: 'code_removal_requested',
+    sessionId: session.sessionId,
+    element: element,
+    url: url,
+    timestamp: new Date().toISOString()
+  });
+  
+  // Store the request for integrations to handle
+  if (!domEditorState.pendingRemovals) {
+    domEditorState.pendingRemovals = new Map();
+  }
+  domEditorState.pendingRemovals.set(session.sessionId, {
+    element,
+    url,
+    requestTime: new Date().toISOString(),
+    ws
+  });
+  
+  console.log('⏳ Waiting for integration to handle removal...');
+}
+
+/**
+ * Find session by WebSocket connection
+ */
+function findSessionByWebSocket(ws) {
+  for (const [sessionId, sessionData] of domEditorConnections) {
+    if (sessionData.ws === ws) {
+      return sessionData;
+    }
+  }
+  return null;
+}
+
+/**
+ * DOM Editor API Endpoints
+ */
+
+// Get DOM editor context for Claude
+app.get('/api/dom-editor/context', (req, res) => {
+  const recentChanges = domEditorState.recentChanges.slice(-10); // Last 10 changes
+  const activeSessions = Array.from(domEditorState.sessions.entries()).map(([sessionId, sessionData]) => ({
+    sessionId,
+    url: sessionData.url,
+    selectedElement: sessionData.selectedElement,
+    changesCount: sessionData.changes.length,
+    lastActivity: sessionData.changes.length > 0 ? sessionData.changes[sessionData.changes.length - 1].timestamp : null
+  }));
+  
+  res.json({
+    recentChanges,
+    activeSessions,
+    totalChanges: domEditorState.recentChanges.length
+  });
+});
+
+// Get specific session details
+app.get('/api/dom-editor/session/:sessionId', (req, res) => {
+  const { sessionId } = req.params;
+  const sessionData = domEditorState.sessions.get(sessionId);
+  
+  if (!sessionData) {
+    return res.status(404).json({ error: 'Session not found' });
+  }
+  
+  res.json({
+    sessionId,
+    ...sessionData
+  });
+});
+
+// Get all DOM editor activity (for Claude context)
+app.get('/api/dom-editor/activity', (req, res) => {
+  const { limit = 20, sessionId } = req.query;
+  
+  let changes = domEditorState.recentChanges;
+  
+  if (sessionId) {
+    changes = changes.filter(change => change.sessionId === sessionId);
+  }
+  
+  const limitedChanges = changes.slice(-parseInt(limit));
+  
+  res.json({
+    changes: limitedChanges,
+    totalChanges: changes.length,
+    sessionId: sessionId || null
+  });
+});
+
+// Send message to DOM editor (for Claude to control extension)
+app.post('/api/dom-editor/message', (req, res) => {
+  const { sessionId, message } = req.body;
+  
+  if (!sessionId || !message) {
+    return res.status(400).json({ error: 'sessionId and message are required' });
+  }
+  
+  const connection = domEditorConnections.get(sessionId);
+  if (!connection) {
+    return res.status(404).json({ error: 'Session not found' });
+  }
+  
+  try {
+    connection.ws.send(JSON.stringify(message));
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error sending message to DOM editor:', error);
+    res.status(500).json({ error: 'Failed to send message' });
+  }
+});
+
+// Hot DOM update endpoint
+app.post('/api/dom-editor/hot-update', (req, res) => {
+  const { type, selector, styles, content, reason } = req.body;
+  
+  console.log(`🔥 Hot DOM Update: ${type} for ${selector}`);
+  console.log(`   Reason: ${reason}`);
+  if (content) console.log(`   Content: ${content.substring(0, 100)}...`);
+  
+  // Broadcast hot update to all clients
+  const hotUpdate = {
+    type: 'hot_dom_update',
+    updateType: type,
+    selector: selector,
+    styles: styles,
+    content: content,
+    reason: reason,
+    timestamp: new Date().toISOString()
+  };
+  
+  broadcast(hotUpdate);
+  
+  res.json({ success: true, message: 'Hot update broadcasted' });
+});
+
 server.listen(port, () => {
   console.log(`Decision Tapestry server listening at http://localhost:${port}`);
   console.log(`Watching for changes in: ${CWD}`);
@@ -780,6 +1351,13 @@ server.listen(port, () => {
 
 const gracefulShutdown = () => {
   console.log("Attempting graceful shutdown...");
+
+  // Stop Claude Code integration if running
+  if (claudeCodeIntegrationProcess) {
+    console.log("Stopping Claude Code integration...");
+    claudeCodeIntegrationProcess.kill();
+    claudeCodeIntegrationProcess = null;
+  }
 
   // Close file watcher
   if (watcher) {
@@ -831,6 +1409,118 @@ process.on("SIGTERM", gracefulShutdown);
 // Timestamp: 2025-07-16T08:35:09.144Z
 
 
+
+// Global variable to track integration process
+let claudeCodeIntegrationProcess = null;
+
+/**
+ * Start Claude Code integration if not already running
+ */
+function startClaudeCodeIntegration() {
+  // Check if integration is already connected
+  if (domEditorState.integrations?.has('claude_code_dom_editor')) {
+    console.log('✅ Claude Code integration already connected');
+    return;
+  }
+  
+  // Check if process is already starting/running
+  if (claudeCodeIntegrationProcess) {
+    console.log('⏳ Claude Code integration already starting...');
+    return;
+  }
+  
+  console.log('🚀 Auto-starting Claude Code DOM Editor integration...');
+  
+  // Find the integration script
+  const integrationPath = path.join(__dirname, '..', 'claude-code-integration', 'dom-editor-integration.mjs');
+  
+  // Spawn the integration process
+  claudeCodeIntegrationProcess = spawn('node', [integrationPath], {
+    cwd: path.join(__dirname, '..'),
+    stdio: ['ignore', 'pipe', 'pipe']
+  });
+  
+  // Handle output
+  claudeCodeIntegrationProcess.stdout.on('data', (data) => {
+    console.log(`[Integration] ${data.toString().trim()}`);
+  });
+  
+  claudeCodeIntegrationProcess.stderr.on('data', (data) => {
+    console.error(`[Integration Error] ${data.toString().trim()}`);
+  });
+  
+  // Handle process exit
+  claudeCodeIntegrationProcess.on('exit', (code) => {
+    console.log(`[Integration] Process exited with code ${code}`);
+    claudeCodeIntegrationProcess = null;
+  });
+  
+  claudeCodeIntegrationProcess.on('error', (err) => {
+    console.error('[Integration] Failed to start:', err);
+    claudeCodeIntegrationProcess = null;
+  });
+}
+
+/**
+ * Handle integration connections (Claude Code, etc.)
+ */
+function handleIntegrationConnect(ws, data) {
+  const { integrationType, projectRoot, capabilities } = data;
+  
+  console.log(`🔌 Integration connected: ${integrationType}`);
+  console.log(`   Project: ${projectRoot}`);
+  console.log(`   Capabilities: ${capabilities.join(', ')}`);
+  
+  // Store integration connection
+  if (!domEditorState.integrations) {
+    domEditorState.integrations = new Map();
+  }
+  
+  domEditorState.integrations.set(integrationType, {
+    ws,
+    projectRoot,
+    capabilities,
+    connectedAt: new Date().toISOString()
+  });
+  
+  // Send acknowledgment
+  ws.send(JSON.stringify({
+    type: 'integration_connected',
+    integrationType,
+    message: 'Integration registered successfully'
+  }));
+}
+
+/**
+ * Handle code removal completion from integrations
+ */
+function handleCodeRemovalComplete(ws, data) {
+  const { sessionId, element, method, success } = data;
+  
+  console.log(`\n✅ CODE REMOVAL COMPLETED`);
+  console.log(`   Element: ${element}`);
+  console.log(`   Method: ${method}`);
+  console.log(`   Success: ${success}`);
+  
+  // Find the pending removal request
+  const pendingRemoval = domEditorState.pendingRemovals?.get(sessionId);
+  if (pendingRemoval) {
+    // Send completion message to the DOM editor
+    pendingRemoval.ws.send(JSON.stringify({
+      type: 'code_removal_complete',
+      element: element,
+      success: success,
+      method: method
+    }));
+    
+    // Clean up
+    domEditorState.pendingRemovals.delete(sessionId);
+    
+    console.log('✅ Notified DOM editor of successful removal');
+  } else {
+    console.warn('⚠️  No pending removal found for session:', sessionId);
+  }
+}
 
 // Enhanced by Decision Tapestry Agent Framework
 // Decision ID: 86

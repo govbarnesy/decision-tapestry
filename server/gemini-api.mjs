@@ -3,134 +3,76 @@
  * Handles Google OAuth and Gemini API integration
  */
 
-import crypto from 'crypto';
+// Simple API key approach - much easier!
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY || 'YOUR_FREE_API_KEY_HERE';
 
-// OAuth configuration
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || 'YOUR_CLIENT_ID';
-const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || 'YOUR_CLIENT_SECRET';
-const REDIRECT_URI = process.env.REDIRECT_URI || 'http://localhost:8080/api/gemini/auth/callback';
-
-// Session storage (in production, use Redis or similar)
+// Simple session storage for demo
 const sessions = new Map();
-const authTokens = new Map();
 
 /**
  * Initialize Gemini API routes
  */
 export function initializeGeminiRoutes(app) {
-  // Auth status check
+  // Simple auth status check - just check if API key is available
   app.get('/api/gemini/auth/status', (req, res) => {
-    const sessionId = req.headers.cookie?.match(/gemini_session=([^;]+)/)?.[1];
-    const session = sessions.get(sessionId);
+    const hasApiKey = GEMINI_API_KEY && GEMINI_API_KEY !== 'YOUR_FREE_API_KEY_HERE';
     
-    if (session && session.authenticated) {
+    if (hasApiKey) {
       res.json({
         authenticated: true,
-        user: { email: session.email }
+        user: { email: 'gemini-user@example.com' }
       });
     } else {
       res.json({ authenticated: false });
     }
   });
 
-  // Google OAuth login
+  // Simple setup instructions
   app.get('/api/gemini/auth/google', (req, res) => {
-    const state = crypto.randomBytes(16).toString('hex');
-    const sessionId = crypto.randomBytes(16).toString('hex');
-    
-    sessions.set(sessionId, { state, authenticated: false });
-    
-    res.cookie('gemini_session', sessionId, { 
-      httpOnly: true, 
-      secure: process.env.NODE_ENV === 'production' 
-    });
-    
-    const authUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth');
-    authUrl.searchParams.append('client_id', GOOGLE_CLIENT_ID);
-    authUrl.searchParams.append('redirect_uri', REDIRECT_URI);
-    authUrl.searchParams.append('response_type', 'code');
-    authUrl.searchParams.append('scope', 'email profile https://www.googleapis.com/auth/generative-language.retriever');
-    authUrl.searchParams.append('state', state);
-    authUrl.searchParams.append('access_type', 'offline');
-    authUrl.searchParams.append('prompt', 'consent');
-    
-    res.redirect(authUrl.toString());
-  });
-
-  // OAuth callback
-  app.get('/api/gemini/auth/callback', async (req, res) => {
-    const { code, state } = req.query;
-    const sessionId = req.headers.cookie?.match(/gemini_session=([^;]+)/)?.[1];
-    const session = sessions.get(sessionId);
-    
-    if (!session || session.state !== state) {
-      return res.status(400).send('Invalid state parameter');
-    }
-    
-    try {
-      // Exchange code for tokens
-      const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({
-          code,
-          client_id: GOOGLE_CLIENT_ID,
-          client_secret: GOOGLE_CLIENT_SECRET,
-          redirect_uri: REDIRECT_URI,
-          grant_type: 'authorization_code'
-        })
-      });
-      
-      const tokens = await tokenResponse.json();
-      
-      if (!tokens.access_token) {
-        throw new Error('Failed to get access token');
-      }
-      
-      // Get user info
-      const userResponse = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
-        headers: { Authorization: `Bearer ${tokens.access_token}` }
-      });
-      
-      const userInfo = await userResponse.json();
-      
-      // Store tokens and user info
-      session.authenticated = true;
-      session.email = userInfo.email;
-      session.tokens = tokens;
-      sessions.set(sessionId, session);
-      
-      // Store tokens for Gemini API use
-      authTokens.set(userInfo.email, tokens);
-      
-      // Close the popup and refresh parent
-      res.send(`
-        <html>
-          <body>
-            <script>
-              window.opener.postMessage({ type: 'auth-success' }, '*');
+    res.send(`
+      <html>
+        <head>
+          <title>Gemini API Setup</title>
+          <style>
+            body { font-family: system-ui; max-width: 600px; margin: 50px auto; padding: 20px; }
+            .code { background: #f5f5f5; padding: 10px; border-radius: 4px; font-family: monospace; }
+            .step { margin: 20px 0; padding: 15px; border-left: 4px solid #4285f4; }
+          </style>
+        </head>
+        <body>
+          <h1>🚀 Set up Free Gemini API</h1>
+          
+          <div class="step">
+            <h3>Step 1: Get your free API key</h3>
+            <p>Visit <a href="https://aistudio.google.com/app/apikey" target="_blank">Google AI Studio</a></p>
+            <p>Sign in with your Google account and click "Create API Key"</p>
+          </div>
+          
+          <div class="step">
+            <h3>Step 2: Set your API key</h3>
+            <p>Copy your API key and run this command:</p>
+            <div class="code">export GEMINI_API_KEY="your_api_key_here"</div>
+            <p>Then restart the server:</p>
+            <div class="code">npm start</div>
+          </div>
+          
+          <div class="step">
+            <h3>Step 3: That's it!</h3>
+            <p>Refresh this page and you'll see the Gemini interface</p>
+          </div>
+          
+          <script>
+            setTimeout(() => {
               window.close();
-            </script>
-            <p>Authentication successful! You can close this window.</p>
-          </body>
-        </html>
-      `);
-    } catch (error) {
-      console.error('OAuth callback error:', error);
-      res.status(500).send('Authentication failed');
-    }
+            }, 10000);
+          </script>
+        </body>
+      </html>
+    `);
   });
 
-  // Logout
+  // Simple logout (just for demo)
   app.post('/api/gemini/auth/logout', (req, res) => {
-    const sessionId = req.headers.cookie?.match(/gemini_session=([^;]+)/)?.[1];
-    if (sessionId) {
-      const session = sessions.get(sessionId);
-      if (session?.email) {
-        authTokens.delete(session.email);
-      }
-      sessions.delete(sessionId);
-    }
     res.json({ success: true });
   });
 
@@ -153,11 +95,8 @@ export function initializeGeminiRoutes(app) {
         'Connection': 'keep-alive'
       });
       
-      // Get the user's access token
-      const tokens = authTokens.get(session.email);
-      if (!tokens) {
-        throw new Error('No tokens found for user');
-      }
+      // For free API key approach, we don't need tokens
+      // In production, this would use the actual Gemini API with the API key
       
       // For now, simulate Gemini response
       // In production, use the actual Gemini API with the access token

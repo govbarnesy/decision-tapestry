@@ -14,7 +14,6 @@
     <script type="module" src="./decision-log.mjs"></script>
     <script type="module" src="./product-backlog.mjs"></script>
     <script type="module" src="./search-panel.mjs"></script>
-    <script type="module" src="./gemini-prompt.mjs"></script>
     <script type="module" src="./decision-velocity-chart.mjs"></script>
     <script type="module" src="./decision-health-chart.mjs"></script>
     <script type="module" src="./decision-detail-panel.mjs"></script>
@@ -26,6 +25,8 @@
     <script type="module" src="./advanced-filter.mjs"></script>
     <script type="module" src="./charter-map.mjs"></script>
     <script type="module" src="./agent-test-panel.mjs"></script>
+    <script type="module" src="./simple-analytics.mjs"></script>
+    <script type="module" src="./hot-update-client.mjs"></script>
 </head>
 
 <body>
@@ -41,19 +42,7 @@
                     </div>
                 </div>
                 <div id="analytics" class="panel-view" data-tab="analytics">
-                    <decision-velocity-chart
-                        style="height: 50%; display: flex; flex-direction: column; padding-bottom: 1rem; box-sizing: border-box;">
-                    </decision-velocity-chart>
-                    <div id="health-metrics"
-                        style="height: 50%; display: flex; flex-direction: column; position: relative; border-top: 1px solid #eee; padding-top: 1rem; box-sizing: border-box;">
-                        <h3>Health Metrics</h3>
-                        <div style="display: flex; align-items: center; gap: 2rem; flex-grow: 1;">
-                            <health-metrics-panel id="health-metrics-stats" style="flex-grow: 1;"></health-metrics-panel>
-                            <div id="decision-health-chart-container" style="flex-basis: 200px; height: 100%;">
-                                <decision-health-chart></decision-health-chart>
-                            </div>
-                        </div>
-                    </div>
+                    <simple-analytics></simple-analytics>
                 </div>
             </div>
         </div>
@@ -73,7 +62,6 @@
             <div class="controls-header">
                 <div class="controls-tabs">
                     <button class="controls-tab active" data-tab="log">Log</button>
-                    <button class="controls-tab" data-tab="gemini">Gemini AI</button>
                     <button class="controls-tab" data-tab="search">Search</button>
                     <button class="controls-tab" data-tab="filters">Filters</button>
                     <button class="controls-tab" data-tab="patterns">Patterns</button>
@@ -83,7 +71,6 @@
             </div>
             <div class="controls-content">
                 <decision-log-panel id="decision-log-content" class="controls-view active" data-tab="log"></decision-log-panel>
-                <gemini-prompt id="gemini-prompt" class="controls-view" data-tab="gemini"></gemini-prompt>
                 <search-panel id="search-controls" class="controls-view" data-tab="search"></search-panel>
                 <advanced-filter id="advanced-filter" class="controls-view" data-tab="filters"></advanced-filter>
                 <pathway-explorer id="pathway-explorer" class="controls-view" data-tab="patterns"></pathway-explorer>

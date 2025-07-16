@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Decision Tapestry DOM Editor</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>🎨 DOM Editor</h1>
+      <div class="connection-status" id="connectionStatus">
+        <span class="status-indicator" id="statusIndicator"></span>
+        <span id="statusText">Connecting...</span>
+      </div>
+    </header>
+    
+    <div class="main-content">
+      <!-- Element Selection -->
+      <section class="section">
+        <div class="section-header">
+          <h2>Select Element</h2>
+          <button class="btn btn-primary" id="selectBtn">Start Selection</button>
+        </div>
+        <div class="element-info" id="elementInfo" style="display: none;">
+          <div class="element-preview" id="elementPreview"></div>
+          <div class="element-details">
+            <div class="detail-row">
+              <span class="label">Tag:</span>
+              <span class="value" id="tagName"></span>
+            </div>
+            <div class="detail-row">
+              <span class="label">ID:</span>
+              <span class="value" id="elementId"></span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Classes:</span>
+              <span class="value" id="className"></span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Selector:</span>
+              <span class="value code" id="selector"></span>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Style Editor -->
+      <section class="section" id="styleEditor" style="display: none;">
+        <div class="section-header">
+          <h2>Edit Styles</h2>
+        </div>
+        <div class="style-groups">
+          <div class="style-group">
+            <h3>Layout</h3>
+            <div class="style-row">
+              <label>Display:</label>
+              <select class="style-input" data-property="display">
+                <option value="">Default</option>
+                <option value="block">Block</option>
+                <option value="inline">Inline</option>
+                <option value="inline-block">Inline Block</option>
+                <option value="flex">Flex</option>
+                <option value="grid">Grid</option>
+                <option value="none">None</option>
+              </select>
+            </div>
+            <div class="style-row">
+              <label>Width:</label>
+              <input type="text" class="style-input" data-property="width" placeholder="auto">
+            </div>
+            <div class="style-row">
+              <label>Height:</label>
+              <input type="text" class="style-input" data-property="height" placeholder="auto">
+            </div>
+          </div>
+          
+          <div class="style-group">
+            <h3>Appearance</h3>
+            <div class="style-row">
+              <label>Background:</label>
+              <input type="text" class="style-input" data-property="background" placeholder="#ffffff">
+            </div>
+            <div class="style-row">
+              <label>Color:</label>
+              <input type="text" class="style-input" data-property="color" placeholder="#000000">
+            </div>
+            <div class="style-row">
+              <label>Border:</label>
+              <input type="text" class="style-input" data-property="border" placeholder="1px solid #ccc">
+            </div>
+            <div class="style-row">
+              <label>Border Radius:</label>
+              <input type="text" class="style-input" data-property="borderRadius" placeholder="4px">
+            </div>
+          </div>
+          
+          <div class="style-group">
+            <h3>Spacing</h3>
+            <div class="style-row">
+              <label>Margin:</label>
+              <input type="text" class="style-input" data-property="margin" placeholder="10px">
+            </div>
+            <div class="style-row">
+              <label>Padding:</label>
+              <input type="text" class="style-input" data-property="padding" placeholder="10px">
+            </div>
+          </div>
+          
+          <div class="style-group">
+            <h3>Typography</h3>
+            <div class="style-row">
+              <label>Font Size:</label>
+              <input type="text" class="style-input" data-property="fontSize" placeholder="16px">
+            </div>
+            <div class="style-row">
+              <label>Font Weight:</label>
+              <select class="style-input" data-property="fontWeight">
+                <option value="">Default</option>
+                <option value="normal">Normal</option>
+                <option value="bold">Bold</option>
+                <option value="100">100</option>
+                <option value="200">200</option>
+                <option value="300">300</option>
+                <option value="400">400</option>
+                <option value="500">500</option>
+                <option value="600">600</option>
+                <option value="700">700</option>
+                <option value="800">800</option>
+                <option value="900">900</option>
+              </select>
+            </div>
+            <div class="style-row">
+              <label>Text Align:</label>
+              <select class="style-input" data-property="textAlign">
+                <option value="">Default</option>
+                <option value="left">Left</option>
+                <option value="center">Center</option>
+                <option value="right">Right</option>
+                <option value="justify">Justify</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Actions -->
+      <section class="section">
+        <div class="section-header">
+          <h2>Actions</h2>
+        </div>
+        <div class="action-buttons">
+          <button class="btn btn-secondary" id="exportBtn">Export CSS</button>
+          <button class="btn btn-warning" id="undoBtn">Undo All</button>
+          <button class="btn btn-danger" id="removeBtn">Remove Element</button>
+        </div>
+      </section>
+      
+      <!-- Export Output -->
+      <section class="section" id="exportSection" style="display: none;">
+        <div class="section-header">
+          <h2>Generated CSS</h2>
+        </div>
+        <textarea class="export-output" id="exportOutput" readonly></textarea>
+        <button class="btn btn-primary" id="copyBtn">Copy to Clipboard</button>
+      </section>
+    </div>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
