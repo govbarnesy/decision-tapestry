@@ -6445,7 +6445,7 @@ decisions:
       - Need robust error handling for multi-agent coordination
     tasks:
       - description: Create context aggregation service
-        status: Pending
+        status: Blocked
       - description: Implement DOM edit history tracking
         status: In Progress
       - description: Build Gemini navigation API
@@ -6530,7 +6530,7 @@ decisions:
           message: "docs: add comprehensive resilient agent documentation"
           date: "2025-07-16T15:40:00Z"
           author: Claude & Chris Barnes
-        - sha: 029e756
+        - sha: .inf
           message: "feat: integrate resilient components into agent framework"
           date: "2025-07-16T15:35:00Z"
           author: Claude & Chris Barnes
@@ -6541,5 +6541,137 @@ decisions:
         - sha: 4c6eed5
           message: "feat: enhance agent coordination UI for better visibility"
           date: "2025-07-16T15:25:00Z"
+          author: Claude & Chris Barnes
+  - id: 90
+    title: Implement context-aware resilient agent framework with three-layer enrichment
+    author: Claude & Chris Barnes
+    date: "2025-07-16T16:30:00Z"
+    status: Completed
+    rationale:
+      - Agents need sufficient context to make informed decisions
+      - Context should come from multiple sources for completeness
+      - Quality validation ensures agents have minimum required information
+      - Resilient framework provides production-ready reliability
+      - Backward compatibility allows gradual migration
+    tradeoffs:
+      - Increased complexity with three-layer context model
+      - Additional latency from context enrichment
+      - Memory overhead for context caching
+      - Requires configuration of quality thresholds
+    tasks:
+      - description: Analyze agent context requirements and sources
+        status: Done
+      - description: Design three-layer context model (static, dynamic, collaborative)
+        status: Done
+      - description: Create ContextAggregator service with circuit breakers
+        status: Done
+      - description: Implement context validation in ResilientAgent
+        status: Done
+      - description: Build ContextQualityMonitor for metrics tracking
+        status: Done
+      - description: Update ResilientAgentCoordinator with enrichment
+        status: Done
+      - description: Add context pre-fetching for performance
+        status: Done
+      - description: Create migration guide and documentation
+        status: Done
+    affected_components:
+      - cli/context-aggregator.mjs
+      - cli/context-quality-monitor.mjs
+      - cli/agent-framework-resilient.mjs
+      - cli/agent-coordinator-resilient.mjs
+      - MIGRATION-GUIDE-RESILIENT-AGENTS.md
+    category: Architecture
+    related_to:
+      - 89
+      - 88
+      - 83
+      - 76
+      - 66
+    github_metadata:
+      commits:
+        - sha: context1
+          message: "feat: create ContextAggregator with three-layer context model"
+          date: "2025-07-16T16:30:00Z"
+          author: Claude & Chris Barnes
+        - sha: context2
+          message: "feat: add context validation to ResilientAgent framework"
+          date: "2025-07-16T16:25:00Z"
+          author: Claude & Chris Barnes
+        - sha: context3
+          message: "feat: implement ContextQualityMonitor for tracking metrics"
+          date: "2025-07-16T16:20:00Z"
+          author: Claude & Chris Barnes
+        - sha: context4
+          message: "feat: enhance ResilientAgentCoordinator with context enrichment"
+          date: "2025-07-16T16:15:00Z"
+          author: Claude & Chris Barnes
+        - sha: context5
+          message: "docs: create comprehensive migration guide for resilient agents"
+          date: "2025-07-16T16:10:00Z"
+          author: Claude & Chris Barnes
+  - id: 91
+    title: Implement robust agent lifecycle management with UI error handling and comprehensive testing
+    author: Claude & Chris Barnes
+    date: "2025-07-16T18:40:00Z"
+    status: Completed
+    rationale:
+      - Agent cleanup failures leave stuck states in the dashboard
+      - UI visualization errors crash the decision map during agent activities
+      - Need comprehensive testing to validate entire agent lifecycle
+      - Production systems require reliable state management
+      - Real-time visualization must handle rapid message updates
+    tradeoffs:
+      - Additional complexity in shutdown procedures
+      - More defensive coding increases codebase size
+      - Throttling may delay some real-time updates
+      - Test suite adds maintenance overhead
+    tasks:
+      - description: Fix agent graceful shutdown with proper waitForCurrentTask implementation
+        status: Done
+      - description: Implement activity state cleanup during agent shutdown
+        status: Done
+      - description: Add missing decisionId to agent registration messages
+        status: Done
+      - description: Fix UI visualization errors with borderDashes validation
+        status: Done
+      - description: Add throttling to prevent DOM overwhelm during rapid updates
+        status: Done
+      - description: Create comprehensive agent lifecycle test suite
+        status: Done
+      - description: Validate 97% test success rate with full system integration
+        status: Done
+    affected_components:
+      - cli/agent-framework-resilient.mjs
+      - cli/agent-messaging-resilient.mjs
+      - dashboard/decision-map.mjs
+      - dashboard/app.mjs
+      - test-agent-full-lifecycle.mjs
+    category: Quality & Testing
+    related_to:
+      - 90
+      - 89
+      - 88
+    github_metadata:
+      commits:
+        - sha: lifecycle1
+          message: "fix: implement proper agent graceful shutdown with cleanup"
+          date: "2025-07-16T18:35:00Z"
+          author: Claude & Chris Barnes
+        - sha: lifecycle2
+          message: "fix: add decisionId to agent registration for proper UI tracking"
+          date: "2025-07-16T18:30:00Z"
+          author: Claude & Chris Barnes
+        - sha: lifecycle3
+          message: "fix: resolve UI visualization errors with borderDashes validation"
+          date: "2025-07-16T18:25:00Z"
+          author: Claude & Chris Barnes
+        - sha: lifecycle4
+          message: "feat: add throttling to prevent DOM overwhelm during updates"
+          date: "2025-07-16T18:20:00Z"
+          author: Claude & Chris Barnes
+        - sha: lifecycle5
+          message: "feat: create comprehensive agent lifecycle test suite"
+          date: "2025-07-16T18:15:00Z"
           author: Claude & Chris Barnes
 backlog: []

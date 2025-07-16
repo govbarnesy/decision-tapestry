@@ -213,6 +213,15 @@ class DecisionMap extends LitElement {
   // Update node with activity state - enhanced for multiple agents
   updateNodeActivity(nodeId, agentId, activityState) {
     if (!this._nodesDataSet) return;
+    
+    // Throttle updates to prevent DOM overwhelm
+    const throttleKey = `${nodeId}-${agentId}`;
+    const now = Date.now();
+    if (this._lastUpdateTime?.[throttleKey] && now - this._lastUpdateTime[throttleKey] < 100) {
+      return; // Skip if updated less than 100ms ago
+    }
+    this._lastUpdateTime = this._lastUpdateTime || {};
+    this._lastUpdateTime[throttleKey] = now;
 
     const activityColors = {
       working: "#4CAF50",
@@ -266,15 +275,22 @@ class DecisionMap extends LitElement {
     }
 
     // Create updated node with activity visualization
+    // Ensure borderDashes is always a valid value (false or array of numbers)
+    const getValidBorderDashes = (value) => {
+      if (value === false || value === true) return false;
+      if (Array.isArray(value) && value.every(v => typeof v === 'number')) return value;
+      return false; // Default to solid line
+    };
+    
     const updatedNode = {
       ...originalNode,
       borderWidth: hasActiveAgents ? 4 : 2,
       borderWidthSelected: hasActiveAgents ? 5 : 3,
       shapeProperties: {
         ...(originalNode.shapeProperties || {}),
-        ...(hasActiveAgents
-          ? {}
-          : { borderDashes: originalNode.shapeProperties?.borderDashes }),
+        borderDashes: hasActiveAgents 
+          ? false // Always solid border when active
+          : getValidBorderDashes(originalNode.shapeProperties?.borderDashes),
       },
       color: {
         ...originalNode.color,
@@ -373,8 +389,20 @@ class DecisionMap extends LitElement {
       };
     }
 
-    // Update the node in the dataset
-    this._nodesDataSet.update(updatedNode);
+    // Update the node in the dataset with error handling
+    try {
+      this._nodesDataSet.update(updatedNode);
+    } catch (error) {
+      console.error(`Error updating node ${nodeId}:`, error);
+      // Fallback: update without shapeProperties
+      try {
+        const fallbackNode = { ...updatedNode };
+        delete fallbackNode.shapeProperties;
+        this._nodesDataSet.update(fallbackNode);
+      } catch (fallbackError) {
+        console.error(`Fallback update also failed for node ${nodeId}:`, fallbackError);
+      }
+    }
 
     // Enhanced visual effects for better visibility
     if (activityState !== "idle") {

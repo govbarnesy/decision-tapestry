@@ -17,6 +17,7 @@ export class ResilientAgentMessaging extends EventEmitter {
     constructor(agentId, options = {}) {
         super();
         this.agentId = agentId;
+        this.decisionId = options.decisionId; // Store decisionId for registration
         this.ws = null;
         this.serverUrl = options.serverUrl || 'ws://localhost:8080';
         this.connected = false;
@@ -246,6 +247,7 @@ export class ResilientAgentMessaging extends EventEmitter {
         const message = {
             type: 'agent_register',
             agentId: this.agentId,
+            decisionId: this.decisionId, // Include decisionId in registration
             timestamp: new Date().toISOString(),
             messageId: this.generateMessageId()
         };

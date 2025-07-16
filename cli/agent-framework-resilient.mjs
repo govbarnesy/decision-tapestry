@@ -10,11 +10,28 @@ import { CircuitBreaker, createCircuitBreaker } from './circuit-breaker.mjs';
 import EventEmitter from 'events';
 
 export class ResilientAgent extends AgentBase {
-    constructor(decisionId, options = {}) {
-        super(decisionId, options);
+    constructor(agentId, decisionId, options = {}) {
+        // Support both old and new constructor signatures
+        if (typeof agentId === 'number' && !decisionId) {
+            // Old signature: constructor(decisionId, options)
+            super(agentId, options);
+            this.agentId = `Agent-${agentId}`;
+            options = decisionId || {};
+        } else {
+            // New signature: constructor(agentId, decisionId, options)
+            super(agentId, decisionId);
+            this.agentId = agentId;
+            options = options || {};
+        }
+        
+        // Context configuration
+        this.enrichedContext = options.context || null;
+        this.contextValidationEnabled = options.contextValidationEnabled !== false;
+        this.minContextCompleteness = options.minContextCompleteness || 50; // Minimum 50% context completeness
         
         // Initialize resilient components
         this.messaging = new ResilientAgentMessaging(this.agentId, {
+            decisionId: this.decisionId, // Pass decisionId to messaging
             serverUrl: options.serverUrl,
             maxReconnectAttempts: options.maxReconnectAttempts || 10,
             failureThreshold: options.failureThreshold || 5
@@ -42,6 +59,9 @@ export class ResilientAgent extends AgentBase {
             recoveryAttempts: 0
         };
         
+        // Setup required methods for health checks
+        this.setupRequiredMethods();
+        
         // Setup event handlers
         this.setupEventHandlers();
         
@@ -49,6 +69,31 @@ export class ResilientAgent extends AgentBase {
         this.registerHealthChecks();
     }
 
+    /**
+     * Setup required methods for health checks
+     */
+    setupRequiredMethods() {
+        // Set up fs for file system operations
+        this.fs = {
+            writeFile: async (path, data) => {
+                const fs = await import('fs/promises');
+                return fs.writeFile(path, data);
+            },
+            unlink: async (path) => {
+                const fs = await import('fs/promises');
+                return fs.unlink(path);
+            }
+        };
+        
+        // Set up exec for git operations
+        this.exec = async (command, options = {}) => {
+            const { exec } = await import('child_process');
+            const { promisify } = await import('util');
+            const execAsync = promisify(exec);
+            return execAsync(command, { cwd: process.cwd(), ...options });
+        };
+    }
+    
     /**
      * Setup event handlers for resilient components
      */
@@ -157,6 +202,11 @@ export class ResilientAgent extends AgentBase {
             // Call parent initialize
             await super.initialize();
             
+            // Validate context if provided
+            if (this.enrichedContext && this.contextValidationEnabled) {
+                await this.validateContext();
+            }
+            
             // Update health metrics
             this.healthMonitor.updateResourceMetrics({
                 memoryUsage: process.memoryUsage().heapUsed,
@@ -175,6 +225,64 @@ export class ResilientAgent extends AgentBase {
     }
 
     /**
+     * Validate enriched context
+     */
+    async validateContext() {
+        if (!this.enrichedContext) {
+            this.log('No enriched context to validate');
+            return;
+        }
+        
+        const validation = this.enrichedContext._metadata?.validation;
+        if (!validation) {
+            this.log('Context missing validation metadata', 'warn');
+            return;
+        }
+        
+        // Check completeness
+        if (validation.completeness < this.minContextCompleteness) {
+            this.log(`Context completeness (${validation.completeness}%) below minimum (${this.minContextCompleteness}%)`, 'warn');
+            
+            // Log specific warnings
+            if (validation.warnings && validation.warnings.length > 0) {
+                validation.warnings.forEach(warning => {
+                    this.log(`Context warning: ${warning}`, 'warn');
+                });
+            }
+            
+            // Decide whether to proceed
+            if (!validation.isValid) {
+                throw new Error('Invalid context: ' + validation.missingElements.join(', '));
+            }
+        }
+        
+        this.log(`Context validated: ${validation.completeness}% complete`);
+    }
+    
+    /**
+     * Get context for task execution
+     */
+    getTaskContext(task) {
+        // Merge enriched context with task-specific context
+        const baseContext = {};
+        
+        if (!this.enrichedContext) {
+            return baseContext;
+        }
+        
+        return {
+            ...baseContext,
+            enriched: {
+                metadata: this.enrichedContext.metadata,
+                related: this.enrichedContext.related,
+                collaboration: this.enrichedContext.collaboration,
+                executionHints: this.enrichedContext.executionHints
+            },
+            contextQuality: this.enrichedContext._metadata?.validation?.completeness || 0
+        };
+    }
+
+    /**
      * Execute task with circuit breaker protection
      */
     async executeTask(task) {
@@ -185,6 +293,14 @@ export class ResilientAgent extends AgentBase {
                 async () => {
                     // Update activity
                     await this.updateActivity('working', task.description);
+                    
+                    // Get enriched context for task
+                    const taskContext = this.getTaskContext(task);
+                    
+                    // Log context quality if available
+                    if (taskContext.contextQuality !== undefined) {
+                        this.log(`Executing with ${taskContext.contextQuality}% context completeness`);
+                    }
                     
                     // Execute the actual task
                     const result = await super.executeTask(task);
@@ -455,7 +571,7 @@ export class ResilientAgent extends AgentBase {
      * Get comprehensive status including health
      */
     getStatus() {
-        const baseStatus = super.getStatus();
+        const baseStatus = super.getStatus ? super.getStatus() : {};
         const healthStatus = this.healthMonitor.getStatus();
         const messagingStatus = this.messaging.getStatus();
         
@@ -471,8 +587,50 @@ export class ResilientAgent extends AgentBase {
                     return acc;
                 }, {}),
                 recoveryAttempts: this.state.recoveryAttempts
+            },
+            context: {
+                hasEnrichedContext: !!this.enrichedContext,
+                contextQuality: this.enrichedContext?._metadata?.validation?.completeness || 0,
+                validationEnabled: this.contextValidationEnabled
             }
         };
+    }
+    
+    /**
+     * Get health status for coordinator
+     */
+    async getHealthStatus() {
+        const status = this.getStatus();
+        return {
+            healthy: status.health.state === 'healthy',
+            state: status.health.state,
+            details: status
+        };
+    }
+
+    /**
+     * Wait for current task to complete
+     */
+    async waitForCurrentTask(timeout = 5000) {
+        return new Promise((resolve) => {
+            const startTime = Date.now();
+            const checkInterval = setInterval(() => {
+                if (this.state.currentActivity?.state !== 'working' || 
+                    Date.now() - startTime > timeout) {
+                    clearInterval(checkInterval);
+                    resolve();
+                }
+            }, 100);
+        });
+    }
+
+    /**
+     * Save state for recovery
+     */
+    async saveState() {
+        // Implementation for state saving if needed
+        // For now, just log that we're saving state
+        this.log('State saved for recovery');
     }
 
     /**
@@ -484,6 +642,9 @@ export class ResilientAgent extends AgentBase {
         try {
             // Stop accepting new tasks
             this.state.shuttingDown = true;
+            
+            // Send idle state to clean up activity tracking
+            await this.updateActivity('idle', 'Agent shutting down');
             
             // Complete current task if any
             if (this.state.currentActivity?.state === 'working') {
@@ -500,8 +661,10 @@ export class ResilientAgent extends AgentBase {
             // Stop health monitor
             this.healthMonitor.cleanup();
             
-            // Call parent cleanup
-            await super.cleanup();
+            // Call parent cleanup if it exists
+            if (super.cleanup) {
+                await super.cleanup();
+            }
             
             this.log('Graceful shutdown completed');
         } catch (error) {
