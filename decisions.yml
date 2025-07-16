@@ -6468,4 +6468,78 @@ decisions:
       - 87
       - 68
       - 83
+  - id: 89
+    title: Implement resilient agent coordination system
+    author: Claude & Chris Barnes
+    date: "2025-07-16T15:00:00Z"
+    status: Completed
+    rationale:
+      - Agents need fault tolerance for distributed operations
+      - Circuit breakers prevent cascading failures
+      - Health monitoring enables proactive issue detection
+      - Graceful degradation maintains functionality during outages
+      - Self-healing capabilities reduce manual intervention
+    tradeoffs:
+      - Added complexity in agent framework
+      - Slight performance overhead from health checks
+      - Requires configuration tuning for different environments
+      - Memory usage for message queuing and metrics
+    tasks:
+      - description: Move Agents tab to first position in dashboard
+        status: Done
+      - description: Remove auto-selection of decisions on agent activity
+        status: Done
+      - description: Enhance decision map to show multiple agents per node
+        status: Done
+      - description: Create ResilientAgentMessaging with circuit breaker
+        status: Done
+      - description: Implement CircuitBreaker pattern with three states
+        status: Done
+      - description: Build AgentHealthMonitor for health tracking
+        status: Done
+      - description: Integrate resilient components into agent framework
+        status: Done
+      - description: Add comprehensive test suite for resilience
+        status: Done
+      - description: Create documentation and examples
+        status: Done
+    affected_components:
+      - cli/agent-messaging-resilient.mjs
+      - cli/circuit-breaker.mjs
+      - cli/agent-health-monitor.mjs
+      - cli/agent-framework-resilient.mjs
+      - dashboard/decision-map.mjs
+      - dashboard/app.mjs
+      - dashboard/index.html
+      - examples/resilient-agent-example.mjs
+      - __tests__/resilient-agent.test.mjs
+      - docs/resilient-agent-architecture.md
+      - docs/resilient-agent-quickstart.md
+    category: Architecture
+    related_to:
+      - 83
+      - 88
+      - 68
+    github_metadata:
+      commits:
+        - sha: 7f6ab80
+          message: "docs: add resilient agents implementation summary"
+          date: "2025-07-16T15:45:00Z"
+          author: Claude & Chris Barnes
+        - sha: 0c70d08
+          message: "docs: add comprehensive resilient agent documentation"
+          date: "2025-07-16T15:40:00Z"
+          author: Claude & Chris Barnes
+        - sha: 029e756
+          message: "feat: integrate resilient components into agent framework"
+          date: "2025-07-16T15:35:00Z"
+          author: Claude & Chris Barnes
+        - sha: a11083f
+          message: "feat: implement resilient agent coordination infrastructure"
+          date: "2025-07-16T15:30:00Z"
+          author: Claude & Chris Barnes
+        - sha: 4c6eed5
+          message: "feat: enhance agent coordination UI for better visibility"
+          date: "2025-07-16T15:25:00Z"
+          author: Claude & Chris Barnes
 backlog: []
