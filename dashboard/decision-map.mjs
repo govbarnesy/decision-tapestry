@@ -254,8 +254,8 @@ class DecisionMap extends LitElement {
     if (!originalNode) return;
 
     // Get active agents for this node
-    const nodeAgents = this._nodeActivities.get(nodeId);
-    const hasActiveAgents = nodeAgents && nodeAgents.size > 0;
+    const activeAgents = this._nodeActivities.get(nodeId);
+    const hasActiveAgents = activeAgents && activeAgents.size > 0;
     
     // Determine primary state (most recent agent)
     let primaryState = "idle";
@@ -399,7 +399,6 @@ class DecisionMap extends LitElement {
     }
   }
 
-  // Add visual pulsing effect to active nodes
   // Helper function to convert hex color to rgba with opacity
   _hexToRgba(hex, opacity) {
     const r = parseInt(hex.slice(1, 3), 16);
@@ -408,10 +407,10 @@ class DecisionMap extends LitElement {
     return `rgba(${r}, ${g}, ${b}, ${opacity})`;
   }
 
-  _addPulsingEffect(nodeId, activityState) {
+  // Add visual pulsing effect to active nodes
+  _addPulsingEffect(nodeId) {
     if (!this._network) return;
 
-    const pulseInterval = 2000; // 2 seconds
     const pulseKey = `pulse-${nodeId}`;
 
     // Clear existing pulse for this node
@@ -467,7 +466,7 @@ class DecisionMap extends LitElement {
     });
 
     // Reset all nodes to original state
-    this._nodeActivities.forEach((agentMap, nodeId) => {
+    this._nodeActivities.forEach((agentMap) => {
       agentMap.clear();
     });
     this._nodeActivities.clear();
