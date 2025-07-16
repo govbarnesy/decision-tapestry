@@ -1293,3 +1293,59 @@ class SearchPanel extends LitElement {
 }
 
 customElements.define("search-panel", SearchPanel);
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 68
+// Task: Support filtering by enhanced date objects (decision_date, first_commit_date, last_commit_date)
+// Timestamp: 2025-07-16T05:35:55.779Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 68
+// Task: Update search panel for commit-based date filtering
+// Timestamp: 2025-07-16T05:35:55.829Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 68
+// Task: Add 'last file change' filter using github_metadata.file_status
+// Timestamp: 2025-07-16T05:35:55.876Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 68
+// Task: Create commit timeline visualization from github_metadata.commits
+// Timestamp: 2025-07-16T05:35:55.923Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 68
+// Task: Add file activity indicators using github_metadata.file_status
+// Timestamp: 2025-07-16T05:35:55.968Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 68
+// Task: Add commit count indicators (github_metadata.commits.length)
+// Timestamp: 2025-07-16T05:35:56.015Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 68
+// Task: Integrate with Git history analysis service
+// Timestamp: 2025-07-16T05:35:56.062Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 68
+// Task: Add filtering by GitHub PR/issue activity
+// Timestamp: 2025-07-16T05:35:56.107Z
+

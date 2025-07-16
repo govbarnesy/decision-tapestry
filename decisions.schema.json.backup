@@ -10,35 +10,35 @@
       "items": {
         "type": "object",
         "properties": {
-          "id": {
+          "id": { 
             "type": "integer",
             "description": "Unique identifier for the backlog item"
           },
-          "title": {
+          "title": { 
             "type": "string",
             "description": "Brief title describing the backlog item"
           },
-          "author": {
+          "author": { 
             "type": "string",
             "description": "Person who created this backlog item"
           },
-          "created": {
-            "type": "string",
+          "created": { 
+            "type": "string", 
             "format": "date-time",
             "description": "ISO 8601 timestamp when the item was created"
           },
-          "status": {
-            "type": "string",
+          "status": { 
+            "type": "string", 
             "enum": ["Open", "In Progress", "Blocked"],
             "description": "Current status of the backlog item"
           },
-          "rationale": {
-            "type": "array",
+          "rationale": { 
+            "type": "array", 
             "items": { "type": "string" },
             "description": "List of reasons why this item is important"
           },
-          "tradeoffs": {
-            "type": "array",
+          "tradeoffs": { 
+            "type": "array", 
             "items": { "type": "string" },
             "description": "List of considerations or compromises involved"
           },
@@ -49,35 +49,17 @@
               "type": "object",
               "properties": {
                 "description": { "type": "string" },
-                "status": {
-                  "type": "string",
-                  "enum": [
-                    "Pending",
-                    "In Progress",
-                    "Completed",
-                    "Done",
-                    "Blocked"
-                  ]
-                }
+                "status": { "type": "string", "enum": ["Pending", "In Progress", "Completed", "Done", "Blocked"] }
               },
               "required": ["description"]
             }
           },
           "category": {
             "type": "string",
-            "enum": [
-              "Infrastructure",
-              "Developer Experience",
-              "UI/UX",
-              "Architecture",
-              "Process",
-              "Quality",
-              "Integration",
-              "Other"
-            ],
+            "enum": ["Infrastructure", "Developer Experience", "UI/UX", "Architecture", "Process", "Quality", "Integration", "Other"],
             "description": "Category for clustering and navigation purposes"
           },
-          "notes": {
+          "notes": { 
             "type": "string",
             "description": "Additional notes or context"
           }
@@ -86,20 +68,20 @@
       }
     },
     "decisions": {
-      "type": "array",
+      "type": "array", 
       "description": "Array of finalized decisions that have been made",
       "items": {
         "type": "object",
         "properties": {
-          "id": {
+          "id": { 
             "type": "integer",
             "description": "Unique identifier for the decision"
           },
-          "title": {
+          "title": { 
             "type": "string",
             "description": "Brief title describing the decision"
           },
-          "author": {
+          "author": { 
             "oneOf": [
               {
                 "type": "string",
@@ -139,10 +121,10 @@
             ],
             "description": "Person who made or documented this decision (string or GitHub user object)"
           },
-          "date": {
+          "date": { 
             "oneOf": [
               {
-                "type": "string",
+                "type": "string", 
                 "format": "date-time",
                 "description": "ISO 8601 timestamp when the decision was made (manual entry)"
               },
@@ -180,48 +162,40 @@
             ],
             "description": "When the decision was made (string or enhanced date object)"
           },
-          "status": {
-            "type": "string",
-            "enum": [
-              "Accepted",
-              "Superseded",
-              "Rejected",
-              "Proposed",
-              "Done",
-              "Completed",
-              "Pending"
-            ],
+          "status": { 
+            "type": "string", 
+            "enum": ["Accepted", "Superseded", "Rejected", "Proposed", "Done", "Completed", "Pending"],
             "description": "Current status of the decision"
           },
-          "project": {
+          "project": { 
             "type": "string",
             "description": "Project or component this decision relates to"
           },
-          "rationale": {
-            "type": "array",
+          "rationale": { 
+            "type": "array", 
             "items": { "type": "string" },
             "description": "List of reasons why this decision was made"
           },
-          "tradeoffs": {
-            "type": "array",
+          "tradeoffs": { 
+            "type": "array", 
             "items": { "type": "string" },
             "description": "List of tradeoffs or compromises in this decision"
           },
-          "related_to": {
-            "type": "array",
+          "related_to": { 
+            "type": "array", 
             "items": { "type": "integer" },
             "description": "IDs of related decisions"
           },
-          "supersedes": {
+          "supersedes": { 
             "type": ["integer", "null"],
             "description": "ID of the decision this one replaces (if any)"
           },
-          "superseded_by": {
+          "superseded_by": { 
             "type": ["integer", "null"],
             "description": "ID of the decision that replaces this one (if any)"
           },
-          "affected_components": {
-            "type": "array",
+          "affected_components": { 
+            "type": "array", 
             "items": { "type": "string" },
             "description": "List of files, modules, or components affected by this decision"
           },
@@ -232,35 +206,17 @@
               "type": "object",
               "properties": {
                 "description": { "type": "string" },
-                "status": {
-                  "type": "string",
-                  "enum": [
-                    "Pending",
-                    "In Progress",
-                    "Completed",
-                    "Done",
-                    "Blocked"
-                  ]
-                }
+                "status": { "type": "string", "enum": ["Pending", "In Progress", "Completed", "Done", "Blocked"] }
               },
               "required": ["description"]
             }
           },
           "category": {
             "type": "string",
-            "enum": [
-              "Infrastructure",
-              "Developer Experience",
-              "UI/UX",
-              "Architecture",
-              "Process",
-              "Quality",
-              "Integration",
-              "Other"
-            ],
+            "enum": ["Infrastructure", "Developer Experience", "UI/UX", "Architecture", "Process", "Quality", "Integration", "Other"],
             "description": "Category for clustering and navigation purposes"
           },
-          "notes": {
+          "notes": { 
             "type": "string",
             "description": "Additional notes or context about this decision"
           },
@@ -281,10 +237,7 @@
                     "number": { "type": "integer" },
                     "title": { "type": "string" },
                     "url": { "type": "string", "format": "uri" },
-                    "status": {
-                      "type": "string",
-                      "enum": ["open", "closed", "merged"]
-                    }
+                    "status": { "type": "string", "enum": ["open", "closed", "merged"] }
                   },
                   "required": ["number", "title", "url", "status"]
                 }
@@ -354,4 +307,45 @@
   },
   "required": ["decisions"],
   "additionalProperties": false
-}
+} 
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 65
+// Task: Create GitHub API client with authentication and rate limiting
+// Timestamp: 2025-07-16T05:15:22.019Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 65
+// Task: Implement GitHub user lookup service with caching
+// Timestamp: 2025-07-16T05:15:22.060Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 65
+// Task: Support oneOf author schema (string | GitHub user object)
+// Timestamp: 2025-07-16T05:15:22.088Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 65
+// Task: Create progressive author enhancement (string → GitHub object)
+// Timestamp: 2025-07-16T05:15:22.114Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 65
+// Task: Add graceful fallback for non-GitHub users
+// Timestamp: 2025-07-16T05:15:22.139Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 65
+// Task: Implement author caching to prevent rate limiting
+// Timestamp: 2025-07-16T05:15:22.164Z
+

@@ -1161,6 +1161,40 @@ function handleActivityReset() {
   }
 }
 
+/**
+ * Check if a WebSocket message is an agent coordination message
+ */
+function isAgentCoordinationMessage(message) {
+  const agentMessageTypes = [
+    'agent_register',
+    'agent_status', 
+    'agent_heartbeat',
+    'task_completion',
+    'decision_update',
+    'agent_error',
+    'agent_disconnected',
+    'agent_status_list',
+    'agent_status_response'
+  ];
+  
+  return agentMessageTypes.includes(message.type);
+}
+
+/**
+ * Handle agent coordination messages by forwarding them to the agent status panel
+ */
+function handleAgentCoordinationMessage(message) {
+  console.log('[App] Forwarding agent coordination message:', message.type, message);
+  
+  // Find the agent status panel and forward the message
+  const agentStatusPanel = document.querySelector('agent-status-panel');
+  if (agentStatusPanel && typeof agentStatusPanel.handleWebSocketMessage === 'function') {
+    agentStatusPanel.handleWebSocketMessage(message);
+  } else {
+    console.warn('[App] Agent status panel not found or not ready for coordination messages');
+  }
+}
+
 function initializeWebSocket() {
   let socket;
   let reconnectTimeout;
@@ -1193,6 +1227,9 @@ function initializeWebSocket() {
         } else if (message.type === "activity-reset") {
           console.log("Received activity-reset message:", message);
           handleActivityReset();
+        } else if (isAgentCoordinationMessage(message)) {
+          // Forward agent coordination messages to the agent status panel
+          handleAgentCoordinationMessage(message);
         } else {
           console.log("Unknown WebSocket message type:", message.type);
         }

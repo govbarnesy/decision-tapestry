@@ -105,14 +105,36 @@ class DecisionVelocityChart extends LitElement {
   groupDecisionsByTime(period) {
     const groups = {};
     this.decisions.forEach((decision) => {
-      const date = new Date(decision.date);
+      // Handle different date formats and validate
+      let dateValue = decision.date;
+      
+      // If date is an object with git-derived dates, use the decision_date or last_commit_date
+      if (typeof dateValue === 'object' && dateValue !== null) {
+        dateValue = dateValue.decision_date || dateValue.last_commit_date || dateValue.first_commit_date;
+      }
+      
+      // Skip if no valid date value
+      if (!dateValue) {
+        console.warn(`Decision ${decision.id} has no valid date, skipping from velocity chart`);
+        return;
+      }
+      
+      const date = new Date(dateValue);
+      
+      // Validate the date is valid
+      if (isNaN(date.getTime())) {
+        console.warn(`Decision ${decision.id} has invalid date format: ${dateValue}, skipping from velocity chart`);
+        return;
+      }
+      
       let key;
       if (period === "day") {
         key = date.toISOString().split("T")[0];
       } else if (period === "week") {
         const day = date.getDay();
         const diff = date.getDate() - day + (day === 0 ? -6 : 1);
-        const weekStart = new Date(date.setDate(diff));
+        const weekStart = new Date(date.getTime()); // Create a new Date to avoid modifying original
+        weekStart.setDate(weekStart.getDate() - day + (day === 0 ? -6 : 1));
         key = weekStart.toISOString().split("T")[0];
       } else {
         // month

@@ -279,6 +279,11 @@ export class AgentCoordinator {
             // Start agent work
             const report = await agent.start();
             
+            this.log(`${agentId} completed work, initiating peer review...`);
+            
+            // Initiate peer review process
+            await this.initiateReviewProcess(agentId, decisionId, report);
+            
             this.log(`${agentId} completed successfully`);
             return report;
             
@@ -419,6 +424,98 @@ export class AgentCoordinator {
         }
         
         this.log('Coordinator cleanup completed');
+    }
+
+    /**
+     * Initiate peer review process
+     */
+    async initiateReviewProcess(originalAgentId, decisionId, workProduct) {
+        try {
+            // Find a suitable reviewer (another available agent or create a new one)
+            const reviewerAgentId = await this.assignReviewer(originalAgentId, decisionId);
+            
+            if (!reviewerAgentId) {
+                this.log(`No available reviewer for Decision #${decisionId}, skipping review`);
+                return;
+            }
+            
+            this.log(`Assigning ${reviewerAgentId} to review ${originalAgentId}'s work on Decision #${decisionId}`);
+            
+            // Get or create reviewer agent
+            let reviewerAgent = this.agents.get(reviewerAgentId);
+            if (!reviewerAgent) {
+                reviewerAgent = new DecisionTapestryAgent(reviewerAgentId, null); // No specific decision for reviewer
+                await reviewerAgent.initialize();
+                this.agents.set(reviewerAgentId, reviewerAgent);
+            }
+            
+            // Start the review process
+            const reviewResults = await reviewerAgent.startPeerReview(originalAgentId, decisionId, workProduct);
+            
+            this.log(`Review completed: ${reviewResults.summary} (Quality Score: ${reviewResults.qualityScore}%)`);
+            
+            // Handle review results
+            if (!reviewResults.approved) {
+                this.log(`Review found issues that need addressing in Decision #${decisionId}`);
+                // Could potentially assign back to original agent for fixes, but for now just log
+            }
+            
+            return reviewResults;
+            
+        } catch (error) {
+            this.log(`Review process failed: ${error.message}`);
+            // Don't fail the main coordination if review fails
+            return null;
+        }
+    }
+    
+    /**
+     * Assign a reviewer agent
+     */
+    async assignReviewer(originalAgentId, decisionId) {
+        // Simple strategy: create a dedicated reviewer agent
+        const reviewerAgentId = `Reviewer-${decisionId}`;
+        
+        // Check if this reviewer already exists
+        if (this.agents.has(reviewerAgentId)) {
+            return reviewerAgentId;
+        }
+        
+        // For now, always create a new reviewer
+        // In future, could implement more sophisticated assignment:
+        // - Round-robin assignment
+        // - Skill-based matching 
+        // - Workload balancing
+        return reviewerAgentId;
+    }
+    
+    /**
+     * Get review status for all decisions
+     */
+    getReviewStatus() {
+        const reviewStatus = {};
+        
+        // Check each decision for review status
+        for (const [decisionId, node] of this.dependencyGraph) {
+            const decision = this.decisions.get(decisionId);
+            if (decision && decision.reviews) {
+                reviewStatus[decisionId] = {
+                    status: decision.review_status || 'pending_review',
+                    reviews: decision.reviews.length,
+                    approved: decision.reviews.filter(r => r.approved).length,
+                    latest_review: decision.reviews[decision.reviews.length - 1]
+                };
+            } else {
+                reviewStatus[decisionId] = {
+                    status: 'no_review',
+                    reviews: 0,
+                    approved: 0,
+                    latest_review: null
+                };
+            }
+        }
+        
+        return reviewStatus;
     }
 
     /**

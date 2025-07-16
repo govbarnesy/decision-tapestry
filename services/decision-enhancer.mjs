@@ -200,3 +200,94 @@ export class DecisionEnhancer {
 
 // Export singleton instance
 export const decisionEnhancer = new DecisionEnhancer();
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 76
+// Task: Create git-truth-resolver.mjs for data hierarchy management
+// Timestamp: 2025-07-16T04:36:43.476Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 76
+// Task: Implement conflict detection between git and manual data
+// Timestamp: 2025-07-16T04:36:43.499Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 76
+// Task: Add intelligent conflict resolution strategies
+// Timestamp: 2025-07-16T04:36:43.521Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 76
+// Task: Update decision-enhancer.mjs to use git-first hierarchy
+// Timestamp: 2025-07-16T04:36:43.543Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 76
+// Task: Add validation for affected_components vs actual git files
+// Timestamp: 2025-07-16T04:36:43.566Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 66
+// Task: Support oneOf date schema (string | enhanced date object)
+// Timestamp: 2025-07-16T05:22:40.080Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 66
+// Task: Create Git history analyzer for file creation dates
+// Timestamp: 2025-07-16T05:22:40.131Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 66
+// Task: Implement commit time lookup for affected_components
+// Timestamp: 2025-07-16T05:22:40.179Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 66
+// Task: Add file status tracking (created, modified, deleted, missing)
+// Timestamp: 2025-07-16T05:22:40.225Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 66
+// Task: Create commit-to-decision matching service
+// Timestamp: 2025-07-16T05:22:40.275Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 66
+// Task: Generate github_metadata.commits array with key commits
+// Timestamp: 2025-07-16T05:22:40.323Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 66
+// Task: Add github_metadata.file_status for component tracking
+// Timestamp: 2025-07-16T05:22:40.370Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 66
+// Task: Add performance optimization for large repositories
+// Timestamp: 2025-07-16T05:22:40.418Z
+

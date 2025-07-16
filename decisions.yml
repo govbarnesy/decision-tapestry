@@ -192,7 +192,7 @@ decisions:
       last_commit_date: "2025-07-15T15:52:53-04:00"
       commit_count: 16
       git_derived: true
-    status: Completed
+    status: Pending
     project: Decision Tapestry
     rationale:
       - GitHub avatars make authors instantly recognizable
@@ -208,21 +208,21 @@ decisions:
       - Need to handle mixed author formats in same view
     tasks:
       - description: Create GitHub avatar component with fallback for string authors
-        status: Completed
+        status: Pending
       - description: Update decision-log to show GitHub avatars and enhanced dates
-        status: Completed
+        status: Pending
       - description: Add author cards with GitHub profile links and metadata
-        status: Completed
+        status: Pending
       - description: Enhance advanced filters with avatar-based author selection
-        status: Completed
+        status: Pending
       - description: Add GitHub user display to decision detail panel
-        status: Completed
+        status: Pending
       - description: Display github_metadata.commits timeline in decision details
-        status: Completed
+        status: Pending
       - description: Show github_metadata.file_status in affected components
-        status: Completed
+        status: Pending
       - description: Add GitHub PR/issue links to decision detail panel
-        status: Completed
+        status: Pending
     affected_components:
       - dashboard/avatar-display.mjs
       - dashboard/github-author-card.mjs
@@ -434,7 +434,7 @@ decisions:
       last_commit_date: "2025-07-15T15:52:53-04:00"
       commit_count: 4
       git_derived: true
-    status: Completed
+    status: Pending
     project: Decision Tapestry
     rationale:
       - Individual components need integration for seamless user experience
@@ -450,25 +450,25 @@ decisions:
       - Schema validation complexity with oneOf patterns
     tasks:
       - description: Integrate GitHub API client with UI components
-        status: Completed
+        status: Pending
       - description: Connect Git history analysis with time filtering
-        status: Completed
+        status: Pending
       - description: Test oneOf schema validation (author and date objects)
-        status: Completed
+        status: Pending
       - description: Validate github_metadata structure and display
-        status: Completed
+        status: Pending
       - description: Test GitHub integration with rate limiting scenarios
-        status: Completed
+        status: Pending
       - description: Verify graceful fallback when GitHub unavailable
-        status: Completed
+        status: Pending
       - description: Validate backward compatibility with existing string authors/dates
-        status: Completed
+        status: Pending
       - description: Test progressive enhancement (string → GitHub object migration)
-        status: Completed
+        status: Pending
       - description: Performance testing with large repositories
-        status: Completed
+        status: Pending
       - description: Create documentation for GitHub integration features
-        status: Completed
+        status: Pending
     affected_components:
       - All GitHub integration components
       - decisions.schema.json
@@ -1416,11 +1416,11 @@ decisions:
       - 5
     tasks:
       - description: Update YAML schema definition to formally include 'tasks'.
-        status: Completed
+        status: Pending
       - description: Modify generation script to parse new task data.
-        status: Completed
+        status: Pending
       - description: Display tasks as a checklist in the Decision Detail panel.
-        status: Completed
+        status: Pending
     affected_components:
       - internal-packages/decision-tapestry/generate-dashboard.mjs
     github_metadata:
@@ -1496,9 +1496,9 @@ decisions:
       - 5
     tasks:
       - description: Create the PRODUCT-BACKLOG.md file.
-        status: Completed
+        status: Pending
       - description: Populate the backlog with previously discussed ideas.
-        status: Completed
+        status: Pending
     affected_components:
       - internal-packages/decision-tapestry/PRODUCT-BACKLOG.md
     github_metadata:
@@ -4862,7 +4862,7 @@ decisions:
       last_commit_date: "2025-07-15T15:52:53-04:00"
       commit_count: 10
       git_derived: true
-    status: Completed
+    status: Pending
     project: Decision Tapestry
     rationale:
       - Enable parallel development through multiple AI agents working on different features
@@ -4876,17 +4876,17 @@ decisions:
       - Performance overhead from agent coordination messages
     tasks:
       - description: Create agent framework with message passing and coordination
-        status: Completed
+        status: Pending
       - description: Implement agent command system for task assignment
-        status: Completed
+        status: Pending
       - description: Build agent test framework for validation
-        status: Completed
+        status: Pending
       - description: Create demo agents to showcase capabilities
-        status: Completed
+        status: Pending
       - description: Implement Claude agent integration
-        status: Completed
+        status: Pending
       - description: Add agent integration tests
-        status: Completed
+        status: Pending
     affected_components:
       - cli/agent-framework.mjs
       - cli/agent-coordinator.mjs
@@ -4943,7 +4943,7 @@ decisions:
       last_commit_date: "2025-07-15T15:52:53-04:00"
       commit_count: 8
       git_derived: true
-    status: Completed
+    status: Pending
     project: Decision Tapestry
     rationale:
       - Provide real-time visibility into agent activities across the system
@@ -4957,15 +4957,15 @@ decisions:
       - Analytics calculations add processing overhead
     tasks:
       - description: Create agent activity feed component
-        status: Completed
+        status: Pending
       - description: Implement activity timeline visualization
-        status: Completed
+        status: Pending
       - description: Add activity analytics endpoints
-        status: Completed
+        status: Pending
       - description: Build real-time activity updates via WebSocket
-        status: Completed
+        status: Pending
       - description: Create activity filtering and search
-        status: Completed
+        status: Pending
     affected_components:
       - dashboard/agent-activity-feed.mjs
       - dashboard/activity-timeline.mjs
@@ -5052,7 +5052,7 @@ decisions:
       last_commit_date: "2025-07-15T15:52:53-04:00"
       commit_count: 5
       git_derived: true
-    status: Completed
+    status: Pending
     project: Decision Tapestry
     rationale:
       - Enable sophisticated time-based filtering of decisions
@@ -5066,15 +5066,15 @@ decisions:
       - Time zone handling adds implementation complexity
     tasks:
       - description: Create enhanced time filter component
-        status: Completed
+        status: Pending
       - description: Implement time range picker UI
-        status: Completed
+        status: Pending
       - description: Build commit activity heatmap visualization
-        status: Completed
+        status: Pending
       - description: Add commit timeline visualization
-        status: Completed
+        status: Pending
       - description: Integrate with existing filter system
-        status: Completed
+        status: Pending
     affected_components:
       - dashboard/enhanced-time-filter.mjs
       - dashboard/time-range-picker.mjs
@@ -5120,7 +5120,7 @@ decisions:
       last_commit_date: "2025-07-15T15:52:53-04:00"
       commit_count: 6
       git_derived: true
-    status: Completed
+    status: Pending
     project: Decision Tapestry
     rationale:
       - Ensure reliability of complex multi-agent system
@@ -5134,15 +5134,15 @@ decisions:
       - Integration tests require full system setup
     tasks:
       - description: Create agent integration test suite
-        status: Completed
+        status: Pending
       - description: Implement frontend integration tests
-        status: Completed
+        status: Pending
       - description: Add clustering algorithm tests
-        status: Completed
+        status: Pending
       - description: Build activity system test harness
-        status: Completed
+        status: Pending
       - description: Create visual activity demo for manual testing
-        status: Completed
+        status: Pending
     affected_components:
       - __tests__/agent-integration.test.ts
       - __tests__/frontend-integration.test.ts
@@ -5216,7 +5216,7 @@ decisions:
       last_commit_date: "2025-07-15T15:52:53-04:00"
       commit_count: 14
       git_derived: true
-    status: Completed
+    status: Pending
     project: Decision Tapestry
     rationale:
       - Complete the GitHub integration vision with dedicated services
@@ -5230,21 +5230,21 @@ decisions:
       - UI components need graceful degradation
     tasks:
       - description: Create GitHub service for API interactions
-        status: Completed
+        status: Pending
       - description: Implement author service with caching
-        status: Completed
+        status: Pending
       - description: Build Git analyzer for history extraction
-        status: Completed
+        status: Pending
       - description: Create file tracker for status monitoring
-        status: Completed
+        status: Pending
       - description: Implement decision enhancer for metadata
-        status: Completed
+        status: Pending
       - description: Add Git performance optimization service
-        status: Completed
+        status: Pending
       - description: Create avatar display component
-        status: Completed
+        status: Pending
       - description: Build file status display component
-        status: Completed
+        status: Pending
     affected_components:
       - services/github-service.mjs
       - services/author-service.mjs
@@ -5301,4 +5301,161 @@ decisions:
           url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
           date: "2025-07-15T15:52:53-04:00"
           author: govbarnesy
+  - id: 74
+    title: Implement High-Performance Batch Git Operations
+    description: Replace individual git commands with efficient batch operations to improve performance by 50% for large repositories
+    author: Claude & Chris Barnes
+    date: "2025-07-16T00:00:00Z"
+    status: Completed
+    category: Performance
+    rationale: Current git integration makes hundreds of individual git calls causing performance bottlenecks. Need batch operations for scalability.
+    tasks:
+      - description: Analyze current git performance bottlenecks and identify optimization opportunities
+        status: Completed
+      - description: Create git-batch-processor.mjs with parallel command execution
+        status: Completed
+      - description: Implement git command pooling to reuse processes
+        status: Completed
+      - description: Replace individual git calls with batch operations in git-analyzer.mjs
+        status: Completed
+      - description: Add performance benchmarking for before/after comparison
+        status: Completed
+    affected_components:
+      - services/git-analyzer.mjs
+      - services/git-performance.mjs
+      - utils/git-batch-processor.mjs
+      - utils/git-command-pool.mjs
+    related_to:
+      - 65
+      - 66
+      - 67
+      - 68
+  - id: 75
+    title: Create Intelligent Git Cache with .git Directory Monitoring
+    description: Implement smart caching system that monitors .git directory changes and invalidates cache automatically
+    author: Claude & Chris Barnes
+    date: "2025-07-16T00:00:00Z"
+    status: Completed
+    category: Performance
+    rationale: Current caching is basic and doesn't respond to git state changes. Need intelligent cache invalidation for accuracy.
+    tasks:
+      - description: Create git-cache-manager.mjs with intelligent caching strategies
+        status: Completed
+      - description: Implement .git directory file watcher for cache invalidation
+        status: Completed
+      - description: Add cache invalidation logic based on git state changes
+        status: Completed
+      - description: Integrate smart caching with existing git services
+        status: Completed
+      - description: Add cache performance metrics and monitoring
+        status: Completed
+    affected_components:
+      - services/git-cache-manager.mjs
+      - utils/git-file-watcher.mjs
+      - utils/cache-invalidation.mjs
+    related_to:
+      - 74
+  - id: 76
+    title: Implement Git-First Data Hierarchy with Conflict Resolution
+    description: Make git log the authoritative source of truth with smart conflict resolution for manual data
+    author: Claude & Chris Barnes
+    date: "2025-07-16T00:00:00Z"
+    status: Completed
+    category: Architecture
+    rationale: Manual data sometimes conflicts with git reality. Need git-first hierarchy with intelligent conflict resolution.
+    tasks:
+      - description: Create git-truth-resolver.mjs for data hierarchy management
+        status: Completed
+      - description: Implement conflict detection between git and manual data
+        status: Completed
+      - description: Add intelligent conflict resolution strategies
+        status: Completed
+      - description: Update decision-enhancer.mjs to use git-first hierarchy
+        status: Completed
+      - description: Add validation for affected_components vs actual git files
+        status: Completed
+    affected_components:
+      - services/decision-enhancer.mjs
+      - utils/git-truth-resolver.mjs
+      - utils/data-conflict-detector.mjs
+    related_to:
+      - 74
+      - 75
+  - id: 77
+    title: Add Automatic Decision Inference from Git Patterns
+    description: Analyze git commit patterns to automatically discover and suggest decision implementations
+    author: Claude & Chris Barnes
+    date: "2025-07-16T00:00:00Z"
+    status: Pending
+    category: Intelligence
+    rationale: Many decisions are implemented in git but not tracked in decisions.yml. Need automatic discovery from git patterns.
+    tasks:
+      - description: Create git-pattern-analyzer.mjs for commit pattern detection
+        status: Pending
+      - description: Implement commit message parsing for decision context
+        status: Pending
+      - description: Build decision inference engine from git patterns
+        status: Pending
+      - description: Add automatic decision discovery suggestions
+        status: Pending
+      - description: Create UI for reviewing and approving inferred decisions
+        status: Pending
+    affected_components:
+      - services/git-pattern-analyzer.mjs
+      - utils/commit-message-parser.mjs
+      - utils/decision-inference-engine.mjs
+    related_to:
+      - 76
+  - id: 78
+    title: Implement Branch and Merge Analysis for Decision Tracking
+    description: Track decision implementation across branches, merges, and feature development lifecycle
+    author: Claude & Chris Barnes
+    date: "2025-07-16T00:00:00Z"
+    status: Completed
+    category: Analysis
+    rationale: Current system only tracks linear git history. Need branch/merge awareness for complex development workflows.
+    tasks:
+      - description: Create git-branch-analyzer.mjs for branch tracking
+        status: Completed
+      - description: Implement merge pattern detection and analysis
+        status: Completed
+      - description: Add branch timeline visualization component
+        status: Completed
+      - description: Track decision implementation across feature branches
+        status: Completed
+      - description: Create branch-aware decision dependency mapping
+        status: Completed
+    affected_components:
+      - services/git-branch-analyzer.mjs
+      - utils/merge-pattern-detector.mjs
+      - dashboard/branch-timeline-viz.mjs
+    related_to:
+      - 74
+      - 77
+  - id: 79
+    title: Create Real-time Git Event System with WebSocket Integration
+    description: Monitor git repository changes in real-time and broadcast updates via WebSocket to dashboard
+    author: Claude & Chris Barnes
+    date: "2025-07-16T00:00:00Z"
+    status: Completed
+    category: Real-time
+    rationale: Dashboard should update immediately when git changes occur. Need real-time git event monitoring and broadcasting.
+    tasks:
+      - description: Create git-event-monitor.mjs for repository change detection
+        status: Completed
+      - description: Implement WebSocket integration for git events
+        status: Completed
+      - description: Add real-time dashboard updates for git changes
+        status: Completed
+      - description: Create file system watchers for git repository
+        status: Completed
+      - description: Integrate with existing activity tracking system
+        status: Completed
+    affected_components:
+      - services/git-event-monitor.mjs
+      - server/git-websocket-handler.mjs
+      - dashboard/real-time-git-updates.mjs
+    related_to:
+      - 75
+      - 76
 backlog: []

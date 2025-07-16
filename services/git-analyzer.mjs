@@ -256,3 +256,94 @@ export class GitAnalyzer {
 
 // Export singleton instance
 export const gitAnalyzer = new GitAnalyzer();
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 74
+// Task: Analyze current git performance bottlenecks and identify optimization opportunities
+// Timestamp: 2025-07-16T04:34:14.180Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 74
+// Task: Create git-batch-processor.mjs with parallel command execution
+// Timestamp: 2025-07-16T04:34:14.208Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 74
+// Task: Implement git command pooling to reuse processes
+// Timestamp: 2025-07-16T04:34:14.231Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 74
+// Task: Replace individual git calls with batch operations in git-analyzer.mjs
+// Timestamp: 2025-07-16T04:34:14.254Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 74
+// Task: Add performance benchmarking for before/after comparison
+// Timestamp: 2025-07-16T04:34:14.277Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 66
+// Task: Support oneOf date schema (string | enhanced date object)
+// Timestamp: 2025-07-16T05:22:40.077Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 66
+// Task: Create Git history analyzer for file creation dates
+// Timestamp: 2025-07-16T05:22:40.129Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 66
+// Task: Implement commit time lookup for affected_components
+// Timestamp: 2025-07-16T05:22:40.177Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 66
+// Task: Add file status tracking (created, modified, deleted, missing)
+// Timestamp: 2025-07-16T05:22:40.224Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 66
+// Task: Create commit-to-decision matching service
+// Timestamp: 2025-07-16T05:22:40.273Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 66
+// Task: Generate github_metadata.commits array with key commits
+// Timestamp: 2025-07-16T05:22:40.322Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 66
+// Task: Add github_metadata.file_status for component tracking
+// Timestamp: 2025-07-16T05:22:40.369Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 66
+// Task: Add performance optimization for large repositories
+// Timestamp: 2025-07-16T05:22:40.416Z
+

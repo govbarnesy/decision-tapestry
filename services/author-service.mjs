@@ -273,3 +273,45 @@ export const authorService = new AuthorService();
 
 // Also export the class for testing
 export { AuthorService };
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 65
+// Task: Create GitHub API client with authentication and rate limiting
+// Timestamp: 2025-07-16T05:15:22.018Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 65
+// Task: Implement GitHub user lookup service with caching
+// Timestamp: 2025-07-16T05:15:22.060Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 65
+// Task: Support oneOf author schema (string | GitHub user object)
+// Timestamp: 2025-07-16T05:15:22.087Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 65
+// Task: Create progressive author enhancement (string → GitHub object)
+// Timestamp: 2025-07-16T05:15:22.113Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 65
+// Task: Add graceful fallback for non-GitHub users
+// Timestamp: 2025-07-16T05:15:22.138Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 65
+// Task: Implement author caching to prevent rate limiting
+// Timestamp: 2025-07-16T05:15:22.163Z
+

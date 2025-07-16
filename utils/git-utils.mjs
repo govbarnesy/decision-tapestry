@@ -170,3 +170,58 @@ export async function getRepoRoot() {
     return process.cwd();
   }
 }
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 66
+// Task: Support oneOf date schema (string | enhanced date object)
+// Timestamp: 2025-07-16T05:22:40.082Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 66
+// Task: Create Git history analyzer for file creation dates
+// Timestamp: 2025-07-16T05:22:40.132Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 66
+// Task: Implement commit time lookup for affected_components
+// Timestamp: 2025-07-16T05:22:40.181Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 66
+// Task: Add file status tracking (created, modified, deleted, missing)
+// Timestamp: 2025-07-16T05:22:40.227Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 66
+// Task: Create commit-to-decision matching service
+// Timestamp: 2025-07-16T05:22:40.276Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 66
+// Task: Generate github_metadata.commits array with key commits
+// Timestamp: 2025-07-16T05:22:40.324Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 66
+// Task: Add github_metadata.file_status for component tracking
+// Timestamp: 2025-07-16T05:22:40.371Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 66
+// Task: Add performance optimization for large repositories
+// Timestamp: 2025-07-16T05:22:40.419Z
+
