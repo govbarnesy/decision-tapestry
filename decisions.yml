@@ -5467,7 +5467,7 @@ decisions:
       last_commit_date: "2025-07-15T15:52:53-04:00"
       commit_count: 14
       git_derived: true
-    status: Pending
+    status: Completed
     project: Decision Tapestry
     rationale:
       - Complete the GitHub integration vision with dedicated services
@@ -5481,21 +5481,21 @@ decisions:
       - UI components need graceful degradation
     tasks:
       - description: Create GitHub service for API interactions
-        status: Pending
+        status: Done
       - description: Implement author service with caching
-        status: Pending
+        status: Done
       - description: Build Git analyzer for history extraction
-        status: Pending
+        status: Done
       - description: Create file tracker for status monitoring
-        status: Pending
+        status: Done
       - description: Implement decision enhancer for metadata
-        status: Pending
+        status: Done
       - description: Add Git performance optimization service
-        status: Pending
+        status: Done
       - description: Create avatar display component
-        status: Pending
+        status: Done
       - description: Build file status display component
-        status: Pending
+        status: Done
     affected_components:
       - services/github-service.mjs
       - services/author-service.mjs
