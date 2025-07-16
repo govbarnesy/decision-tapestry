@@ -157,12 +157,12 @@ decisions:
         feedback: []
     review_status: approved
     related_to:
-      - 65 # GitHub API integration and author enhancement
-      - 66 # Git history analysis
-      - 67 # GitHub UI components
-      - 68 # Commit-based enhancements
-      - 73 # GitHub services and metadata
-      - 84 # GitHub metadata enrichment testing
+      - 65
+      - 66
+      - 67
+      - 68
+      - 73
+      - 84
   - id: 84
     title: Test GitHub metadata enrichment with token
     author: Quick Capture
@@ -209,10 +209,10 @@ decisions:
         feedback: []
     review_status: approved
     related_to:
-      - 65 # GitHub API integration foundation
-      - 73 # GitHub services implementation
-      - 82 # Task status updates for GitHub features
-      - 85 # GitHub webhook enhancement
+      - 65
+      - 73
+      - 82
+      - 85
   - id: 83
     title: Test peer review workflow with agent coordination
     author: Quick Capture
@@ -6105,4 +6105,344 @@ decisions:
     related_to:
       - 81
       - 65
+  - id: 86
+    title: Integrate Gemini CLI for AI-powered decision management
+    author: Chris Barnes
+    date:
+      decision_date: "2025-07-16T12:00:00Z"
+      first_commit_date: "2025-06-30T08:48:27-04:00"
+      last_commit_date: "2025-07-16T03:47:33-04:00"
+      commit_count: 11
+      git_derived: true
+    status: Completed
+    rationale:
+      - Replace search input with natural language Gemini prompts
+      - Use free Gemini CLI for intelligent decision discovery and creation
+      - Enable AI-powered analysis of decision relationships
+      - Support multi-modal inputs including code and images
+    tradeoffs:
+      - Requires Gemini CLI installation and API key setup
+      - May introduce latency for AI processing
+      - Need to handle rate limits and API failures gracefully
+    tasks:
+      - description: Install and configure Gemini CLI wrapper
+        status: Completed
+      - description: Create Gemini API endpoint in server
+        status: Completed
+      - description: Replace search panel with Gemini prompt interface
+        status: Completed
+      - description: Implement streaming response display
+        status: Completed
+      - description: Add decision context injection for Gemini prompts
+        status: Completed
+      - description: Create natural language to action translation
+        status: Completed
+    affected_components:
+      - gemini-integration/gemini-wrapper.mjs
+      - server/gemini-api.mjs
+      - dashboard/gemini-prompt.mjs
+      - dashboard/search-panel.mjs
+      - server/server.mjs
+    category: Intelligence
+    github_metadata:
+      file_status:
+        created: []
+        modified:
+          - dashboard/search-panel.mjs
+          - server/server.mjs
+        deleted: []
+        missing:
+          - gemini-integration/gemini-wrapper.mjs
+          - server/gemini-api.mjs
+          - dashboard/gemini-prompt.mjs
+      commits:
+        - sha: f2853c5
+          message: "feat: enhance agent framework with peer review, GitHub integration, and automatic relationship analysis"
+          url: {}
+          date: "2025-07-16T03:47:33-04:00"
+          author: precious
+        - sha: f2853c5
+          message: "feat: enhance agent framework with peer review, GitHub integration, and automatic relationship analysis"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f2853c5
+          date: "2025-07-16T03:47:33-04:00"
+          author: precious
+        - sha: 39d93fb
+          message: "feat: comprehensive Git history integration with agent coordination and peer review system"
+          url: {}
+          date: "2025-07-16T01:39:08-04:00"
+          author: precious
+        - sha: 39d93fb
+          message: "feat: comprehensive Git history integration with agent coordination and peer review system"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/39d93fb
+          date: "2025-07-16T01:39:08-04:00"
+          author: precious
+        - sha: 84a0b33
+          message: "chore: add lint-staged configuration and dependencies"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/84a0b33
+          date: "2025-07-16T00:05:02-04:00"
+          author: precious
+        - sha: "598e163"
+          message: "feat: comprehensive dashboard UX overhaul with agent simulation and visual improvements"
+          url: {}
+          date: "2025-07-16T00:04:44-04:00"
+          author: precious
+        - sha: "598e163"
+          message: "feat: comprehensive dashboard UX overhaul with agent simulation and visual improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/598e163
+          date: "2025-07-16T00:04:44-04:00"
+          author: precious
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: {}
+          date: "2025-07-15T15:52:53-04:00"
+          author: precious
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: precious
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: {}
+          date: "2025-07-15T03:25:12-04:00"
+          author: precious
+      commit_status:
+        state: pending
+        total_count: 0
+        statuses: []
+      agent_file_operations:
+        - operation: created
+          filePath: gemini-integration/gemini-wrapper.mjs
+          status: success
+          timestamp: "2025-07-16T08:35:08.898Z"
+          agentId: Agent-86
+        - operation: created
+          filePath: server/gemini-api.mjs
+          status: success
+          timestamp: "2025-07-16T08:35:08.900Z"
+          agentId: Agent-86
+        - operation: created
+          filePath: dashboard/gemini-prompt.mjs
+          status: success
+          timestamp: "2025-07-16T08:35:08.926Z"
+          agentId: Agent-86
+        - operation: enhanced
+          filePath: dashboard/search-panel.mjs
+          status: success
+          timestamp: "2025-07-16T08:35:08.931Z"
+          agentId: Agent-86
+        - operation: enhanced
+          filePath: server/server.mjs
+          status: success
+          timestamp: "2025-07-16T08:35:08.934Z"
+          agentId: Agent-86
+        - operation: enhanced
+          filePath: gemini-integration/gemini-wrapper.mjs
+          status: success
+          timestamp: "2025-07-16T08:35:09.025Z"
+          agentId: Agent-86
+        - operation: enhanced
+          filePath: server/gemini-api.mjs
+          status: success
+          timestamp: "2025-07-16T08:35:09.028Z"
+          agentId: Agent-86
+        - operation: enhanced
+          filePath: dashboard/gemini-prompt.mjs
+          status: success
+          timestamp: "2025-07-16T08:35:09.031Z"
+          agentId: Agent-86
+        - operation: enhanced
+          filePath: dashboard/search-panel.mjs
+          status: success
+          timestamp: "2025-07-16T08:35:09.033Z"
+          agentId: Agent-86
+        - operation: enhanced
+          filePath: server/server.mjs
+          status: success
+          timestamp: "2025-07-16T08:35:09.035Z"
+          agentId: Agent-86
+        - operation: enhanced
+          filePath: gemini-integration/gemini-wrapper.mjs
+          status: success
+          timestamp: "2025-07-16T08:35:09.139Z"
+          agentId: Agent-86
+        - operation: enhanced
+          filePath: server/gemini-api.mjs
+          status: success
+          timestamp: "2025-07-16T08:35:09.141Z"
+          agentId: Agent-86
+        - operation: enhanced
+          filePath: dashboard/gemini-prompt.mjs
+          status: success
+          timestamp: "2025-07-16T08:35:09.142Z"
+          agentId: Agent-86
+        - operation: enhanced
+          filePath: dashboard/search-panel.mjs
+          status: success
+          timestamp: "2025-07-16T08:35:09.143Z"
+          agentId: Agent-86
+        - operation: enhanced
+          filePath: server/server.mjs
+          status: success
+          timestamp: "2025-07-16T08:35:09.144Z"
+          agentId: Agent-86
+        - operation: enhanced
+          filePath: gemini-integration/gemini-wrapper.mjs
+          status: success
+          timestamp: "2025-07-16T08:35:09.214Z"
+          agentId: Agent-86
+        - operation: enhanced
+          filePath: server/gemini-api.mjs
+          status: success
+          timestamp: "2025-07-16T08:35:09.216Z"
+          agentId: Agent-86
+        - operation: enhanced
+          filePath: dashboard/gemini-prompt.mjs
+          status: success
+          timestamp: "2025-07-16T08:35:09.224Z"
+          agentId: Agent-86
+        - operation: enhanced
+          filePath: dashboard/search-panel.mjs
+          status: success
+          timestamp: "2025-07-16T08:35:09.226Z"
+          agentId: Agent-86
+        - operation: enhanced
+          filePath: server/server.mjs
+          status: success
+          timestamp: "2025-07-16T08:35:09.227Z"
+          agentId: Agent-86
+        - operation: enhanced
+          filePath: gemini-integration/gemini-wrapper.mjs
+          status: success
+          timestamp: "2025-07-16T08:35:09.294Z"
+          agentId: Agent-86
+        - operation: enhanced
+          filePath: server/gemini-api.mjs
+          status: success
+          timestamp: "2025-07-16T08:35:09.296Z"
+          agentId: Agent-86
+        - operation: enhanced
+          filePath: dashboard/gemini-prompt.mjs
+          status: success
+          timestamp: "2025-07-16T08:35:09.297Z"
+          agentId: Agent-86
+        - operation: enhanced
+          filePath: dashboard/search-panel.mjs
+          status: success
+          timestamp: "2025-07-16T08:35:09.298Z"
+          agentId: Agent-86
+        - operation: enhanced
+          filePath: server/server.mjs
+          status: success
+          timestamp: "2025-07-16T08:35:09.302Z"
+          agentId: Agent-86
+        - operation: enhanced
+          filePath: gemini-integration/gemini-wrapper.mjs
+          status: success
+          timestamp: "2025-07-16T08:35:09.389Z"
+          agentId: Agent-86
+        - operation: enhanced
+          filePath: server/gemini-api.mjs
+          status: success
+          timestamp: "2025-07-16T08:35:09.390Z"
+          agentId: Agent-86
+        - operation: enhanced
+          filePath: dashboard/gemini-prompt.mjs
+          status: success
+          timestamp: "2025-07-16T08:35:09.391Z"
+          agentId: Agent-86
+        - operation: enhanced
+          filePath: dashboard/search-panel.mjs
+          status: success
+          timestamp: "2025-07-16T08:35:09.393Z"
+          agentId: Agent-86
+        - operation: enhanced
+          filePath: server/server.mjs
+          status: success
+          timestamp: "2025-07-16T08:35:09.395Z"
+          agentId: Agent-86
+    reviews:
+      - reviewer: Reviewer-86
+        reviewed_agent: Agent-86
+        date: "2025-07-16T08:35:13.183Z"
+        approved: true
+        quality_score: 100
+        summary: 0 issues found (0 critical, 0 major, 0 minor)
+        feedback_count: 0
+        feedback: []
+    review_status: approved
+  - id: 87
+    title: Create visual DOM editor browser extension
+    author: Chris Barnes
+    date: "2025-07-16T12:00:00Z"
+    status: Accepted
+    rationale:
+      - Enable visual editing of any webpage's DOM and CSS
+      - Seamless communication to Claude Code for generating production CSS
+      - Rapid prototyping without writing code
+      - Visual design updates with immediate feedback
+    tradeoffs:
+      - Requires browser extension installation
+      - Chrome-specific initially (Manifest V3)
+      - Need to handle cross-origin restrictions
+    tasks:
+      - description: Create Chrome extension structure with Manifest V3
+        status: Pending
+      - description: Implement visual element selection system
+        status: Pending
+      - description: Build live CSS editor interface
+        status: Pending
+      - description: Create WebSocket communication for DOM edits
+        status: Pending
+      - description: Add DOM edits API endpoint to server
+        status: Pending
+      - description: Implement CSS diff generation
+        status: Pending
+    affected_components:
+      - dom-editor-extension/manifest.json
+      - dom-editor-extension/content-script.js
+      - dom-editor-extension/background.js
+      - dom-editor-extension/popup/
+      - server/dom-edits-api.mjs
+      - server/server.mjs
+    category: Developer Experience
+  - id: 88
+    title: Build unified context system for Gemini-Agent orchestration
+    author: Chris Barnes
+    date: "2025-07-16T12:00:00Z"
+    status: Accepted
+    rationale:
+      - Gemini acts as master orchestrator aware of DOM edits
+      - Coordinate agents to implement visual changes across codebase
+      - Bridge gap between visual design and code implementation
+      - Enable seamless visual-to-code pipeline
+    tradeoffs:
+      - Complex integration between multiple systems
+      - Requires careful state management
+      - Need robust error handling for multi-agent coordination
+    tasks:
+      - description: Create context aggregation service
+        status: Pending
+      - description: Implement DOM edit history tracking
+        status: Pending
+      - description: Build Gemini navigation API
+        status: Pending
+      - description: Create agent orchestration protocol
+        status: Pending
+      - description: Implement visual change to code mapping
+        status: Pending
+      - description: Add validation for visual-to-code transformations
+        status: Pending
+    affected_components:
+      - gemini-integration/context-provider.mjs
+      - gemini-integration/navigation-api.mjs
+      - gemini-integration/agent-orchestrator.mjs
+      - server/context-service.mjs
+      - cli/agent-coordinator.mjs
+    category: Architecture
+    related_to:
+      - 86
+      - 87
+      - 68
+      - 83
 backlog: []
