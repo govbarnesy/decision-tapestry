@@ -1,6 +1,6 @@
-import fs from 'fs/promises';
-import path from 'path';
-import { gitAnalyzer } from './git-analyzer.mjs';
+import fs from "fs/promises";
+import path from "path";
+import { gitAnalyzer } from "./git-analyzer.mjs";
 
 /**
  * File Tracker Service
@@ -23,7 +23,7 @@ export class FileTracker {
       created: [],
       modified: [],
       deleted: [],
-      missing: []
+      missing: [],
     };
 
     if (!filePaths || filePaths.length === 0) {
@@ -49,39 +49,39 @@ export class FileTracker {
       return this.fileStatusCache.get(filePath);
     }
 
-    const absolutePath = path.isAbsolute(filePath) 
-      ? filePath 
+    const absolutePath = path.isAbsolute(filePath)
+      ? filePath
       : path.join(this.repoPath, filePath);
 
     // Check if file currently exists
     const exists = await this.fileExists(absolutePath);
-    
+
     // Check Git history
     const hasHistory = await gitAnalyzer.hasGitHistory(filePath);
-    
+
     if (!hasHistory) {
       // No Git history - file is missing (never existed in repo)
-      this.fileStatusCache.set(filePath, 'missing');
-      return 'missing';
+      this.fileStatusCache.set(filePath, "missing");
+      return "missing";
     }
 
     if (!exists) {
       // Has Git history but doesn't exist - file was deleted
-      this.fileStatusCache.set(filePath, 'deleted');
-      return 'deleted';
+      this.fileStatusCache.set(filePath, "deleted");
+      return "deleted";
     }
 
     // File exists and has history - check if created or modified
     const commits = await gitAnalyzer.getFileCommits(filePath, 100);
-    
+
     if (commits.length === 1) {
       // Only one commit - file was created
-      this.fileStatusCache.set(filePath, 'created');
-      return 'created';
+      this.fileStatusCache.set(filePath, "created");
+      return "created";
     } else {
       // Multiple commits - file was modified
-      this.fileStatusCache.set(filePath, 'modified');
-      return 'modified';
+      this.fileStatusCache.set(filePath, "modified");
+      return "modified";
     }
   }
 
@@ -106,8 +106,8 @@ export class FileTracker {
    */
   async getFileDetails(filePath) {
     const status = await this.getFileStatus(filePath);
-    const absolutePath = path.isAbsolute(filePath) 
-      ? filePath 
+    const absolutePath = path.isAbsolute(filePath)
+      ? filePath
       : path.join(this.repoPath, filePath);
 
     const details = {
@@ -119,17 +119,18 @@ export class FileTracker {
       lastModifiedDate: null,
       commitCount: 0,
       firstCommit: null,
-      lastCommit: null
+      lastCommit: null,
     };
 
     if (await gitAnalyzer.hasGitHistory(filePath)) {
       details.gitHistory = true;
       details.creationDate = await gitAnalyzer.getFileCreationDate(filePath);
-      details.lastModifiedDate = await gitAnalyzer.getFileLastModifiedDate(filePath);
-      
+      details.lastModifiedDate =
+        await gitAnalyzer.getFileLastModifiedDate(filePath);
+
       const commits = await gitAnalyzer.getFileCommits(filePath, 100);
       details.commitCount = commits.length;
-      
+
       if (commits.length > 0) {
         details.firstCommit = commits[commits.length - 1]; // Oldest
         details.lastCommit = commits[0]; // Newest
@@ -152,7 +153,7 @@ export class FileTracker {
     const changes = {
       added: [],
       removed: [],
-      unchanged: []
+      unchanged: [],
     };
 
     // Find added files
@@ -186,9 +187,9 @@ export class FileTracker {
         created: new Set(),
         modified: new Set(),
         deleted: new Set(),
-        missing: new Set()
+        missing: new Set(),
       },
-      byDecision: new Map()
+      byDecision: new Map(),
     };
 
     for (const decision of decisions) {
@@ -213,9 +214,9 @@ export class FileTracker {
         created: Array.from(summary.byStatus.created),
         modified: Array.from(summary.byStatus.modified),
         deleted: Array.from(summary.byStatus.deleted),
-        missing: Array.from(summary.byStatus.missing)
+        missing: Array.from(summary.byStatus.missing),
       },
-      byDecision: Object.fromEntries(summary.byDecision)
+      byDecision: Object.fromEntries(summary.byDecision),
     };
   }
 

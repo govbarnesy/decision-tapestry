@@ -63,7 +63,7 @@ body.dark-theme {
 .dashboard {
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: 1fr;
     height: 100vh;
     gap: 1rem;
     padding: 1rem;
@@ -73,21 +73,19 @@ body.dark-theme {
 #left-panel {
     grid-column: 1 / 2;
     grid-row: 1 / -1;
+    min-height: 0;
 }
 
 #center-panel {
     grid-column: 2 / 3;
     grid-row: 1 / -1;
+    min-height: 0;
 }
 
 #controls-panel {
     grid-column: 3 / 4;
-    grid-row: 1 / 2;
-}
-
-#decision-log {
-    grid-column: 3 / 4;
-    grid-row: 2 / 3;
+    grid-row: 1 / -1;
+    min-height: 0;
 }
 
 .panel {
@@ -97,35 +95,12 @@ body.dark-theme {
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    height: calc(100vh - 2rem);
 }
 
-#left-panel {
-    grid-column: 1 / 2;
-    grid-row: 1 / 4;
-}
+/* Remove duplicate grid positioning - already defined above */
 
-#decision-map {
-    grid-column: 2 / 3;
-    grid-row: 1 / 4;
-}
-
-#controls-panel {
-    grid-column: 3 / 4;
-    grid-row: 1 / 2;
-    height: auto;
-}
-
-#decision-log {
-    grid-column: 3 / 4;
-    grid-row: 2 / 4;
-    height: auto;
-    background: var(--panel-bg);
-    border-radius: var(--panel-radius);
-    box-shadow: var(--panel-shadow);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-}
+/* Decision log now integrated into controls panel */
 
 #charter-map {
     display: none;
@@ -173,6 +148,29 @@ p {
     color: var(--tab-active-color);
 }
 
+/* Left Panel Structure */
+.left-panel-content {
+    position: relative;
+    height: calc(100% - 50px);
+}
+
+.panel-view {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    overflow-y: auto;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+.panel-view.active {
+    display: block;
+}
+
+/* Legacy tab content - to be removed after migration */
 .tab-content {
     display: none;
 }
@@ -247,17 +245,52 @@ body.dark-theme select {
     border: 1px solid #333;
 }
 
+/* Unified tab styles */
 .tab-button,
-body.dark-theme .tab-button {
-    background: #000 !important;
-    color: var(--text-main) !important;
+.center-tab,
+.controls-tab {
+    padding: 0.5rem 1rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 4px 4px 0 0;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    transition: all 0.2s ease;
+}
+
+.tab-button:hover,
+.center-tab:hover,
+.controls-tab:hover {
+    background: var(--tab-active-bg);
+    color: var(--text-main);
 }
 
 .tab-button.active,
-body.dark-theme .tab-button.active {
-    background: #000 !important;
-    color: var(--text-main) !important;
-    border-bottom: 3px solid var(--tab-active-border);
+.center-tab.active,
+.controls-tab.active {
+    background: var(--accent);
+    color: white;
+}
+
+body.dark-theme .tab-button,
+body.dark-theme .center-tab,
+body.dark-theme .controls-tab {
+    color: var(--text-secondary);
+}
+
+body.dark-theme .tab-button:hover,
+body.dark-theme .center-tab:hover,
+body.dark-theme .controls-tab:hover {
+    background: var(--tab-active-bg);
+    color: var(--text-main);
+}
+
+body.dark-theme .tab-button.active,
+body.dark-theme .center-tab.active,
+body.dark-theme .controls-tab.active {
+    background: var(--accent);
+    color: white;
 }
 
 .log-item,
@@ -324,31 +357,7 @@ h2, h3, h4, p, .panel-content, .log-item, .tab-button {
     100% { box-shadow: 0 0 5px rgba(156, 39, 176, 0.5); }
 }
 
-/* Activity Panel Styles */
-#activity-panel {
-    grid-column: 3 / 4;
-    grid-row: 1 / 2;
-    background: var(--panel-bg);
-    border-radius: var(--panel-radius);
-    box-shadow: var(--panel-shadow);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-}
-
-#activity-timeline-panel {
-    grid-column: 1 / 2;
-    grid-row: 3 / 4;
-    background: var(--panel-bg);
-    border-radius: var(--panel-radius);
-    box-shadow: var(--panel-shadow);
-    overflow: hidden;
-}
-
-/* Adjust grid for new activity panels */
-.dashboard.with-activities {
-    grid-template-rows: auto 1fr 1fr;
-}
+/* Activity panels removed - functionality integrated into existing panels */
 
 /* Activity state animations and effects */
 @keyframes activityPulse {
@@ -458,37 +467,54 @@ h2, h3, h4, p, .panel-content, .log-item, .tab-button {
     font-weight: normal !important;
 }
 
-/* Center Panel Styles */
-.center-panel-header {
+/* Unified Panel Header Styles */
+.panel-header,
+.center-panel-header,
+.controls-header,
+.tabs-header {
     padding: 0.5rem 1rem;
     border-bottom: 1px solid var(--border);
     background: var(--tab-bg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Tab Container Styles */
+.tabs,
+.center-tabs,
+.controls-tabs {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    padding: 0.5rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 1.2rem;
+    transition: all 0.2s ease;
+    min-width: 40px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.theme-toggle:hover {
+    background: var(--tab-active-bg);
+}
+
+body.dark-theme .theme-toggle {
+    color: var(--text-main);
 }
 
 .center-tabs {
     display: flex;
     gap: 0.5rem;
-}
-
-.center-tab {
-    padding: 0.5rem 1rem;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    border-radius: 4px 4px 0 0;
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    transition: all 0.2s ease;
-}
-
-.center-tab:hover {
-    background: var(--tab-active-bg);
-    color: var(--text-main);
-}
-
-.center-tab.active {
-    background: var(--accent);
-    color: white;
 }
 
 .center-panel-content {
@@ -509,37 +535,16 @@ h2, h3, h4, p, .panel-content, .log-item, .tab-button {
     display: block;
 }
 
-/* Controls Panel Styles */
-.controls-header {
-    padding: 0.5rem 1rem;
-    border-bottom: 1px solid var(--border);
-    background: var(--tab-bg);
+/* Panel Content Styles */
+.panel-content {
+    padding: 1rem;
+    overflow-y: auto;
+    height: calc(100% - 50px);
 }
 
 .controls-tabs {
     display: flex;
     gap: 0.5rem;
-}
-
-.controls-tab {
-    padding: 0.5rem 1rem;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    border-radius: 4px 4px 0 0;
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    transition: all 0.2s ease;
-}
-
-.controls-tab:hover {
-    background: var(--tab-active-bg);
-    color: var(--text-main);
-}
-
-.controls-tab.active {
-    background: var(--accent);
-    color: white;
 }
 
 .controls-content {

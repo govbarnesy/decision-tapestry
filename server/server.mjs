@@ -1,13 +1,13 @@
-import express from 'express';
-import fs from 'fs';
-import fsp from 'fs/promises';
-import http from 'http';
-import yaml from 'js-yaml';
-import path from 'path';
-import chokidar from 'chokidar';
-import { fileURLToPath } from 'url';
-import { WebSocketServer } from 'ws';
-import { readDecisionsFile, writeDecisionsFile } from '../shared/yaml-utils.js';
+import express from "express";
+import fs from "fs";
+import fsp from "fs/promises";
+import http from "http";
+import yaml from "js-yaml";
+import path from "path";
+import chokidar from "chokidar";
+import { fileURLToPath } from "url";
+import { WebSocketServer } from "ws";
+import { readDecisionsFile, writeDecisionsFile } from "../shared/yaml-utils.js";
 
 // Helper to get __dirname in ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -17,77 +17,79 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocketServer({ noServer: true });
 
-server.on('upgrade', (request, socket, head) => {
+server.on("upgrade", (request, socket, head) => {
   wss.handleUpgrade(request, socket, head, (ws) => {
-    wss.emit('connection', ws, request);
+    wss.emit("connection", ws, request);
   });
 });
 
 const port = process.env.PORT || 8080;
 // Use the mounted volume if it exists (in Docker), otherwise use the current working directory.
-const userDataPath = '/app/user_data';
+const userDataPath = "/app/user_data";
 const CWD = fs.existsSync(userDataPath) ? userDataPath : process.cwd();
 
 // Serve the static frontend from the dashboard directory
-app.use(express.static(path.join(__dirname, '../dashboard')));
+app.use(express.static(path.join(__dirname, "../dashboard")));
 // Serve utils directory
-app.use('/utils', express.static(path.join(__dirname, '../utils')));
+app.use("/utils", express.static(path.join(__dirname, "../utils")));
 // Serve styles directory
-app.use('/styles', express.static(path.join(__dirname, '../styles')));
+app.use("/styles", express.static(path.join(__dirname, "../styles")));
 app.use(express.json());
 
 // Serve CSS files with the correct MIME type
-app.get('/*.css', (req, res) => {
-  res.type('text/css');
-  res.sendFile(path.join(__dirname, '../dashboard', req.originalUrl));
+app.get("/*.css", (req, res) => {
+  res.type("text/css");
+  res.sendFile(path.join(__dirname, "../dashboard", req.originalUrl));
 });
 
 // Serve the main HTML file
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../dashboard', 'index.html'));
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../dashboard", "index.html"));
 });
 
 // Track connected clients and agents
 const connectedClients = new Set();
 const connectedAgents = new Map();
 
-wss.on('connection', (ws) => {
-  console.log('Client connected');
+wss.on("connection", (ws) => {
+  console.log("Client connected");
   connectedClients.add(ws);
-  
+
   // Send initial agent status to new client
   const agentStatuses = Array.from(connectedAgents.values());
   if (agentStatuses.length > 0) {
-    ws.send(JSON.stringify({
-      type: 'agent_status_list',
-      agents: agentStatuses
-    }));
+    ws.send(
+      JSON.stringify({
+        type: "agent_status_list",
+        agents: agentStatuses,
+      }),
+    );
   }
-  
-  ws.on('message', (message) => {
+
+  ws.on("message", (message) => {
     try {
       const data = JSON.parse(message);
       handleWebSocketMessage(ws, data);
     } catch (error) {
-      console.error('Invalid WebSocket message:', error.message);
+      console.error("Invalid WebSocket message:", error.message);
     }
   });
-  
-  ws.on('close', () => {
-    console.log('Client disconnected');
+
+  ws.on("close", () => {
+    console.log("Client disconnected");
     connectedClients.delete(ws);
-    
+
     // Remove agent if it was an agent connection
     for (const [agentId, agentData] of connectedAgents) {
       if (agentData.ws === ws) {
         connectedAgents.delete(agentId);
         console.log(`Agent ${agentId} disconnected`);
-        
+
         // Broadcast agent disconnection
         broadcast({
-          type: 'agent_disconnected',
+          type: "agent_disconnected",
           agentId: agentId,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         });
         break;
       }
@@ -100,36 +102,36 @@ wss.on('connection', (ws) => {
  */
 function handleWebSocketMessage(ws, data) {
   const { type, agentId } = data;
-  
+
   switch (type) {
-    case 'agent_register':
+    case "agent_register":
       handleAgentRegistration(ws, data);
       break;
-      
-    case 'agent_status':
+
+    case "agent_status":
       handleAgentStatus(ws, data);
       break;
-      
-    case 'agent_heartbeat':
+
+    case "agent_heartbeat":
       handleAgentHeartbeat(ws, data);
       break;
-      
-    case 'task_completion':
+
+    case "task_completion":
       handleTaskCompletion(ws, data);
       break;
-      
-    case 'decision_update':
+
+    case "decision_update":
       handleDecisionUpdate(ws, data);
       break;
-      
-    case 'agent_error':
+
+    case "agent_error":
       handleAgentError(ws, data);
       break;
-      
-    case 'get_agent_status':
+
+    case "get_agent_status":
       handleGetAgentStatus(ws, data);
       break;
-      
+
     default:
       console.warn(`Unknown message type: ${type}`);
   }
@@ -140,25 +142,25 @@ function handleWebSocketMessage(ws, data) {
  */
 function handleAgentRegistration(ws, data) {
   const { agentId, decisionId } = data;
-  
+
   // Store agent connection
   connectedAgents.set(agentId, {
     ws: ws,
     agentId: agentId,
     decisionId: decisionId,
-    status: 'initializing',
+    status: "initializing",
     registeredAt: new Date().toISOString(),
-    lastHeartbeat: new Date().toISOString()
+    lastHeartbeat: new Date().toISOString(),
   });
-  
+
   console.log(`Agent ${agentId} registered for decision ${decisionId}`);
-  
+
   // Broadcast agent registration to all clients
   broadcast({
-    type: 'agent_register',
+    type: "agent_register",
     agentId: agentId,
     decisionId: decisionId,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 }
 
@@ -167,23 +169,23 @@ function handleAgentRegistration(ws, data) {
  */
 function handleAgentStatus(ws, data) {
   const { agentId } = data;
-  
+
   if (connectedAgents.has(agentId)) {
     const agentData = connectedAgents.get(agentId);
-    
+
     // Update agent status
     connectedAgents.set(agentId, {
       ...agentData,
       status: data.status,
       message: data.message,
       currentTask: data.currentTask,
-      lastUpdate: new Date().toISOString()
+      lastUpdate: new Date().toISOString(),
     });
-    
+
     // Broadcast status update to all clients
     broadcast({
-      type: 'agent_status',
-      ...data
+      type: "agent_status",
+      ...data,
     });
   }
 }
@@ -193,14 +195,14 @@ function handleAgentStatus(ws, data) {
  */
 function handleAgentHeartbeat(ws, data) {
   const { agentId } = data;
-  
+
   if (connectedAgents.has(agentId)) {
     const agentData = connectedAgents.get(agentId);
-    
+
     // Update last heartbeat
     connectedAgents.set(agentId, {
       ...agentData,
-      lastHeartbeat: new Date().toISOString()
+      lastHeartbeat: new Date().toISOString(),
     });
   }
 }
@@ -210,16 +212,16 @@ function handleAgentHeartbeat(ws, data) {
  */
 function handleTaskCompletion(ws, data) {
   const { agentId, taskDescription, decisionId } = data;
-  
+
   console.log(`Agent ${agentId} completed task: ${taskDescription}`);
-  
+
   // Broadcast task completion
   broadcast({
-    type: 'task_completion',
+    type: "task_completion",
     agentId: agentId,
     taskDescription: taskDescription,
     decisionId: decisionId,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 }
 
@@ -228,16 +230,16 @@ function handleTaskCompletion(ws, data) {
  */
 function handleDecisionUpdate(ws, data) {
   const { agentId, decisionId, message } = data;
-  
+
   console.log(`Agent ${agentId} updated decision ${decisionId}: ${message}`);
-  
+
   // Broadcast decision update
   broadcast({
-    type: 'decision_update',
+    type: "decision_update",
     agentId: agentId,
     decisionId: decisionId,
     message: message,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 }
 
@@ -246,27 +248,27 @@ function handleDecisionUpdate(ws, data) {
  */
 function handleAgentError(ws, data) {
   const { agentId, decisionId, message } = data;
-  
+
   console.error(`Agent ${agentId} error: ${message}`);
-  
+
   // Update agent status
   if (connectedAgents.has(agentId)) {
     const agentData = connectedAgents.get(agentId);
     connectedAgents.set(agentId, {
       ...agentData,
-      status: 'error',
+      status: "error",
       lastError: message,
-      lastUpdate: new Date().toISOString()
+      lastUpdate: new Date().toISOString(),
     });
   }
-  
+
   // Broadcast error
   broadcast({
-    type: 'agent_error',
+    type: "agent_error",
     agentId: agentId,
     decisionId: decisionId,
     message: message,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 }
 
@@ -275,27 +277,31 @@ function handleAgentError(ws, data) {
  */
 function handleGetAgentStatus(ws, data) {
   const { agentId } = data;
-  
+
   if (agentId) {
     // Send specific agent status
     const agentData = connectedAgents.get(agentId);
-    ws.send(JSON.stringify({
-      type: 'agent_status_response',
-      agentId: agentId,
-      status: agentData || null
-    }));
+    ws.send(
+      JSON.stringify({
+        type: "agent_status_response",
+        agentId: agentId,
+        status: agentData || null,
+      }),
+    );
   } else {
     // Send all agent statuses
     const allAgents = Array.from(connectedAgents.values());
-    ws.send(JSON.stringify({
-      type: 'agent_status_list',
-      agents: allAgents
-    }));
+    ws.send(
+      JSON.stringify({
+        type: "agent_status_list",
+        agents: allAgents,
+      }),
+    );
   }
 }
 
 function broadcast(data) {
-  console.log('Broadcasting to clients:', data);
+  console.log("Broadcasting to clients:", data);
   wss.clients.forEach((client) => {
     if (client.readyState === 1) {
       // WebSocket.OPEN
@@ -307,22 +313,24 @@ function broadcast(data) {
 // Activity state tracking for real-time development visualization
 const activeAgents = new Map();
 const activityHistory = [];
-const activityStates = ['idle', 'working', 'debugging', 'testing', 'reviewing'];
+const activityStates = ["idle", "working", "debugging", "testing", "reviewing"];
 const MAX_HISTORY_ENTRIES = 1000;
 
 function broadcastActivity(agentId, activity) {
   const activityData = {
-    type: 'activity',
+    type: "activity",
     agentId,
     activity,
     timestamp: new Date().toISOString(),
-    decisionId: activity.decisionId || null
+    decisionId: activity.decisionId || null,
   };
-  
+
   // Persist activity to history
   persistActivity(agentId, activity);
-  
-  console.log(`[Agent-1] Broadcasting activity: ${agentId} is ${activity.state}`);
+
+  console.log(
+    `[Agent-1] Broadcasting activity: ${agentId} is ${activity.state}`,
+  );
   broadcast(activityData);
 }
 
@@ -333,26 +341,28 @@ function persistActivity(agentId, activity) {
     state: activity.state,
     decisionId: activity.decisionId,
     taskDescription: activity.taskDescription,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   };
-  
+
   activityHistory.push(historyEntry);
-  
+
   // Maintain history size limit
   if (activityHistory.length > MAX_HISTORY_ENTRIES) {
     activityHistory.shift();
   }
-  
-  console.log(`[Agent-1] Persisted activity: ${agentId} -> ${activity.state} (history: ${activityHistory.length} entries)`);
+
+  console.log(
+    `[Agent-1] Persisted activity: ${agentId} -> ${activity.state} (history: ${activityHistory.length} entries)`,
+  );
 }
 
 async function getData() {
-  const decisionsPath = path.join(CWD, 'decisions.yml');
+  const decisionsPath = path.join(CWD, "decisions.yml");
   return await readDecisionsFile(decisionsPath);
 }
 
 async function updateData(newData) {
-  const decisionsPath = path.join(CWD, 'decisions.yml');
+  const decisionsPath = path.join(CWD, "decisions.yml");
   await writeDecisionsFile(decisionsPath, newData);
 }
 
@@ -367,7 +377,7 @@ async function updateData(newData) {
 //     res.status(200).send({ message: 'Notification sent' });
 // });
 
-app.get('/api/data', async (req, res) => {
+app.get("/api/data", async (req, res) => {
   try {
     const data = await getData();
     const backlog = data.backlog || [];
@@ -376,76 +386,80 @@ app.get('/api/data', async (req, res) => {
     // This is a simplified way to extract the charter data
     const charter = {
       states: [
-        { id: 'Huddle', label: "1. Frame the 'Why'" },
-        { id: 'Whiteboard', label: "2. Design the 'What'" },
-        { id: 'Build', label: '3. Build & Iterate' },
-        { id: 'Validate', label: '4. Validate & Refine' }
+        { id: "Huddle", label: "1. Frame the 'Why'" },
+        { id: "Whiteboard", label: "2. Design the 'What'" },
+        { id: "Build", label: "3. Build & Iterate" },
+        { id: "Validate", label: "4. Validate & Refine" },
       ],
       transitions: [
-        { from: 'Huddle', to: 'Whiteboard' },
-        { from: 'Whiteboard', to: 'Build' },
-        { from: 'Build', to: 'Validate' },
-        { from: 'Validate', to: 'Huddle' },
-        { from: 'Validate', to: 'Whiteboard' }
-      ]
+        { from: "Huddle", to: "Whiteboard" },
+        { from: "Whiteboard", to: "Build" },
+        { from: "Build", to: "Validate" },
+        { from: "Validate", to: "Huddle" },
+        { from: "Validate", to: "Whiteboard" },
+      ],
     };
 
     res.json({ decisions, backlog, charter });
   } catch (error) {
-    console.error('Error fetching API data:', error);
-    
+    console.error("Error fetching API data:", error);
+
     // Send more specific error messages to the client
-    if (error.message.includes('Could not find decisions.yml')) {
-      res.status(404).json({ 
-        error: 'decisions.yml not found',
+    if (error.message.includes("Could not find decisions.yml")) {
+      res.status(404).json({
+        error: "decisions.yml not found",
         message: error.message,
-        suggestion: 'Run "decision-tapestry init" to create a new decisions.yml file'
+        suggestion:
+          'Run "decision-tapestry init" to create a new decisions.yml file',
       });
-    } else if (error.message.includes('Invalid YAML syntax')) {
-      res.status(400).json({ 
-        error: 'Invalid YAML format',
+    } else if (error.message.includes("Invalid YAML syntax")) {
+      res.status(400).json({
+        error: "Invalid YAML format",
         message: error.message,
-        suggestion: 'Check the YAML syntax in your decisions.yml file'
+        suggestion: "Check the YAML syntax in your decisions.yml file",
       });
-    } else if (error.message.includes('must be an array')) {
-      res.status(400).json({ 
-        error: 'Invalid file structure',
+    } else if (error.message.includes("must be an array")) {
+      res.status(400).json({
+        error: "Invalid file structure",
         message: error.message,
-        suggestion: 'Ensure decisions and backlog are arrays in your YAML file'
+        suggestion: "Ensure decisions and backlog are arrays in your YAML file",
       });
     } else {
-      res.status(500).json({ 
-        error: 'Server error',
-        message: 'An unexpected error occurred while loading your decisions',
-        suggestion: 'Check the server logs for more details'
+      res.status(500).json({
+        error: "Server error",
+        message: "An unexpected error occurred while loading your decisions",
+        suggestion: "Check the server logs for more details",
       });
     }
   }
 });
 
-app.post('/api/decisions/promote', async (req, res) => {
+app.post("/api/decisions/promote", async (req, res) => {
   try {
     const { id } = req.body;
     if (!id) {
-      return res.status(400).send({ message: 'Backlog item ID is required' });
+      return res.status(400).send({ message: "Backlog item ID is required" });
     }
 
     const data = await getData();
     const backlogItemIndex = data.backlog.findIndex((item) => item.id === id);
 
     if (backlogItemIndex === -1) {
-      return res.status(404).send({ message: 'Backlog item not found' });
+      return res.status(404).send({ message: "Backlog item not found" });
     }
 
     const [backlogItem] = data.backlog.splice(backlogItemIndex, 1);
 
-    const newDecisionId = data.decisions.length > 0 ? Math.max(...data.decisions.map((d) => d.id)) + 1 : 1;
+    const newDecisionId =
+      data.decisions.length > 0
+        ? Math.max(...data.decisions.map((d) => d.id)) + 1
+        : 1;
 
     const newDecision = {
       ...backlogItem,
       id: newDecisionId,
-      status: 'Accepted',
-      date: new Date().toISOString()
+      status: "Accepted",
+      date: new Date().toISOString(),
     };
 
     // Remove backlog-specific fields if they exist
@@ -455,189 +469,232 @@ app.post('/api/decisions/promote', async (req, res) => {
 
     data.decisions.push(newDecision);
     await updateData(data);
-    broadcast({ type: 'update' });
+    broadcast({ type: "update" });
 
     res.status(201).json(newDecision);
   } catch (error) {
-    console.error('Error promoting backlog item:', error);
-    
-    if (error.message.includes('Permission denied')) {
-      res.status(403).json({ 
-        error: 'Permission denied',
+    console.error("Error promoting backlog item:", error);
+
+    if (error.message.includes("Permission denied")) {
+      res.status(403).json({
+        error: "Permission denied",
         message: error.message,
-        suggestion: 'Check file permissions for decisions.yml'
+        suggestion: "Check file permissions for decisions.yml",
       });
-    } else if (error.message.includes('Directory does not exist')) {
-      res.status(400).json({ 
-        error: 'Directory error',
+    } else if (error.message.includes("Directory does not exist")) {
+      res.status(400).json({
+        error: "Directory error",
         message: error.message,
-        suggestion: 'Ensure the directory containing decisions.yml exists'
+        suggestion: "Ensure the directory containing decisions.yml exists",
       });
     } else {
-      res.status(500).json({ 
-        error: 'Promotion failed',
-        message: 'Failed to promote backlog item to decision',
-        suggestion: 'Check the server logs for more details'
+      res.status(500).json({
+        error: "Promotion failed",
+        message: "Failed to promote backlog item to decision",
+        suggestion: "Check the server logs for more details",
       });
     }
   }
 });
 
 // Activity tracking endpoints - Agent-1 Infrastructure work
-app.post('/api/activity', express.json(), (req, res) => {
+app.post("/api/activity", express.json(), (req, res) => {
   const { agentId, state, decisionId, taskDescription } = req.body;
-  
+
   if (!agentId || !state) {
-    return res.status(400).json({ error: 'agentId and state are required' });
+    return res.status(400).json({ error: "agentId and state are required" });
   }
-  
+
   if (!activityStates.includes(state)) {
-    return res.status(400).json({ error: 'Invalid activity state' });
+    return res.status(400).json({ error: "Invalid activity state" });
   }
-  
+
   // Update agent activity
   activeAgents.set(agentId, {
     state,
     decisionId,
     taskDescription,
-    lastUpdate: new Date().toISOString()
+    lastUpdate: new Date().toISOString(),
   });
-  
+
   // Broadcast to all connected clients
   broadcastActivity(agentId, { state, decisionId, taskDescription });
-  
-  console.log(`[Agent-1] Activity update: ${agentId} -> ${state} on decision ${decisionId}`);
-  res.status(200).json({ message: 'Activity updated successfully' });
+
+  console.log(
+    `[Agent-1] Activity update: ${agentId} -> ${state} on decision ${decisionId}`,
+  );
+  res.status(200).json({ message: "Activity updated successfully" });
 });
 
-app.get('/api/activity', (req, res) => {
+app.get("/api/activity", (req, res) => {
   const { includeHistory = false, agentId, limit = 50 } = req.query;
-  
-  const currentActivities = Array.from(activeAgents.entries()).map(([agentId, activity]) => ({
-    agentId,
-    ...activity
-  }));
-  
+
+  const currentActivities = Array.from(activeAgents.entries()).map(
+    ([agentId, activity]) => ({
+      agentId,
+      ...activity,
+    }),
+  );
+
   const response = { activities: currentActivities };
-  
-  if (includeHistory === 'true') {
+
+  if (includeHistory === "true") {
     let history = activityHistory;
-    
+
     // Filter by agent if requested
     if (agentId) {
-      history = history.filter(entry => entry.agentId === agentId);
+      history = history.filter((entry) => entry.agentId === agentId);
     }
-    
+
     // Apply limit
     const limitNum = parseInt(limit);
     if (limitNum && limitNum > 0) {
       history = history.slice(-limitNum);
     }
-    
+
     response.history = history;
   }
-  
+
   res.json(response);
 });
 
 // New endpoint for activity history analytics
-app.get('/api/activity/analytics', (req, res) => {
-  const { timeRange = '1h' } = req.query;
-  
+app.get("/api/activity/analytics", (req, res) => {
+  const { timeRange = "1h" } = req.query;
+
   // Calculate time cutoff
   const now = new Date();
   let cutoffTime;
   switch (timeRange) {
-    case '15m': cutoffTime = new Date(now - 15 * 60 * 1000); break;
-    case '1h': cutoffTime = new Date(now - 60 * 60 * 1000); break;
-    case '6h': cutoffTime = new Date(now - 6 * 60 * 60 * 1000); break;
-    case '24h': cutoffTime = new Date(now - 24 * 60 * 60 * 1000); break;
-    default: cutoffTime = new Date(now - 60 * 60 * 1000);
+    case "15m":
+      cutoffTime = new Date(now - 15 * 60 * 1000);
+      break;
+    case "1h":
+      cutoffTime = new Date(now - 60 * 60 * 1000);
+      break;
+    case "6h":
+      cutoffTime = new Date(now - 6 * 60 * 60 * 1000);
+      break;
+    case "24h":
+      cutoffTime = new Date(now - 24 * 60 * 60 * 1000);
+      break;
+    default:
+      cutoffTime = new Date(now - 60 * 60 * 1000);
   }
-  
+
   // Filter activity history by time range
-  const recentActivity = activityHistory.filter(entry => 
-    new Date(entry.timestamp) >= cutoffTime
+  const recentActivity = activityHistory.filter(
+    (entry) => new Date(entry.timestamp) >= cutoffTime,
   );
-  
+
   // Calculate analytics
   const agentActivityCounts = {};
   const stateDistribution = {};
   const decisionActivityCounts = {};
-  
-  recentActivity.forEach(entry => {
+
+  recentActivity.forEach((entry) => {
     // Agent activity counts
-    agentActivityCounts[entry.agentId] = (agentActivityCounts[entry.agentId] || 0) + 1;
-    
+    agentActivityCounts[entry.agentId] =
+      (agentActivityCounts[entry.agentId] || 0) + 1;
+
     // State distribution
     stateDistribution[entry.state] = (stateDistribution[entry.state] || 0) + 1;
-    
+
     // Decision activity counts
     if (entry.decisionId) {
-      decisionActivityCounts[entry.decisionId] = (decisionActivityCounts[entry.decisionId] || 0) + 1;
+      decisionActivityCounts[entry.decisionId] =
+        (decisionActivityCounts[entry.decisionId] || 0) + 1;
     }
   });
-  
+
   res.json({
     timeRange,
     totalActivities: recentActivity.length,
     agentActivityCounts,
     stateDistribution,
     decisionActivityCounts,
-    mostActiveAgent: Object.keys(agentActivityCounts).reduce((a, b) => 
-      agentActivityCounts[a] > agentActivityCounts[b] ? a : b, null),
-    mostActiveDecision: Object.keys(decisionActivityCounts).reduce((a, b) => 
-      decisionActivityCounts[a] > decisionActivityCounts[b] ? a : b, null)
+    mostActiveAgent: Object.keys(agentActivityCounts).reduce(
+      (a, b) => (agentActivityCounts[a] > agentActivityCounts[b] ? a : b),
+      null,
+    ),
+    mostActiveDecision: Object.keys(decisionActivityCounts).reduce(
+      (a, b) => (decisionActivityCounts[a] > decisionActivityCounts[b] ? a : b),
+      null,
+    ),
+  });
+});
+
+// Clear all agent activities endpoint
+app.delete("/api/activity/all", (req, res) => {
+  console.log("[Activity] Clearing all agent activities");
+  console.log("[Activity] Active agents before clear:", activeAgents.size);
+
+  // Clear server state
+  activeAgents.clear();
+
+  console.log("[Activity] Active agents after clear:", activeAgents.size);
+
+  // Broadcast reset event to all clients
+  const resetMessage = {
+    type: "activity-reset",
+    timestamp: new Date().toISOString(),
+  };
+  console.log("[Activity] Broadcasting reset message:", resetMessage);
+  broadcast(resetMessage);
+
+  res.json({
+    message: "All agent activities cleared",
+    clearedAgents: activeAgents.size,
   });
 });
 
 // Manual refresh endpoint for backup
-app.post('/api/refresh', (req, res) => {
-  console.log('[Manual] Forcing dashboard refresh via API call');
-  broadcast({ type: 'update' });
-  res.json({ message: 'Refresh broadcast sent to all clients' });
+app.post("/api/refresh", (req, res) => {
+  console.log("[Manual] Forcing dashboard refresh via API call");
+  broadcast({ type: "update" });
+  res.json({ message: "Refresh broadcast sent to all clients" });
 });
 
 // Health check endpoint
-app.get('/api/health', async (_req, res) => {
+app.get("/api/health", async (_req, res) => {
   const health = {
-    status: 'ok',
+    status: "ok",
     timestamp: new Date().toISOString(),
-    checks: {}
+    checks: {},
   };
 
   // Check if decisions.yml exists and is readable
-  const decisionsPath = path.join(CWD, 'decisions.yml');
+  const decisionsPath = path.join(CWD, "decisions.yml");
   try {
     await getData();
-    health.checks.decisionsFile = { 
-      status: 'ok', 
-      message: 'decisions.yml found and readable',
-      path: decisionsPath 
+    health.checks.decisionsFile = {
+      status: "ok",
+      message: "decisions.yml found and readable",
+      path: decisionsPath,
     };
   } catch (error) {
-    health.status = 'error';
-    health.checks.decisionsFile = { 
-      status: 'error', 
+    health.status = "error";
+    health.checks.decisionsFile = {
+      status: "error",
       message: error.message,
-      path: decisionsPath 
+      path: decisionsPath,
     };
   }
 
   // Check working directory
   try {
     await fsp.access(CWD);
-    health.checks.workingDirectory = { 
-      status: 'ok', 
-      message: 'Working directory accessible',
-      path: CWD 
+    health.checks.workingDirectory = {
+      status: "ok",
+      message: "Working directory accessible",
+      path: CWD,
     };
   } catch (error) {
-    health.status = 'error';
-    health.checks.workingDirectory = { 
-      status: 'error', 
-      message: 'Working directory not accessible',
-      path: CWD 
+    health.status = "error";
+    health.checks.workingDirectory = {
+      status: "error",
+      message: "Working directory not accessible",
+      path: CWD,
     };
   }
 
@@ -645,7 +702,7 @@ app.get('/api/health', async (_req, res) => {
 });
 
 // --- File Watcher for Real-Time Updates ---
-const decisionsPath = path.join(CWD, 'decisions.yml');
+const decisionsPath = path.join(CWD, "decisions.yml");
 let debounceTimer = null;
 
 // Use chokidar for more reliable file watching
@@ -657,49 +714,53 @@ const watcher = chokidar.watch(decisionsPath, {
   ignoreInitial: true,
   awaitWriteFinish: {
     stabilityThreshold: 100,
-    pollInterval: 50
-  }
+    pollInterval: 50,
+  },
 });
 
 watcher
-  .on('change', (path, stats) => {
+  .on("change", (path, stats) => {
     if (debounceTimer) clearTimeout(debounceTimer);
     debounceTimer = setTimeout(() => {
-      console.log(`[Chokidar] Detected change in decisions.yml, broadcasting update.`);
-      broadcast({ type: 'update' });
+      console.log(
+        `[Chokidar] Detected change in decisions.yml, broadcasting update.`,
+      );
+      broadcast({ type: "update" });
     }, 150);
   })
-  .on('error', error => {
+  .on("error", (error) => {
     console.error(`[Chokidar] Watcher error:`, error);
     // Fallback to polling if watching fails
     console.log(`[Chokidar] Falling back to polling mode...`);
     watcher.close();
     startPollingFallback();
   })
-  .on('ready', () => {
+  .on("ready", () => {
     console.log(`[Chokidar] Watching for changes in: ${decisionsPath}`);
   });
 
 // Polling fallback for extreme cases
 function startPollingFallback() {
   let lastModified = null;
-  
+
   const pollFile = async () => {
     try {
       const stats = await fsp.stat(decisionsPath);
       const currentModified = stats.mtime.getTime();
-      
+
       if (lastModified !== null && currentModified !== lastModified) {
-        console.log(`[Polling] Detected change in decisions.yml, broadcasting update.`);
-        broadcast({ type: 'update' });
+        console.log(
+          `[Polling] Detected change in decisions.yml, broadcasting update.`,
+        );
+        broadcast({ type: "update" });
       }
-      
+
       lastModified = currentModified;
     } catch (error) {
       console.error(`[Polling] Error checking file:`, error);
     }
   };
-  
+
   // Poll every 1 second as fallback
   setInterval(pollFile, 1000);
   console.log(`[Polling] Started polling fallback for: ${decisionsPath}`);
@@ -711,31 +772,33 @@ server.listen(port, () => {
 });
 
 const gracefulShutdown = () => {
-  console.log('Attempting graceful shutdown...');
-  
+  console.log("Attempting graceful shutdown...");
+
   // Close file watcher
   if (watcher) {
     watcher.close();
-    console.log('File watcher closed.');
+    console.log("File watcher closed.");
   }
-  
+
   server.close(() => {
-    console.log('Server successfully closed.');
+    console.log("Server successfully closed.");
     process.exit(0);
   });
 
   // Force close after 5 seconds
   setTimeout(() => {
-    console.error('Could not close connections in time, forcefully shutting down');
+    console.error(
+      "Could not close connections in time, forcefully shutting down",
+    );
     process.exit(1);
   }, 5000);
 };
 
 // Listen for nodemon's restart signal
-process.once('SIGUSR2', gracefulShutdown);
+process.once("SIGUSR2", gracefulShutdown);
 
 // Listen for standard interrupt signal
-process.on('SIGINT', gracefulShutdown);
+process.on("SIGINT", gracefulShutdown);
 
 // Listen for standard termination signal
-process.on('SIGTERM', gracefulShutdown);
+process.on("SIGTERM", gracefulShutdown);

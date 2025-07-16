@@ -1,7 +1,7 @@
-import { exec } from 'child_process';
-import { promisify } from 'util';
-import path from 'path';
-import fs from 'fs';
+import { exec } from "child_process";
+import { promisify } from "util";
+import path from "path";
+import fs from "fs";
 
 const execAsync = promisify(exec);
 
@@ -21,7 +21,7 @@ export class GitAnalyzer {
    */
   async isGitRepo() {
     try {
-      await execAsync('git rev-parse --git-dir', { cwd: this.repoPath });
+      await execAsync("git rev-parse --git-dir", { cwd: this.repoPath });
       return true;
     } catch {
       return false;
@@ -41,9 +41,9 @@ export class GitAnalyzer {
       // Get the first commit that added this file
       const { stdout } = await execAsync(
         `git log --format='%aI' --reverse --follow -- "${filePath}" | head -1`,
-        { cwd: this.repoPath }
+        { cwd: this.repoPath },
       );
-      
+
       const date = stdout.trim();
       if (date) {
         this.cache.set(cacheKey, date);
@@ -51,7 +51,10 @@ export class GitAnalyzer {
       }
       return null;
     } catch (error) {
-      console.error(`Error getting creation date for ${filePath}:`, error.message);
+      console.error(
+        `Error getting creation date for ${filePath}:`,
+        error.message,
+      );
       return null;
     }
   }
@@ -68,9 +71,9 @@ export class GitAnalyzer {
     try {
       const { stdout } = await execAsync(
         `git log -1 --format='%aI' -- "${filePath}"`,
-        { cwd: this.repoPath }
+        { cwd: this.repoPath },
       );
-      
+
       const date = stdout.trim();
       if (date) {
         this.cache.set(cacheKey, date);
@@ -78,7 +81,10 @@ export class GitAnalyzer {
       }
       return null;
     } catch (error) {
-      console.error(`Error getting last modified date for ${filePath}:`, error.message);
+      console.error(
+        `Error getting last modified date for ${filePath}:`,
+        error.message,
+      );
       return null;
     }
   }
@@ -95,22 +101,24 @@ export class GitAnalyzer {
     try {
       const { stdout } = await execAsync(
         `git log --format='%H|%aI|%an|%s' -n ${limit} -- "${filePath}"`,
-        { cwd: this.repoPath }
+        { cwd: this.repoPath },
       );
-      
-      const commits = stdout.trim().split('\n')
-        .filter(line => line)
-        .map(line => {
-          const [sha, date, author, message] = line.split('|');
+
+      const commits = stdout
+        .trim()
+        .split("\n")
+        .filter((line) => line)
+        .map((line) => {
+          const [sha, date, author, message] = line.split("|");
           return {
             sha: sha.substring(0, 7), // Short SHA
             date,
             author,
             message,
-            url: this.getCommitUrl(sha)
+            url: this.getCommitUrl(sha),
           };
         });
-      
+
       this.cache.set(cacheKey, commits);
       return commits;
     } catch (error) {
@@ -125,19 +133,19 @@ export class GitAnalyzer {
   async getCommitUrl(sha) {
     try {
       const { stdout: remoteUrl } = await execAsync(
-        'git config --get remote.origin.url',
-        { cwd: this.repoPath }
+        "git config --get remote.origin.url",
+        { cwd: this.repoPath },
       );
-      
+
       const url = remoteUrl.trim();
-      if (url.includes('github.com')) {
+      if (url.includes("github.com")) {
         // Convert SSH to HTTPS format
         const httpsUrl = url
-          .replace('git@github.com:', 'https://github.com/')
-          .replace('.git', '');
+          .replace("git@github.com:", "https://github.com/")
+          .replace(".git", "");
         return `${httpsUrl}/commit/${sha}`;
       }
-      
+
       return null;
     } catch {
       return null;
@@ -149,38 +157,39 @@ export class GitAnalyzer {
    */
   async analyzeFiles(filePaths) {
     const results = new Map();
-    
+
     for (const filePath of filePaths) {
-      const absolutePath = path.isAbsolute(filePath) 
-        ? filePath 
+      const absolutePath = path.isAbsolute(filePath)
+        ? filePath
         : path.join(this.repoPath, filePath);
-      
+
       // Check if file exists
       const exists = fs.existsSync(absolutePath);
-      
+
       const fileInfo = {
         path: filePath,
         exists,
-        status: exists ? 'existing' : 'missing',
+        status: exists ? "existing" : "missing",
         creationDate: null,
         lastModifiedDate: null,
-        commits: []
+        commits: [],
       };
 
-      if (exists || await this.hasGitHistory(filePath)) {
+      if (exists || (await this.hasGitHistory(filePath))) {
         fileInfo.creationDate = await this.getFileCreationDate(filePath);
-        fileInfo.lastModifiedDate = await this.getFileLastModifiedDate(filePath);
+        fileInfo.lastModifiedDate =
+          await this.getFileLastModifiedDate(filePath);
         fileInfo.commits = await this.getFileCommits(filePath, 5);
-        
+
         // Determine if file was deleted
         if (!exists && fileInfo.commits.length > 0) {
-          fileInfo.status = 'deleted';
+          fileInfo.status = "deleted";
         }
       }
-      
+
       results.set(filePath, fileInfo);
     }
-    
+
     return results;
   }
 
@@ -191,7 +200,7 @@ export class GitAnalyzer {
     try {
       const { stdout } = await execAsync(
         `git log --oneline -1 -- "${filePath}"`,
-        { cwd: this.repoPath }
+        { cwd: this.repoPath },
       );
       return stdout.trim().length > 0;
     } catch {
@@ -206,28 +215,34 @@ export class GitAnalyzer {
     let firstDate = null;
     let lastDate = null;
     let totalCommits = 0;
-    
+
     for (const filePath of filePaths) {
       const creationDate = await this.getFileCreationDate(filePath);
       const lastModDate = await this.getFileLastModifiedDate(filePath);
       const commits = await this.getFileCommits(filePath, 100);
-      
+
       totalCommits += commits.length;
-      
-      if (creationDate && (!firstDate || new Date(creationDate) < new Date(firstDate))) {
+
+      if (
+        creationDate &&
+        (!firstDate || new Date(creationDate) < new Date(firstDate))
+      ) {
         firstDate = creationDate;
       }
-      
-      if (lastModDate && (!lastDate || new Date(lastModDate) > new Date(lastDate))) {
+
+      if (
+        lastModDate &&
+        (!lastDate || new Date(lastModDate) > new Date(lastDate))
+      ) {
         lastDate = lastModDate;
       }
     }
-    
+
     return {
       first_commit_date: firstDate,
       last_commit_date: lastDate,
       commit_count: totalCommits,
-      git_derived: true
+      git_derived: true,
     };
   }
 

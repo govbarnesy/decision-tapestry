@@ -1,8 +1,13 @@
 decisions:
   - id: 65
     title: Implement GitHub author enhancement with API integration
-    author: Agent A
-    date: "2025-07-15T22:15:00Z"
+    author: Claude & Chris Barnes
+    date:
+      decision_date: "2025-07-15T22:15:00Z"
+      first_commit_date: "2025-07-03T18:09:20-04:00"
+      last_commit_date: "2025-07-15T15:52:53-04:00"
+      commit_count: 8
+      git_derived: true
     status: Completed
     project: Decision Tapestry
     rationale:
@@ -41,10 +46,77 @@ decisions:
       - 67
       - 68
       - 61
+    github_metadata:
+      file_status:
+        created:
+          - services/github-service.mjs
+          - services/author-service.mjs
+          - config/github-config.mjs
+          - utils/author-migration.mjs
+        modified:
+          - decisions.schema.json
+        deleted: []
+        missing: []
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: {}
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: {}
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 6c00688
+          message: "chore(release): 1.7.0"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/6c00688
+          date: "2025-07-14T11:01:45-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: b30ab50
+          message: "feat: implement comprehensive development automation and quality infrastructure"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/b30ab50
+          date: "2025-07-12T10:56:09-04:00"
+          author: govbarnesy
+        - sha: fe7e42a
+          message: "feat: comprehensive error handling, schema improvements, and documentation overhaul"
+          url: {}
+          date: "2025-07-06T10:11:40-04:00"
+          author: govbarnesy
+        - sha: fe7e42a
+          message: "feat: comprehensive error handling, schema improvements, and documentation overhaul"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/fe7e42a
+          date: "2025-07-06T10:11:40-04:00"
+          author: govbarnesy
   - id: 66
     title: Implement Git history analysis for commit-based decision dating
-    author: Agent B
-    date: "2025-07-15T22:16:00Z"
+    author: Claude & Chris Barnes
+    date:
+      decision_date: "2025-07-15T22:16:00Z"
+      first_commit_date: "2025-07-15T15:52:53-04:00"
+      last_commit_date: "2025-07-15T15:52:53-04:00"
+      commit_count: 6
+      git_derived: true
     status: Completed
     project: Decision Tapestry
     rationale:
@@ -88,10 +160,38 @@ decisions:
       - 67
       - 68
       - 61
+    github_metadata:
+      file_status:
+        created:
+          - services/git-analyzer.mjs
+          - services/file-tracker.mjs
+          - services/decision-enhancer.mjs
+          - services/git-performance.mjs
+          - utils/git-utils.mjs
+          - utils/commit-matcher.mjs
+        modified: []
+        deleted: []
+        missing: []
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: {}
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
   - id: 67
     title: Create GitHub UI components for author visualization
-    author: Agent C
-    date: "2025-07-15T22:17:00Z"
+    author: Claude & Chris Barnes
+    date:
+      decision_date: "2025-07-15T22:17:00Z"
+      first_commit_date: "2025-06-30T08:48:27-04:00"
+      last_commit_date: "2025-07-15T15:52:53-04:00"
+      commit_count: 16
+      git_derived: true
     status: Completed
     project: Decision Tapestry
     rationale:
@@ -139,10 +239,82 @@ decisions:
       - 66
       - 68
       - 61
+    github_metadata:
+      file_status:
+        created:
+          - dashboard/avatar-display.mjs
+          - dashboard/github-author-card.mjs
+          - dashboard/author-filter.mjs
+          - dashboard/commit-timeline.mjs
+          - dashboard/file-status-display.mjs
+          - styles/github-ui.css
+          - utils/github-ui-utils.mjs
+        modified:
+          - dashboard/decision-log.mjs
+          - dashboard/advanced-filter.mjs
+          - dashboard/decision-detail-panel.mjs
+        deleted: []
+        missing: []
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: {}
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: {}
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 6c00688
+          message: "chore(release): 1.7.0"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/6c00688
+          date: "2025-07-14T11:01:45-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: {}
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: b30ab50
+          message: "feat: implement comprehensive development automation and quality infrastructure"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/b30ab50
+          date: "2025-07-12T10:56:09-04:00"
+          author: govbarnesy
+        - sha: fe7e42a
+          message: "feat: comprehensive error handling, schema improvements, and documentation overhaul"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/fe7e42a
+          date: "2025-07-06T10:11:40-04:00"
+          author: govbarnesy
   - id: 68
     title: Enhance time filtering with commit-based date ranges
-    author: Agent D
-    date: "2025-07-15T22:18:00Z"
+    author: Claude & Chris Barnes
+    date:
+      decision_date: "2025-07-15T22:18:00Z"
+      first_commit_date: "2025-06-30T08:48:27-04:00"
+      last_commit_date: "2025-07-15T15:52:53-04:00"
+      commit_count: 11
+      git_derived: true
     status: Completed
     project: Decision Tapestry
     rationale:
@@ -188,10 +360,80 @@ decisions:
       - 66
       - 67
       - 61
+    github_metadata:
+      file_status:
+        created:
+          - dashboard/enhanced-time-filter.mjs
+          - dashboard/commit-timeline-viz.mjs
+          - dashboard/time-range-picker.mjs
+          - dashboard/commit-activity-heatmap.mjs
+          - utils/time-filtering-utils.mjs
+          - styles/time-filter.css
+        modified:
+          - dashboard/search-panel.mjs
+          - dashboard/advanced-filter.mjs
+        deleted: []
+        missing: []
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: {}
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: {}
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 6c00688
+          message: "chore(release): 1.7.0"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/6c00688
+          date: "2025-07-14T11:01:45-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: b30ab50
+          message: "feat: implement comprehensive development automation and quality infrastructure"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/b30ab50
+          date: "2025-07-12T10:56:09-04:00"
+          author: govbarnesy
+        - sha: fe7e42a
+          message: "feat: comprehensive error handling, schema improvements, and documentation overhaul"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/fe7e42a
+          date: "2025-07-06T10:11:40-04:00"
+          author: govbarnesy
+        - sha: 1a6b3b2
+          message: "fix(cli): replace nodemon with node for CLI start command"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/1a6b3b2
+          date: "2025-07-06T09:41:01-04:00"
+          author: govbarnesy
   - id: 62
     title: Integrate GitHub MVP components into unified experience
     author: Claude & Chris Barnes
-    date: "2025-07-15T22:19:00Z"
+    date:
+      decision_date: "2025-07-15T22:19:00Z"
+      first_commit_date: "2025-07-03T18:09:20-04:00"
+      last_commit_date: "2025-07-15T15:52:53-04:00"
+      commit_count: 4
+      git_derived: true
     status: Completed
     project: Decision Tapestry
     rationale:
@@ -249,10 +491,77 @@ decisions:
       - Graceful fallback when GitHub unavailable
       - Backward compatibility maintained with existing string authors/dates
       - Progressive enhancement working (string → GitHub object migration)
+    github_metadata:
+      file_status:
+        created: []
+        modified:
+          - decisions.schema.json
+        deleted: []
+        missing:
+          - All GitHub integration components
+          - Integration tests
+          - Documentation
+          - Schema validation utilities
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: {}
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: {}
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 6c00688
+          message: "chore(release): 1.7.0"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/6c00688
+          date: "2025-07-14T11:01:45-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: b30ab50
+          message: "feat: implement comprehensive development automation and quality infrastructure"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/b30ab50
+          date: "2025-07-12T10:56:09-04:00"
+          author: govbarnesy
+        - sha: fe7e42a
+          message: "feat: comprehensive error handling, schema improvements, and documentation overhaul"
+          url: {}
+          date: "2025-07-06T10:11:40-04:00"
+          author: govbarnesy
+        - sha: fe7e42a
+          message: "feat: comprehensive error handling, schema improvements, and documentation overhaul"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/fe7e42a
+          date: "2025-07-06T10:11:40-04:00"
+          author: govbarnesy
   - id: 61
     title: Implement comprehensive search and filtering with inferred categorization
     author: Claude & Chris Barnes
-    date: "2025-07-15T22:00:00Z"
+    date:
+      decision_date: "2025-07-15T22:00:00Z"
+      first_commit_date: "2025-06-30T08:48:27-04:00"
+      last_commit_date: "2025-07-15T15:52:53-04:00"
+      commit_count: 30
+      git_derived: true
     status: Accepted
     project: Decision Tapestry
     rationale:
@@ -293,9 +602,76 @@ decisions:
     related_to:
       - 1
       - 60
+    github_metadata:
+      file_status:
+        created: []
+        modified:
+          - dashboard/search-panel.mjs
+          - dashboard/advanced-filter.mjs
+          - dashboard/decision-map.mjs
+          - dashboard/app.mjs
+          - dashboard/index.html
+          - dashboard/style.css
+        deleted: []
+        missing: []
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: {}
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: {}
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 6c00688
+          message: "chore(release): 1.7.0"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/6c00688
+          date: "2025-07-14T11:01:45-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: {}
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: b30ab50
+          message: "feat: implement comprehensive development automation and quality infrastructure"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/b30ab50
+          date: "2025-07-12T10:56:09-04:00"
+          author: govbarnesy
+        - sha: fe7e42a
+          message: "feat: comprehensive error handling, schema improvements, and documentation overhaul"
+          url: {}
+          date: "2025-07-06T10:11:40-04:00"
+          author: govbarnesy
   - id: 53
     title: Use Redis for session storage
-    author: Quick Capture
+    author:
+      github_username: govbarnesy
+      display_name: Chris Barnes
+      avatar_url: https://avatars.githubusercontent.com/u/188218537?v=4
+      profile_url: https://github.com/govbarnesy
     date: "2025-07-12T15:38:47.284Z"
     status: Done
     rationale:
@@ -323,8 +699,17 @@ decisions:
       - 54
   - id: 1
     title: Establish a System for a Durable, Shared Memory
-    author: Clyde
-    date: "2025-06-20T10:00:00Z"
+    author:
+      github_username: govbarnesy
+      display_name: Chris Barnes
+      avatar_url: https://avatars.githubusercontent.com/u/188218537?v=4
+      profile_url: https://github.com/govbarnesy
+    date:
+      decision_date: "2025-06-20T10:00:00Z"
+      first_commit_date: "2025-06-30T08:48:27-04:00"
+      last_commit_date: "2025-07-15T15:52:53-04:00"
+      commit_count: 11
+      git_derived: true
     status: Done
     project: Decision Tapestry
     superseded_by: null
@@ -337,10 +722,69 @@ decisions:
     affected_components:
       - docs/decision-log-schema.md
       - decisions.yml
+    github_metadata:
+      file_status:
+        created: []
+        modified:
+          - decisions.yml
+        deleted: []
+        missing:
+          - docs/decision-log-schema.md
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: {}
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 6c00688
+          message: "chore(release): 1.7.0"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/6c00688
+          date: "2025-07-14T11:01:45-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: {}
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: {}
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: b30ab50
+          message: "feat: implement comprehensive development automation and quality infrastructure"
+          url: {}
+          date: "2025-07-12T10:56:09-04:00"
+          author: govbarnesy
+        - sha: b30ab50
+          message: "feat: implement comprehensive development automation and quality infrastructure"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/b30ab50
+          date: "2025-07-12T10:56:09-04:00"
+          author: govbarnesy
   - id: 2
     title: Formalize Standard Debugging Procedure
-    author: Clyde & AI Assistant
-    date: "2025-06-20T11:00:00Z"
+    author: Claude & Chris Barnes
+    date: "2025-06-23T11:00:00.000Z"
     status: Done
     project: Collaboration Process
     rationale:
@@ -353,10 +797,23 @@ decisions:
       - 1
     affected_components:
       - internal-packages/decision-tapestry/collaboration-charter.js
+    github_metadata:
+      file_status:
+        created: []
+        modified: []
+        deleted: []
+        missing:
+          - internal-packages/decision-tapestry/collaboration-charter.js
+      commits:
+        - sha: fe7e42a
+          message: "feat: comprehensive error handling, schema improvements, and documentation overhaul"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/fe7e42a
+          date: "2025-07-06T10:11:40-04:00"
+          author: govbarnesy
   - id: 3
     title: Evolve Decision Tapestry for Prompt Integration
-    author: Clyde & AI Assistant
-    date: "2025-06-21T09:00:00Z"
+    author: Claude & Chris Barnes
+    date: "2025-06-23T09:00:00.000Z"
     status: Superseded
     superseded_by: 4
     project: Decision Tapestry
@@ -370,10 +827,69 @@ decisions:
     affected_components:
       - internal-packages/decision-tapestry/decisions.yml
       - internal-packages/decision-tapestry/generate-map.mjs
+    github_metadata:
+      file_status:
+        created: []
+        modified: []
+        deleted: []
+        missing:
+          - internal-packages/decision-tapestry/decisions.yml
+          - internal-packages/decision-tapestry/generate-map.mjs
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: b30ab50
+          message: "feat: implement comprehensive development automation and quality infrastructure"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/b30ab50
+          date: "2025-07-12T10:56:09-04:00"
+          author: govbarnesy
+        - sha: fe7e42a
+          message: "feat: comprehensive error handling, schema improvements, and documentation overhaul"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/fe7e42a
+          date: "2025-07-06T10:11:40-04:00"
+          author: govbarnesy
   - id: 4
     title: Defer Prompt Integration to Maintain Simplicity
-    author: Clyde & AI Assistant
-    date: "2025-06-21T10:00:00Z"
+    author: Claude & Chris Barnes
+    date: "2025-06-23T10:00:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
@@ -388,10 +904,45 @@ decisions:
       - internal-packages/decision-tapestry/decisions.yml
       - internal-packages/decision-tapestry/generate-map.mjs
       - internal-packages/decision-tapestry/package.json
+    github_metadata:
+      file_status:
+        created: []
+        modified: []
+        deleted: []
+        missing:
+          - internal-packages/decision-tapestry/decisions.yml
+          - internal-packages/decision-tapestry/generate-map.mjs
+          - internal-packages/decision-tapestry/package.json
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: fe7e42a
+          message: "feat: comprehensive error handling, schema improvements, and documentation overhaul"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/fe7e42a
+          date: "2025-07-06T10:11:40-04:00"
+          author: govbarnesy
+        - sha: dfaa235
+          message: "feat(cli): add schema validation, onboarding improvements, and template guidance"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/dfaa235
+          date: "2025-07-03T18:09:20-04:00"
+          author: Chris Barnes
   - id: 5
     title: Explore Future Enhancements for Decision Tapestry
-    author: Clyde & AI Assistant
-    date: "2025-06-21T11:00:00Z"
+    author: Claude & Chris Barnes
+    date: "2025-06-24T11:00:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
@@ -408,8 +959,8 @@ decisions:
       - Dynamically highlight the current charter stage on the charter map
   - id: 6
     title: Implement Live Charter Map Highlighting
-    author: Clyde & AI Assistant
-    date: "2025-06-21T12:00:00Z"
+    author: Claude & Chris Barnes
+    date: "2025-06-24T12:00:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
@@ -423,10 +974,50 @@ decisions:
       - internal-packages/decision-tapestry/decisions.yml
       - internal-packages/decision-tapestry/generate-charter-map.mjs
       - internal-packages/decision-tapestry/package.json
+    github_metadata:
+      file_status:
+        created: []
+        modified: []
+        deleted: []
+        missing:
+          - internal-packages/decision-tapestry/decisions.yml
+          - internal-packages/decision-tapestry/generate-charter-map.mjs
+          - internal-packages/decision-tapestry/package.json
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: fe7e42a
+          message: "feat: comprehensive error handling, schema improvements, and documentation overhaul"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/fe7e42a
+          date: "2025-07-06T10:11:40-04:00"
+          author: govbarnesy
+        - sha: 3e9136d
+          message: "fix(ui): adjust right panel layout after removing charter-map; controls and decision log now split column"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/3e9136d
+          date: "2025-07-03T23:16:25-04:00"
+          author: Chris Barnes
+        - sha: 613f344
+          message: "chore(ui): remove charter-map panel from dashboard for now"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/613f344
+          date: "2025-07-03T23:15:08-04:00"
+          author: Chris Barnes
   - id: 7
     title: Redesign Charter Map for Non-Linear Process
-    author: Clyde & AI Assistant
-    date: "2025-06-21T13:00:00Z"
+    author: Claude & Chris Barnes
+    date: "2025-06-24T13:00:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
@@ -439,10 +1030,33 @@ decisions:
       - 5
     affected_components:
       - internal-packages/decision-tapestry/generate-charter-map.mjs
+    github_metadata:
+      file_status:
+        created: []
+        modified: []
+        deleted: []
+        missing:
+          - internal-packages/decision-tapestry/generate-charter-map.mjs
+      commits:
+        - sha: fe7e42a
+          message: "feat: comprehensive error handling, schema improvements, and documentation overhaul"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/fe7e42a
+          date: "2025-07-06T10:11:40-04:00"
+          author: govbarnesy
+        - sha: 3e9136d
+          message: "fix(ui): adjust right panel layout after removing charter-map; controls and decision log now split column"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/3e9136d
+          date: "2025-07-03T23:16:25-04:00"
+          author: Chris Barnes
+        - sha: 613f344
+          message: "chore(ui): remove charter-map panel from dashboard for now"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/613f344
+          date: "2025-07-03T23:15:08-04:00"
+          author: Chris Barnes
   - id: 8
     title: Explore Timeline Visualization for Decision History
-    author: Clyde & AI Assistant
-    date: "2025-06-21T14:00:00Z"
+    author: Claude & Chris Barnes
+    date: "2025-06-25T14:00:00.000Z"
     status: Superseded
     project: Decision Tapestry
     rationale:
@@ -458,8 +1072,8 @@ decisions:
     brainstormed_ideas: []
   - id: 9
     title: Replace Interactive Timeline with a Simple Chronological Log
-    author: Clyde & AI Assistant
-    date: "2025-06-21T15:00:00Z"
+    author: Claude & Chris Barnes
+    date: "2025-06-25T15:00:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
@@ -474,10 +1088,54 @@ decisions:
       - internal-packages/decision-tapestry/generate-timeline.mjs
       - internal-packages/decision-tapestry/package.json
     brainstormed_ideas: []
+    github_metadata:
+      file_status:
+        created: []
+        modified: []
+        deleted: []
+        missing:
+          - internal-packages/decision-tapestry/generate-timeline.mjs
+          - internal-packages/decision-tapestry/package.json
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: fe7e42a
+          message: "feat: comprehensive error handling, schema improvements, and documentation overhaul"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/fe7e42a
+          date: "2025-07-06T10:11:40-04:00"
+          author: govbarnesy
+        - sha: 1a6b3b2
+          message: "fix(cli): replace nodemon with node for CLI start command"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/1a6b3b2
+          date: "2025-07-06T09:41:01-04:00"
+          author: govbarnesy
+        - sha: 593c7aa
+          message: "fix(ui): refine dark mode backgrounds for panels, tabs, log items, and search input\\n\\n- All panels are #333, all text is white, and interactive elements are black in dark mode"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/593c7aa
+          date: "2025-07-03T21:58:25-04:00"
+          author: Chris Barnes
   - id: 10
     title: Increase Timestamp Precision for Decision Log
-    author: Clyde & AI Assistant
-    date: "2025-06-21T16:00:00Z"
+    author: Claude & Chris Barnes
+    date: "2025-06-25T16:00:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
@@ -493,10 +1151,70 @@ decisions:
       - internal-packages/decision-tapestry/generate-timeline.mjs
       - internal-packages/decision-tapestry/package.json
     brainstormed_ideas: []
+    github_metadata:
+      file_status:
+        created: []
+        modified: []
+        deleted: []
+        missing:
+          - internal-packages/decision-tapestry/decisions.yml
+          - internal-packages/decision-tapestry/generate-timeline.mjs
+          - internal-packages/decision-tapestry/package.json
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: b30ab50
+          message: "feat: implement comprehensive development automation and quality infrastructure"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/b30ab50
+          date: "2025-07-12T10:56:09-04:00"
+          author: govbarnesy
+        - sha: b30ab50
+          message: "feat: implement comprehensive development automation and quality infrastructure"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/b30ab50
+          date: "2025-07-12T10:56:09-04:00"
+          author: govbarnesy
+        - sha: fe7e42a
+          message: "feat: comprehensive error handling, schema improvements, and documentation overhaul"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/fe7e42a
+          date: "2025-07-06T10:11:40-04:00"
+          author: govbarnesy
+        - sha: 65b7b00
+          message: "fix(ui): let controls panel auto-size and decision log fill right column"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/65b7b00
+          date: "2025-07-03T23:17:47-04:00"
+          author: Chris Barnes
+        - sha: 3e9136d
+          message: "fix(ui): adjust right panel layout after removing charter-map; controls and decision log now split column"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/3e9136d
+          date: "2025-07-03T23:16:25-04:00"
+          author: Chris Barnes
+        - sha: 2b5c5b8
+          message: "fix(ui): decision map nodes have white background in light mode and black in dark mode"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/2b5c5b8
+          date: "2025-07-03T23:01:21-04:00"
+          author: Chris Barnes
   - id: 11
     title: Consolidate All Visualizations into a Single Dashboard
-    author: Clyde & AI Assistant
-    date: "2025-06-21T17:00:00Z"
+    author: Claude & Chris Barnes
+    date: "2025-06-25T17:00:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
@@ -510,10 +1228,59 @@ decisions:
     affected_components:
       - internal-packages/decision-tapestry/generate-dashboard.mjs
       - internal-packages/decision-tapestry/package.json
+    github_metadata:
+      file_status:
+        created: []
+        modified: []
+        deleted: []
+        missing:
+          - internal-packages/decision-tapestry/generate-dashboard.mjs
+          - internal-packages/decision-tapestry/package.json
+      commits:
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: 613f344
+          message: "chore(ui): remove charter-map panel from dashboard for now"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/613f344
+          date: "2025-07-03T23:15:08-04:00"
+          author: Chris Barnes
+        - sha: d1217eb
+          message: "feat(ui): add dark/light theme toggle with persistent user preference\\n\\n- Adds a toggle button to the dashboard\\n- Implements CSS variables and .dark-theme class\\n- Persists user choice in localStorage\\n- Documents the decision in decisions.yml (decision 50)"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/d1217eb
+          date: "2025-07-03T20:34:40-04:00"
+          author: Chris Barnes
+        - sha: 51132d2
+          message: "ci: consolidate to single workflow file"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/51132d2
+          date: "2025-06-30T08:36:50-04:00"
+          author: Chris Barnes
+        - sha: 51132d2
+          message: "ci: consolidate to single workflow file"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/51132d2
+          date: "2025-06-30T08:36:50-04:00"
+          author: Chris Barnes
+        - sha: 770d36b
+          message: "ci: flatten workflows for single-app repo"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/770d36b
+          date: "2025-06-30T08:29:37-04:00"
+          author: Chris Barnes
+        - sha: fce117a
+          message: "refactor: modularize into cli, server, dashboard, and shared directories"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/fce117a
+          date: "2025-06-23T20:40:39-04:00"
+          author: Chris Barnes
   - id: 12
     title: Add Interactive Decision Detail Panel
-    author: Clyde & AI Assistant
-    date: "2025-06-21T18:00:00Z"
+    author: Claude & Chris Barnes
+    date: "2025-06-26T18:00:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
@@ -526,10 +1293,68 @@ decisions:
       - 11
     affected_components:
       - internal-packages/decision-tapestry/generate-dashboard.mjs
+    github_metadata:
+      file_status:
+        created: []
+        modified: []
+        deleted: []
+        missing:
+          - internal-packages/decision-tapestry/generate-dashboard.mjs
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
   - id: 13
     title: Redesign Dashboard with Three-Column Layout
-    author: Clyde & AI Assistant
-    date: "2025-06-21T19:00:00Z"
+    author: Claude & Chris Barnes
+    date: "2025-06-26T19:00:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
@@ -542,10 +1367,43 @@ decisions:
       - 11
     affected_components:
       - internal-packages/decision-tapestry/generate-dashboard.mjs
+    github_metadata:
+      file_status:
+        created: []
+        modified: []
+        deleted: []
+        missing:
+          - internal-packages/decision-tapestry/generate-dashboard.mjs
+      commits:
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: 3e9136d
+          message: "fix(ui): adjust right panel layout after removing charter-map; controls and decision log now split column"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/3e9136d
+          date: "2025-07-03T23:16:25-04:00"
+          author: Chris Barnes
+        - sha: 613f344
+          message: "chore(ui): remove charter-map panel from dashboard for now"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/613f344
+          date: "2025-07-03T23:15:08-04:00"
+          author: Chris Barnes
+        - sha: d1217eb
+          message: "feat(ui): add dark/light theme toggle with persistent user preference\\n\\n- Adds a toggle button to the dashboard\\n- Implements CSS variables and .dark-theme class\\n- Persists user choice in localStorage\\n- Documents the decision in decisions.yml (decision 50)"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/d1217eb
+          date: "2025-07-03T20:34:40-04:00"
+          author: Chris Barnes
+        - sha: fce117a
+          message: "refactor: modularize into cli, server, dashboard, and shared directories"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/fce117a
+          date: "2025-06-23T20:40:39-04:00"
+          author: Chris Barnes
   - id: 14
     title: Incorporate Actionable Tasks into Decisions
-    author: Clyde & AI Assistant
-    date: "2025-06-21T20:00:00Z"
+    author: Claude & Chris Barnes
+    date: "2025-06-26T20:00:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
@@ -565,10 +1423,68 @@ decisions:
         status: Completed
     affected_components:
       - internal-packages/decision-tapestry/generate-dashboard.mjs
+    github_metadata:
+      file_status:
+        created: []
+        modified: []
+        deleted: []
+        missing:
+          - internal-packages/decision-tapestry/generate-dashboard.mjs
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: b30ab50
+          message: "feat: implement comprehensive development automation and quality infrastructure"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/b30ab50
+          date: "2025-07-12T10:56:09-04:00"
+          author: govbarnesy
+        - sha: fe7e42a
+          message: "feat: comprehensive error handling, schema improvements, and documentation overhaul"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/fe7e42a
+          date: "2025-07-06T10:11:40-04:00"
+          author: govbarnesy
+        - sha: fe7e42a
+          message: "feat: comprehensive error handling, schema improvements, and documentation overhaul"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/fe7e42a
+          date: "2025-07-06T10:11:40-04:00"
+          author: govbarnesy
+        - sha: e499598
+          message: "chore(decisions): add related_to entries for map-to-log scroll sync and theme toggle (49, 50)"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/e499598
+          date: "2025-07-03T20:36:37-04:00"
+          author: Chris Barnes
+        - sha: d1217eb
+          message: "feat(ui): add dark/light theme toggle with persistent user preference\\n\\n- Adds a toggle button to the dashboard\\n- Implements CSS variables and .dark-theme class\\n- Persists user choice in localStorage\\n- Documents the decision in decisions.yml (decision 50)"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/d1217eb
+          date: "2025-07-03T20:34:40-04:00"
+          author: Chris Barnes
+        - sha: 7eb1479
+          message: "chore(decisions): update tasks for onboarding, schema, and validation (47, 48)"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/7eb1479
+          date: "2025-07-03T19:21:16-04:00"
+          author: Chris Barnes
   - id: 15
     title: Establish a Living Product Backlog
-    author: Clyde & AI Assistant
-    date: "2025-06-21T21:00:00Z"
+    author: Claude & Chris Barnes
+    date: "2025-06-27T21:00:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
@@ -585,10 +1501,43 @@ decisions:
         status: Completed
     affected_components:
       - internal-packages/decision-tapestry/PRODUCT-BACKLOG.md
+    github_metadata:
+      file_status:
+        created: []
+        modified: []
+        deleted: []
+        missing:
+          - internal-packages/decision-tapestry/PRODUCT-BACKLOG.md
+      commits:
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: b30ab50
+          message: "feat: implement comprehensive development automation and quality infrastructure"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/b30ab50
+          date: "2025-07-12T10:56:09-04:00"
+          author: govbarnesy
+        - sha: 1a6b3b2
+          message: "fix(cli): replace nodemon with node for CLI start command"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/1a6b3b2
+          date: "2025-07-06T09:41:01-04:00"
+          author: govbarnesy
+        - sha: cfcce8a
+          message: "docs: unify backlog and decisions docs, remove PRODUCT_BACKLOG.md references"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/cfcce8a
+          date: "2025-06-30T13:09:15-04:00"
+          author: Chris Barnes
+        - sha: cfcce8a
+          message: "docs: unify backlog and decisions docs, remove PRODUCT_BACKLOG.md references"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/cfcce8a
+          date: "2025-06-30T13:09:15-04:00"
+          author: Chris Barnes
   - id: 16
     title: Architect the Interactive Backlog Application
-    author: Clyde & AI Assistant
-    date: "2025-06-22T10:00:00Z"
+    author: Claude & Chris Barnes
+    date: "2025-06-27T10:00:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
@@ -611,10 +1560,44 @@ decisions:
     affected_components:
       - internal-packages/decision-tapestry/server.mjs
       - internal-packages/decision-tapestry/package.json
+    github_metadata:
+      file_status:
+        created: []
+        modified: []
+        deleted: []
+        missing:
+          - internal-packages/decision-tapestry/server.mjs
+          - internal-packages/decision-tapestry/package.json
+      commits:
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: b30ab50
+          message: "feat: implement comprehensive development automation and quality infrastructure"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/b30ab50
+          date: "2025-07-12T10:56:09-04:00"
+          author: govbarnesy
+        - sha: 593c7aa
+          message: "fix(ui): refine dark mode backgrounds for panels, tabs, log items, and search input\\n\\n- All panels are #333, all text is white, and interactive elements are black in dark mode"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/593c7aa
+          date: "2025-07-03T21:58:25-04:00"
+          author: Chris Barnes
+        - sha: cfcce8a
+          message: "docs: unify backlog and decisions docs, remove PRODUCT_BACKLOG.md references"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/cfcce8a
+          date: "2025-06-30T13:09:15-04:00"
+          author: Chris Barnes
   - id: 17
     title: "Implement: 1. Enhance Narrative Flow in Visualization"
-    author: Clyde & AI Assistant
-    date: "2025-06-22 10:00:00"
+    author: Claude & Chris Barnes
+    date: "2025-06-27T14:00:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
@@ -632,7 +1615,7 @@ decisions:
       - 5
     supersedes: null
   - title: "Implement: 2. Display Affected Components in Detail Panel"
-    author: Clyde & AI Assistant
+    author: Claude & Chris Barnes
     status: Done
     project: Decision Tapestry
     rationale:
@@ -650,11 +1633,69 @@ decisions:
       - internal-packages/decision-tapestry/generate-dashboard.mjs
     brainstormed_ideas: []
     id: 18
-    date: "2025-06-21T22:18:00.571Z"
+    date: "2025-06-28T22:18:00.000Z"
+    github_metadata:
+      file_status:
+        created: []
+        modified: []
+        deleted: []
+        missing:
+          - internal-packages/decision-tapestry/generate-dashboard.mjs
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: fe7e42a
+          message: "feat: comprehensive error handling, schema improvements, and documentation overhaul"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/fe7e42a
+          date: "2025-07-06T10:11:40-04:00"
+          author: govbarnesy
+        - sha: 65b7b00
+          message: "fix(ui): let controls panel auto-size and decision log fill right column"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/65b7b00
+          date: "2025-07-03T23:17:47-04:00"
+          author: Chris Barnes
+        - sha: 3e9136d
+          message: "fix(ui): adjust right panel layout after removing charter-map; controls and decision log now split column"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/3e9136d
+          date: "2025-07-03T23:16:25-04:00"
+          author: Chris Barnes
   - id: 19
     title: Implement an Interactive CLI for Decision Management
-    author: Clyde & AI Assistant
-    date: "2025-06-22T14:30:00.000Z"
+    author: Claude & Chris Barnes
+    date: "2025-06-28T14:30:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
@@ -674,10 +1715,69 @@ decisions:
     affected_components:
       - internal-packages/decision-tapestry/cli.mjs
       - internal-packages/decision-tapestry/package.json
+    github_metadata:
+      file_status:
+        created: []
+        modified: []
+        deleted: []
+        missing:
+          - internal-packages/decision-tapestry/cli.mjs
+          - internal-packages/decision-tapestry/package.json
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: b30ab50
+          message: "feat: implement comprehensive development automation and quality infrastructure"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/b30ab50
+          date: "2025-07-12T10:56:09-04:00"
+          author: govbarnesy
+        - sha: fe7e42a
+          message: "feat: comprehensive error handling, schema improvements, and documentation overhaul"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/fe7e42a
+          date: "2025-07-06T10:11:40-04:00"
+          author: govbarnesy
+        - sha: 65b7b00
+          message: "fix(ui): let controls panel auto-size and decision log fill right column"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/65b7b00
+          date: "2025-07-03T23:17:47-04:00"
+          author: Chris Barnes
+        - sha: 3e9136d
+          message: "fix(ui): adjust right panel layout after removing charter-map; controls and decision log now split column"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/3e9136d
+          date: "2025-07-03T23:16:25-04:00"
+          author: Chris Barnes
   - id: 20
     title: Implement Real-time UI Updates via WebSockets
-    author: Clyde & AI Assistant
-    date: "2025-06-22T15:00:00.000Z"
+    author: Claude & Chris Barnes
+    date: "2025-06-28T15:00:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
@@ -703,10 +1803,61 @@ decisions:
       - internal-packages/decision-tapestry/dist/app.mjs
       - internal-packages/decision-tapestry/cli.mjs
       - internal-packages/decision-tapestry/package.json
+    github_metadata:
+      file_status:
+        created: []
+        modified: []
+        deleted: []
+        missing:
+          - internal-packages/decision-tapestry/server.mjs
+          - internal-packages/decision-tapestry/dist/app.mjs
+          - internal-packages/decision-tapestry/cli.mjs
+          - internal-packages/decision-tapestry/package.json
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: 48a2788
+          message: Updates package syntax
+          url: https://github.com/govbarnesy/decision-tapestry/commit/48a2788
+          date: "2025-06-30T09:28:11-04:00"
+          author: Chris Barnes
+        - sha: 63239f1
+          message: "fix(server): restore real-time UI updates by watching decisions.yml for changes"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/63239f1
+          date: "2025-06-24T12:09:13-04:00"
+          author: Chris Barnes
+        - sha: 63239f1
+          message: "fix(server): restore real-time UI updates by watching decisions.yml for changes"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/63239f1
+          date: "2025-06-24T12:09:13-04:00"
+          author: Chris Barnes
   - id: 21
     title: Deprecate Static Build Step for a Fully Dynamic Server
-    author: Clyde & AI Assistant
-    date: "2025-06-22T15:30:00.000Z"
+    author: Claude & Chris Barnes
+    date: "2025-06-28T15:30:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
@@ -728,8 +1879,68 @@ decisions:
       - internal-packages/decision-tapestry/generate-dashboard.mjs
       - internal-packages/decision-tapestry/package.json
       - internal-packages/decision-tapestry/server.mjs
+    github_metadata:
+      file_status:
+        created: []
+        modified: []
+        deleted: []
+        missing:
+          - internal-packages/decision-tapestry/generate-dashboard.mjs
+          - internal-packages/decision-tapestry/package.json
+          - internal-packages/decision-tapestry/server.mjs
+      commits:
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: b30ab50
+          message: "feat: implement comprehensive development automation and quality infrastructure"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/b30ab50
+          date: "2025-07-12T10:56:09-04:00"
+          author: govbarnesy
+        - sha: b30ab50
+          message: "feat: implement comprehensive development automation and quality infrastructure"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/b30ab50
+          date: "2025-07-12T10:56:09-04:00"
+          author: govbarnesy
+        - sha: fe7e42a
+          message: "feat: comprehensive error handling, schema improvements, and documentation overhaul"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/fe7e42a
+          date: "2025-07-06T10:11:40-04:00"
+          author: govbarnesy
+        - sha: fe7e42a
+          message: "feat: comprehensive error handling, schema improvements, and documentation overhaul"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/fe7e42a
+          date: "2025-07-06T10:11:40-04:00"
+          author: govbarnesy
+        - sha: 1a6b3b2
+          message: "fix(cli): replace nodemon with node for CLI start command"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/1a6b3b2
+          date: "2025-07-06T09:41:01-04:00"
+          author: govbarnesy
+        - sha: 9fcdff1
+          message: "fix(ci): ensure NODE_AUTH_TOKEN is expanded in .npmrc steps"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9fcdff1
+          date: "2025-06-30T09:33:43-04:00"
+          author: Chris Barnes
   - title: "Implement: 2. Search & Filtering"
-    author: Clyde & AI Assistant
+    author: Claude & Chris Barnes
     status: Done
     project: Decision Tapestry
     rationale:
@@ -748,11 +1959,11 @@ decisions:
     affected_components: []
     brainstormed_ideas: []
     id: 22
-    date: "2025-06-22T03:06:47.105Z"
+    date: "2025-06-30T03:06:47.000Z"
   - id: 23
     title: Implement Decision Velocity Analytics
-    author: Clyde & AI Assistant
-    date: "2025-06-22T18:00:00.000Z"
+    author: Claude & Chris Barnes
+    date: "2025-06-29T18:00:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
@@ -772,10 +1983,69 @@ decisions:
     affected_components:
       - internal-packages/decision-tapestry/dist/index.html
       - internal-packages/decision-tapestry/dist/app.mjs
+    github_metadata:
+      file_status:
+        created: []
+        modified: []
+        deleted: []
+        missing:
+          - internal-packages/decision-tapestry/dist/index.html
+          - internal-packages/decision-tapestry/dist/app.mjs
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: b30ab50
+          message: "feat: implement comprehensive development automation and quality infrastructure"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/b30ab50
+          date: "2025-07-12T10:56:09-04:00"
+          author: govbarnesy
+        - sha: fe7e42a
+          message: "feat: comprehensive error handling, schema improvements, and documentation overhaul"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/fe7e42a
+          date: "2025-07-06T10:11:40-04:00"
+          author: govbarnesy
+        - sha: 65b7b00
+          message: "fix(ui): let controls panel auto-size and decision log fill right column"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/65b7b00
+          date: "2025-07-03T23:17:47-04:00"
+          author: Chris Barnes
+        - sha: 3e9136d
+          message: "fix(ui): adjust right panel layout after removing charter-map; controls and decision log now split column"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/3e9136d
+          date: "2025-07-03T23:16:25-04:00"
+          author: Chris Barnes
+        - sha: 2b5c5b8
+          message: "fix(ui): decision map nodes have white background in light mode and black in dark mode"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/2b5c5b8
+          date: "2025-07-03T23:01:21-04:00"
+          author: Chris Barnes
   - id: 24
     title: Enhance Decision Velocity Analytics with Charting and Time Controls
-    author: Clyde & AI Assistant
-    date: "2025-06-22T19:00:00.000Z"
+    author: Claude & Chris Barnes
+    date: "2025-06-29T19:00:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
@@ -796,10 +2066,69 @@ decisions:
     affected_components:
       - internal-packages/decision-tapestry/dist/index.html
       - internal-packages/decision-tapestry/dist/app.mjs
+    github_metadata:
+      file_status:
+        created: []
+        modified: []
+        deleted: []
+        missing:
+          - internal-packages/decision-tapestry/dist/index.html
+          - internal-packages/decision-tapestry/dist/app.mjs
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
   - id: 25
     title: Implement Project Health Metrics
-    author: Clyde & AI Assistant
-    date: "2025-06-22T20:00:00.000Z"
+    author: Claude & Chris Barnes
+    date: "2025-06-30T20:00:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
@@ -819,10 +2148,29 @@ decisions:
     affected_components:
       - internal-packages/decision-tapestry/dist/index.html
       - internal-packages/decision-tapestry/dist/app.mjs
+    github_metadata:
+      file_status:
+        created: []
+        modified: []
+        deleted: []
+        missing:
+          - internal-packages/decision-tapestry/dist/index.html
+          - internal-packages/decision-tapestry/dist/app.mjs
+      commits:
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: fe7e42a
+          message: "feat: comprehensive error handling, schema improvements, and documentation overhaul"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/fe7e42a
+          date: "2025-07-06T10:11:40-04:00"
+          author: govbarnesy
   - id: 26
     title: Enhance Health Metrics with a Pie Chart Visualization
-    author: Clyde & AI Assistant
-    date: "2025-06-22T21:00:00.000Z"
+    author: Claude & Chris Barnes
+    date: "2025-06-30T21:00:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
@@ -839,10 +2187,69 @@ decisions:
     affected_components:
       - internal-packages/decision-tapestry/dist/index.html
       - internal-packages/decision-tapestry/dist/app.mjs
+    github_metadata:
+      file_status:
+        created: []
+        modified: []
+        deleted: []
+        missing:
+          - internal-packages/decision-tapestry/dist/index.html
+          - internal-packages/decision-tapestry/dist/app.mjs
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: fe7e42a
+          message: "feat: comprehensive error handling, schema improvements, and documentation overhaul"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/fe7e42a
+          date: "2025-07-06T10:11:40-04:00"
+          author: govbarnesy
+        - sha: fe7e42a
+          message: "feat: comprehensive error handling, schema improvements, and documentation overhaul"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/fe7e42a
+          date: "2025-07-06T10:11:40-04:00"
+          author: govbarnesy
   - id: 27
     title: Balance Layout of Analytics Charts
-    author: Clyde & AI Assistant
-    date: "2025-06-22T22:00:00.000Z"
+    author: Claude & Chris Barnes
+    date: "2025-06-30T22:00:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
@@ -857,8 +2264,31 @@ decisions:
         status: Done
     affected_components:
       - internal-packages/decision-tapestry/dist/index.html
+    github_metadata:
+      file_status:
+        created: []
+        modified: []
+        deleted: []
+        missing:
+          - internal-packages/decision-tapestry/dist/index.html
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 3e9136d
+          message: "fix(ui): adjust right panel layout after removing charter-map; controls and decision log now split column"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/3e9136d
+          date: "2025-07-03T23:16:25-04:00"
+          author: Chris Barnes
   - title: "Implement: Phase 2: Tooling & Portability"
-    author: Clyde & AI Assistant
+    author: Claude & Chris Barnes
     status: Done
     project: Decision Tapestry
     rationale:
@@ -881,10 +2311,10 @@ decisions:
     affected_components: []
     brainstormed_ideas: []
     id: 28
-    date: "2025-06-22T06:15:06.721Z"
+    date: "2025-06-30T06:15:06.000Z"
   - title: Create VS Code Extension for Enhanced DX
-    author: Clyde & AI Assistant
-    date: "2025-06-23T10:00:00.000Z"
+    author: Claude & Chris Barnes
+    date: "2025-07-01T10:00:00.000Z"
     status: Done
     project: Decision Tapestry
     rationale:
@@ -907,8 +2337,13 @@ decisions:
     id: 29
   - id: 30
     title: "Implement: Command Palette Integration for Decision Creation"
-    author: Clyde & AI Assistant
-    date: "2025-06-24T10:00:00.000Z"
+    author: Claude & Chris Barnes
+    date:
+      decision_date: "2025-06-24T10:00:00.000Z"
+      first_commit_date: "2025-06-23T19:40:28-04:00"
+      last_commit_date: "2025-06-30T08:48:27-04:00"
+      commit_count: 8
+      git_derived: true
     status: Done
     project: Decision Tapestry
     rationale:
@@ -919,7 +2354,7 @@ decisions:
     related_to:
       - 29
     tasks:
-      - description: "[Phase 1] Add a \"createDecision\" command to the extension's package.json."
+      - description: '[Phase 1] Add a "createDecision" command to the extension''s package.json.'
         status: Done
       - description: "[Phase 1] Implement the command logic in extension.ts to prompt for a title."
         status: Done
@@ -930,8 +2365,67 @@ decisions:
     affected_components:
       - vscode-extension/package.json
       - vscode-extension/src/extension.ts
+    github_metadata:
+      file_status:
+        created: []
+        modified: []
+        deleted:
+          - vscode-extension/package.json
+          - vscode-extension/src/extension.ts
+        missing: []
+      commits:
+        - sha: dbe9fc0
+          message: "chore: remove legacy monorepo and extension files"
+          url: {}
+          date: "2025-06-30T08:48:27-04:00"
+          author: Chris Barnes
+        - sha: dbe9fc0
+          message: "chore: remove legacy monorepo and extension files"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/dbe9fc0
+          date: "2025-06-30T08:48:27-04:00"
+          author: Chris Barnes
+        - sha: 865d805
+          message: "chore: add build and release scripts for CI/CD"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/865d805
+          date: "2025-06-30T08:43:43-04:00"
+          author: Chris Barnes
+        - sha: 51132d2
+          message: "ci: consolidate to single workflow file"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/51132d2
+          date: "2025-06-30T08:36:50-04:00"
+          author: Chris Barnes
+        - sha: 770d36b
+          message: "ci: flatten workflows for single-app repo"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/770d36b
+          date: "2025-06-30T08:29:37-04:00"
+          author: Chris Barnes
+        - sha: f9d3517
+          message: "ci: update workflows for tag and Docker publishing"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f9d3517
+          date: "2025-06-30T08:15:23-04:00"
+          author: Chris Barnes
+        - sha: a1c393d
+          message: "docs(vscode-extension): update README for Marketplace publishing"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/a1c393d
+          date: "2025-06-24T22:03:52-04:00"
+          author: Chris Barnes
+        - sha: d2ea4a9
+          message: "chore: trigger vsce publish workflow test"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/d2ea4a9
+          date: "2025-06-24T21:59:24-04:00"
+          author: Chris Barnes
+        - sha: aecc863
+          message: "feat: test vsce publish workflow"
+          url: {}
+          date: "2025-06-24T18:46:05-04:00"
+          author: Chris Barnes
+        - sha: aecc863
+          message: "feat: test vsce publish workflow"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/aecc863
+          date: "2025-06-24T18:46:05-04:00"
+          author: Chris Barnes
   - title: "Implement: Phase 1: Foundational CLI Tool (Complete)"
-    author: Clyde & AI Assistant
+    author: Claude & Chris Barnes
     status: Done
     project: Decision Tapestry
     rationale:
@@ -946,9 +2440,9 @@ decisions:
     affected_components: []
     brainstormed_ideas: []
     id: 31
-    date: "2025-06-23T06:14:11.055Z"
+    date: "2025-07-01T06:14:11.000Z"
   - title: "Implement: Phase 2: Enhanced Developer Experience (Next Up)"
-    author: Clyde & AI Assistant
+    author: Claude & Chris Barnes
     status: Done
     project: Decision Tapestry
     rationale:
@@ -963,11 +2457,16 @@ decisions:
     affected_components: []
     brainstormed_ideas: []
     id: 32
-    date: "2025-06-23T06:14:23.682Z"
+    date: "2025-07-02T06:14:23.000Z"
   - id: 33
     title: "Implement: Code-to-Decision Linking via Gutter Indicators"
-    author: Clyde & AI Assistant
-    date: "2025-06-25T14:00:00.000Z"
+    author: Claude & Chris Barnes
+    date:
+      decision_date: "2025-06-25T14:00:00.000Z"
+      first_commit_date: "2025-06-23T19:40:28-04:00"
+      last_commit_date: "2025-06-30T08:48:27-04:00"
+      commit_count: 8
+      git_derived: true
     status: Done
     project: Decision Tapestry
     rationale:
@@ -989,9 +2488,69 @@ decisions:
       - vscode-extension/src/extension.ts
       - vscode-extension/src/CodelensProvider.ts
       - vscode-extension/media/icon.svg
+    github_metadata:
+      file_status:
+        created: []
+        modified: []
+        deleted:
+          - vscode-extension/src/extension.ts
+          - vscode-extension/src/CodelensProvider.ts
+          - vscode-extension/media/icon.svg
+        missing: []
+      commits:
+        - sha: dbe9fc0
+          message: "chore: remove legacy monorepo and extension files"
+          url: {}
+          date: "2025-06-30T08:48:27-04:00"
+          author: Chris Barnes
+        - sha: dbe9fc0
+          message: "chore: remove legacy monorepo and extension files"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/dbe9fc0
+          date: "2025-06-30T08:48:27-04:00"
+          author: Chris Barnes
+        - sha: 865d805
+          message: "chore: add build and release scripts for CI/CD"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/865d805
+          date: "2025-06-30T08:43:43-04:00"
+          author: Chris Barnes
+        - sha: 51132d2
+          message: "ci: consolidate to single workflow file"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/51132d2
+          date: "2025-06-30T08:36:50-04:00"
+          author: Chris Barnes
+        - sha: 770d36b
+          message: "ci: flatten workflows for single-app repo"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/770d36b
+          date: "2025-06-30T08:29:37-04:00"
+          author: Chris Barnes
+        - sha: f9d3517
+          message: "ci: update workflows for tag and Docker publishing"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f9d3517
+          date: "2025-06-30T08:15:23-04:00"
+          author: Chris Barnes
+        - sha: a1c393d
+          message: "docs(vscode-extension): update README for Marketplace publishing"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/a1c393d
+          date: "2025-06-24T22:03:52-04:00"
+          author: Chris Barnes
+        - sha: d2ea4a9
+          message: "chore: trigger vsce publish workflow test"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/d2ea4a9
+          date: "2025-06-24T21:59:24-04:00"
+          author: Chris Barnes
+        - sha: aecc863
+          message: "feat: test vsce publish workflow"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/aecc863
+          date: "2025-06-24T18:46:05-04:00"
+          author: Chris Barnes
+        - sha: 010d1d0
+          message: "feat: test semantic-release workflow"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/010d1d0
+          date: "2025-06-24T13:55:04-04:00"
+          author: Chris Barnes
   - id: 34
     title: "Refactor: Implement Debounced File Watching for Real-time UI Updates"
-    author: Clyde & AI Assistant
+    author: Claude & Chris Barnes
     date: "2025-06-25T16:00:00.000Z"
     status: Done
     project: Decision Tapestry
@@ -1012,10 +2571,73 @@ decisions:
         status: Done
     affected_components:
       - internal-packages/decision-tapestry/server.mjs
+    github_metadata:
+      file_status:
+        created: []
+        modified: []
+        deleted: []
+        missing:
+          - internal-packages/decision-tapestry/server.mjs
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: fe7e42a
+          message: "feat: comprehensive error handling, schema improvements, and documentation overhaul"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/fe7e42a
+          date: "2025-07-06T10:11:40-04:00"
+          author: govbarnesy
+        - sha: 1a6b3b2
+          message: "fix(cli): replace nodemon with node for CLI start command"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/1a6b3b2
+          date: "2025-07-06T09:41:01-04:00"
+          author: govbarnesy
   - id: 35
     title: "Enhance: Make CodeLens Command Interactive"
-    author: Clyde & AI Assistant
-    date: "2025-06-25T18:00:00.000Z"
+    author: Claude & Chris Barnes
+    date:
+      decision_date: "2025-06-25T18:00:00.000Z"
+      first_commit_date: "2025-06-23T19:40:28-04:00"
+      last_commit_date: "2025-06-30T08:48:27-04:00"
+      commit_count: 8
+      git_derived: true
     status: Done
     project: Decision Tapestry
     rationale:
@@ -1036,9 +2658,69 @@ decisions:
       - vscode-extension/src/extension.ts
       - vscode-extension/src/CodelensProvider.ts
       - vscode-extension/src/WebViewPanel.ts
+    github_metadata:
+      file_status:
+        created: []
+        modified: []
+        deleted:
+          - vscode-extension/src/extension.ts
+          - vscode-extension/src/CodelensProvider.ts
+          - vscode-extension/src/WebViewPanel.ts
+        missing: []
+      commits:
+        - sha: dbe9fc0
+          message: "chore: remove legacy monorepo and extension files"
+          url: {}
+          date: "2025-06-30T08:48:27-04:00"
+          author: Chris Barnes
+        - sha: dbe9fc0
+          message: "chore: remove legacy monorepo and extension files"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/dbe9fc0
+          date: "2025-06-30T08:48:27-04:00"
+          author: Chris Barnes
+        - sha: 865d805
+          message: "chore: add build and release scripts for CI/CD"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/865d805
+          date: "2025-06-30T08:43:43-04:00"
+          author: Chris Barnes
+        - sha: 51132d2
+          message: "ci: consolidate to single workflow file"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/51132d2
+          date: "2025-06-30T08:36:50-04:00"
+          author: Chris Barnes
+        - sha: 770d36b
+          message: "ci: flatten workflows for single-app repo"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/770d36b
+          date: "2025-06-30T08:29:37-04:00"
+          author: Chris Barnes
+        - sha: f9d3517
+          message: "ci: update workflows for tag and Docker publishing"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f9d3517
+          date: "2025-06-30T08:15:23-04:00"
+          author: Chris Barnes
+        - sha: a1c393d
+          message: "docs(vscode-extension): update README for Marketplace publishing"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/a1c393d
+          date: "2025-06-24T22:03:52-04:00"
+          author: Chris Barnes
+        - sha: d2ea4a9
+          message: "chore: trigger vsce publish workflow test"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/d2ea4a9
+          date: "2025-06-24T21:59:24-04:00"
+          author: Chris Barnes
+        - sha: aecc863
+          message: "feat: test vsce publish workflow"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/aecc863
+          date: "2025-06-24T18:46:05-04:00"
+          author: Chris Barnes
+        - sha: 010d1d0
+          message: "feat: test semantic-release workflow"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/010d1d0
+          date: "2025-06-24T13:55:04-04:00"
+          author: Chris Barnes
   - id: 36
     title: "Enhance: Integrate Dashboard Components for Better UX"
-    author: Clyde & AI Assistant
+    author: Claude & Chris Barnes
     date: "2025-06-25T19:00:00.000Z"
     status: Done
     project: Decision Tapestry
@@ -1059,9 +2741,68 @@ decisions:
     affected_components:
       - internal-packages/decision-tapestry/dist/app.mjs
       - internal-packages/decision-tapestry/dist/index.html
+    github_metadata:
+      file_status:
+        created: []
+        modified: []
+        deleted: []
+        missing:
+          - internal-packages/decision-tapestry/dist/app.mjs
+          - internal-packages/decision-tapestry/dist/index.html
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: fe7e42a
+          message: "feat: comprehensive error handling, schema improvements, and documentation overhaul"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/fe7e42a
+          date: "2025-07-06T10:11:40-04:00"
+          author: govbarnesy
+        - sha: 613f344
+          message: "chore(ui): remove charter-map panel from dashboard for now"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/613f344
+          date: "2025-07-03T23:15:08-04:00"
+          author: Chris Barnes
   - id: 37
     title: "Fix: Make File Watcher Resilient to Rename Events"
-    author: Clyde & AI Assistant
+    author: Claude & Chris Barnes
     date: "2025-06-25T20:00:00.000Z"
     status: Done
     project: Decision Tapestry
@@ -1073,13 +2814,51 @@ decisions:
     related_to:
       - 34
     tasks:
-      - description: "[Phase 1] Update the fs.watch callback to handle both \"change\" and \"rename\" events."
+      - description: '[Phase 1] Update the fs.watch callback to handle both "change" and "rename" events.'
         status: Done
     affected_components:
       - internal-packages/decision-tapestry/server.mjs
+    github_metadata:
+      file_status:
+        created: []
+        modified: []
+        deleted: []
+        missing:
+          - internal-packages/decision-tapestry/server.mjs
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: fe7e42a
+          message: "feat: comprehensive error handling, schema improvements, and documentation overhaul"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/fe7e42a
+          date: "2025-07-06T10:11:40-04:00"
+          author: govbarnesy
+        - sha: 1a6b3b2
+          message: "fix(cli): replace nodemon with node for CLI start command"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/1a6b3b2
+          date: "2025-07-06T09:41:01-04:00"
+          author: govbarnesy
+        - sha: dbe9fc0
+          message: "chore: remove legacy monorepo and extension files"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/dbe9fc0
+          date: "2025-06-30T08:48:27-04:00"
+          author: Chris Barnes
+        - sha: 51132d2
+          message: "ci: consolidate to single workflow file"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/51132d2
+          date: "2025-06-30T08:36:50-04:00"
+          author: Chris Barnes
   - id: 38
     title: "Implement: Dockerize the Decision Tapestry Application"
-    author: Clyde & AI Assistant
+    author: Claude & Chris Barnes
     date: "2025-06-26T10:00:00.000Z"
     status: Done
     project: Decision Tapestry
@@ -1102,9 +2881,69 @@ decisions:
       - internal-packages/decision-tapestry/Dockerfile
       - internal-packages/decision-tapestry/.dockerignore
       - internal-packages/decision-tapestry/README.md
+    github_metadata:
+      file_status:
+        created: []
+        modified: []
+        deleted: []
+        missing:
+          - internal-packages/decision-tapestry/Dockerfile
+          - internal-packages/decision-tapestry/.dockerignore
+          - internal-packages/decision-tapestry/README.md
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: b30ab50
+          message: "feat: implement comprehensive development automation and quality infrastructure"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/b30ab50
+          date: "2025-07-12T10:56:09-04:00"
+          author: govbarnesy
+        - sha: fe7e42a
+          message: "feat: comprehensive error handling, schema improvements, and documentation overhaul"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/fe7e42a
+          date: "2025-07-06T10:11:40-04:00"
+          author: govbarnesy
+        - sha: 65b7b00
+          message: "fix(ui): let controls panel auto-size and decision log fill right column"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/65b7b00
+          date: "2025-07-03T23:17:47-04:00"
+          author: Chris Barnes
+        - sha: 3e9136d
+          message: "fix(ui): adjust right panel layout after removing charter-map; controls and decision log now split column"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/3e9136d
+          date: "2025-07-03T23:16:25-04:00"
+          author: Chris Barnes
   - id: 39
     title: "Fix: Correct fs Module Import for Synchronous Methods"
-    author: Clyde & AI Assistant
+    author: Claude & Chris Barnes
     date: "2025-06-26T12:00:00.000Z"
     status: Done
     project: Decision Tapestry
@@ -1122,8 +2961,36 @@ decisions:
         status: Done
     affected_components:
       - internal-packages/decision-tapestry/server.mjs
+    github_metadata:
+      file_status:
+        created: []
+        modified: []
+        deleted: []
+        missing:
+          - internal-packages/decision-tapestry/server.mjs
+      commits:
+        - sha: fe7e42a
+          message: "feat: comprehensive error handling, schema improvements, and documentation overhaul"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/fe7e42a
+          date: "2025-07-06T10:11:40-04:00"
+          author: govbarnesy
+        - sha: 1a6b3b2
+          message: "fix(cli): replace nodemon with node for CLI start command"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/1a6b3b2
+          date: "2025-07-06T09:41:01-04:00"
+          author: govbarnesy
+        - sha: 44abf36
+          message: "fix(package): set correct npm package name to 'decision-tapestry'"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/44abf36
+          date: "2025-07-03T18:33:03-04:00"
+          author: Chris Barnes
+        - sha: 7163ed3
+          message: "fix: correct bin field for npm CLI publishing"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/7163ed3
+          date: "2025-06-30T09:03:03-04:00"
+          author: Chris Barnes
   - title: "Implement: Future Architecture: Granular Data Binding"
-    author: Clyde & AI Assistant
+    author: Claude & Chris Barnes
     status: Done
     project: Decision Tapestry
     rationale:
@@ -1136,7 +3003,7 @@ decisions:
       - Lightweight Frontend Library (e.g., Preact, Lit): Required a one-time effort to refactor the rendering logic into components and integrate the new library, but the benefits have proven substantial.
       - Full Frontend Framework (e.g., React, Vue): Not pursued, as Lit provided the right balance of power and simplicity for our needs.
     tasks:
-      - description: "[Phase 1] Spike: Introduce Lit dependency and convert the \"Health Metrics\" panel to a Lit component to validate the approach."
+      - description: '[Phase 1] Spike: Introduce Lit dependency and convert the "Health Metrics" panel to a Lit component to validate the approach.'
         status: Done
       - description: "[Phase 2] Systematically convert all major UI sections (graph, log, search) into Lit components."
         status: Done
@@ -1153,11 +3020,85 @@ decisions:
       - internal-packages/decision-tapestry/dist/index.html
       - package.json
     id: 40
-    date: "2025-06-23T07:41:44.867Z"
+    date:
+      decision_date: "2025-06-23T07:41:44.867Z"
+      first_commit_date: "2025-06-24T08:33:55-04:00"
+      last_commit_date: "2025-07-15T15:52:53-04:00"
+      commit_count: 16
+      git_derived: true
+    github_metadata:
+      file_status:
+        created: []
+        modified:
+          - package.json
+        deleted: []
+        missing:
+          - internal-packages/decision-tapestry/dist/app.mjs
+          - internal-packages/decision-tapestry/dist/index.html
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: {}
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 6c00688
+          message: "chore(release): 1.7.0"
+          url: {}
+          date: "2025-07-14T11:01:45-04:00"
+          author: govbarnesy
+        - sha: 6c00688
+          message: "chore(release): 1.7.0"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/6c00688
+          date: "2025-07-14T11:01:45-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: {}
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: b30ab50
+          message: "feat: implement comprehensive development automation and quality infrastructure"
+          url: {}
+          date: "2025-07-12T10:56:09-04:00"
+          author: govbarnesy
+        - sha: b30ab50
+          message: "feat: implement comprehensive development automation and quality infrastructure"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/b30ab50
+          date: "2025-07-12T10:56:09-04:00"
+          author: govbarnesy
   - id: 41
     title: Integrate VS Code Extension with New Architecture
-    author: Clyde
-    date: "2024-06-26T00:00:00Z"
+    author:
+      github_username: govbarnesy
+      display_name: Chris Barnes
+      avatar_url: https://avatars.githubusercontent.com/u/188218537?v=4
+      profile_url: https://github.com/govbarnesy
+    date:
+      decision_date: "2024-06-26T00:00:00Z"
+      first_commit_date: "2025-06-23T19:40:28-04:00"
+      last_commit_date: "2025-06-30T08:48:27-04:00"
+      commit_count: 13
+      git_derived: true
     status: Done
     project: Decision Tapestry
     related_to:
@@ -1180,10 +3121,76 @@ decisions:
       - decision-tapestry/shared/yaml-utils.js
     notes: |
       The extension now uses the shared YAML utility and is fully integrated with the monorepo and backend. All features have been tested and verified.
+    github_metadata:
+      file_status:
+        created: []
+        modified: []
+        deleted:
+          - vscode-extension/package.json
+          - vscode-extension/src/extension.ts
+          - vscode-extension/src/CodelensProvider.ts
+          - decision-tapestry/shared/yaml-utils.js
+        missing: []
+      commits:
+        - sha: dbe9fc0
+          message: "chore: remove legacy monorepo and extension files"
+          url: {}
+          date: "2025-06-30T08:48:27-04:00"
+          author: Chris Barnes
+        - sha: dbe9fc0
+          message: "chore: remove legacy monorepo and extension files"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/dbe9fc0
+          date: "2025-06-30T08:48:27-04:00"
+          author: Chris Barnes
+        - sha: 865d805
+          message: "chore: add build and release scripts for CI/CD"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/865d805
+          date: "2025-06-30T08:43:43-04:00"
+          author: Chris Barnes
+        - sha: 51132d2
+          message: "ci: consolidate to single workflow file"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/51132d2
+          date: "2025-06-30T08:36:50-04:00"
+          author: Chris Barnes
+        - sha: 770d36b
+          message: "ci: flatten workflows for single-app repo"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/770d36b
+          date: "2025-06-30T08:29:37-04:00"
+          author: Chris Barnes
+        - sha: f9d3517
+          message: "ci: update workflows for tag and Docker publishing"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f9d3517
+          date: "2025-06-30T08:15:23-04:00"
+          author: Chris Barnes
+        - sha: a1c393d
+          message: "docs(vscode-extension): update README for Marketplace publishing"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/a1c393d
+          date: "2025-06-24T22:03:52-04:00"
+          author: Chris Barnes
+        - sha: d2ea4a9
+          message: "chore: trigger vsce publish workflow test"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/d2ea4a9
+          date: "2025-06-24T21:59:24-04:00"
+          author: Chris Barnes
+        - sha: aecc863
+          message: "feat: test vsce publish workflow"
+          url: {}
+          date: "2025-06-24T18:46:05-04:00"
+          author: Chris Barnes
+        - sha: aecc863
+          message: "feat: test vsce publish workflow"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/aecc863
+          date: "2025-06-24T18:46:05-04:00"
+          author: Chris Barnes
   - id: 42
     title: Automate Release and Publishing Workflow
-    author: Clyde & AI Assistant
-    date: "2025-06-26T15:00:00Z"
+    author: Claude & Chris Barnes
+    date:
+      decision_date: "2025-06-26T15:00:00Z"
+      first_commit_date: "2025-06-23T19:40:28-04:00"
+      last_commit_date: "2025-07-15T15:52:53-04:00"
+      commit_count: 53
+      git_derived: true
     status: Done
     project: Decision Tapestry
     rationale:
@@ -1208,10 +3215,77 @@ decisions:
       - README.md
     notes: |
       This decision will enable automated, reliable, and scalable release workflows for both the main app and the VS Code extension.
+    github_metadata:
+      file_status:
+        created: []
+        modified:
+          - .github/workflows/
+          - package.json
+          - CHANGELOG.md
+          - README.md
+        deleted:
+          - vscode-extension/package.json
+        missing: []
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: {}
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: {}
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 6c00688
+          message: "chore(release): 1.7.0"
+          url: {}
+          date: "2025-07-14T11:01:45-04:00"
+          author: govbarnesy
+        - sha: 6c00688
+          message: "chore(release): 1.7.0"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/6c00688
+          date: "2025-07-14T11:01:45-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: {}
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: {}
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
   - id: 43
     title: Migrate Legacy Data and Features to New Architecture
-    author: Clyde & AI Assistant
-    date: "2025-06-27T10:00:00Z"
+    author: Claude & Chris Barnes
+    date:
+      decision_date: "2025-06-27T10:00:00Z"
+      first_commit_date: "2025-06-30T08:48:27-04:00"
+      last_commit_date: "2025-07-15T15:52:53-04:00"
+      commit_count: 43
+      git_derived: true
     status: Done
     project: Decision Tapestry
     rationale:
@@ -1236,10 +3310,77 @@ decisions:
       - shared/
     notes: |
       All legacy data and features have been migrated. The new monorepo is now the single source of truth for Decision Tapestry.
+    github_metadata:
+      file_status:
+        created: []
+        modified:
+          - decisions.yml
+          - dashboard/
+          - server/
+          - cli/
+          - shared/
+        deleted: []
+        missing: []
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: {}
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: {}
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 6c00688
+          message: "chore(release): 1.7.0"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/6c00688
+          date: "2025-07-14T11:01:45-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: {}
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: {}
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: b30ab50
+          message: "feat: implement comprehensive development automation and quality infrastructure"
+          url: {}
+          date: "2025-07-12T10:56:09-04:00"
+          author: govbarnesy
   - id: 44
     title: Automate Release and Publishing Workflow
-    author: Clyde & AI Assistant
-    date: "2025-06-27T12:00:00Z"
+    author: Claude & Chris Barnes
+    date:
+      decision_date: "2025-06-27T12:00:00Z"
+      first_commit_date: "2025-06-23T19:40:28-04:00"
+      last_commit_date: "2025-07-15T15:52:53-04:00"
+      commit_count: 53
+      git_derived: true
     status: Done
     project: Decision Tapestry
     rationale:
@@ -1275,10 +3416,77 @@ decisions:
       - README.md
     notes: |
       This decision enabled automated, reliable, and scalable release workflows for the main app using semantic-release for versioning,  changelog, and publishing to npm. All automation is now complete and operational.  Real-time testing update!
+    github_metadata:
+      file_status:
+        created: []
+        modified:
+          - .github/workflows/
+          - package.json
+          - CHANGELOG.md
+          - README.md
+        deleted:
+          - vscode-extension/package.json
+        missing: []
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: {}
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: {}
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 6c00688
+          message: "chore(release): 1.7.0"
+          url: {}
+          date: "2025-07-14T11:01:45-04:00"
+          author: govbarnesy
+        - sha: 6c00688
+          message: "chore(release): 1.7.0"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/6c00688
+          date: "2025-07-14T11:01:45-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: {}
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: {}
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
   - id: 45
     title: Refactor to Flat Repo Structure and Remove VS Code Extension
-    author: Clyde & AI Assistant
-    date: "2025-06-30T00:00:00Z"
+    author: Claude & Chris Barnes
+    date:
+      decision_date: "2025-06-30T00:00:00Z"
+      first_commit_date: "2025-06-23T19:40:28-04:00"
+      last_commit_date: "2025-07-15T15:52:53-04:00"
+      commit_count: 76
+      git_derived: true
     status: Done
     project: Decision Tapestry
     rationale:
@@ -1317,9 +3525,77 @@ decisions:
       - 29
     notes: |
       This decision marks a major simplification and modernization of the Decision Tapestry project, making it easier to maintain, contribute to, and automate. The VS Code extension may be reintroduced as a separate project in the future when ready for dedicated support.
+    github_metadata:
+      file_status:
+        created:
+          - Dockerfile
+        modified:
+          - .github/workflows/
+          - package.json
+          - README.md
+          - decisions.yml
+        deleted:
+          - vscode-extension/
+          - decision-tapestry/
+        missing: []
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: {}
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: {}
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 6c00688
+          message: "chore(release): 1.7.0"
+          url: {}
+          date: "2025-07-14T11:01:45-04:00"
+          author: govbarnesy
+        - sha: 6c00688
+          message: "chore(release): 1.7.0"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/6c00688
+          date: "2025-07-14T11:01:45-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: {}
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: {}
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
   - id: 46
     title: Automate Release and Publishing Workflow
-    author: Clyde
+    author:
+      github_username: govbarnesy
+      display_name: Chris Barnes
+      avatar_url: https://avatars.githubusercontent.com/u/188218537?v=4
+      profile_url: https://github.com/govbarnesy
     date: "2025-06-30T00:00:00Z"
     status: Done
     project: Decision Tapestry
@@ -1342,7 +3618,7 @@ decisions:
       This decision marks the completion of the automation of release and publishing workflows, including CI/CD, semantic-release, and npm/Docker publishing. The system now supports fully automated, reliable, and scalable releases for the main app.
   - id: 47
     title: Provide a Template decisions.yml for New Projects
-    author: Clyde & AI Assistant
+    author: Claude & Chris Barnes
     created: "2025-07-01T00:00:00Z"
     status: Done
     rationale:
@@ -1369,8 +3645,13 @@ decisions:
     date: "2025-07-03T20:21:46.410Z"
   - id: 48
     title: Use Contextual Onboarding CLI to Generate Cursor Planning Prompt
-    author: Clyde & AI Assistant
-    date: "2024-07-03T00:00:00Z"
+    author: Claude & Chris Barnes
+    date:
+      decision_date: "2024-07-03T00:00:00Z"
+      first_commit_date: "2025-06-23T19:40:28-04:00"
+      last_commit_date: "2025-07-15T15:52:53-04:00"
+      commit_count: 35
+      git_derived: true
     status: Done
     project: Decision Tapestry
     rationale:
@@ -1403,10 +3684,77 @@ decisions:
       - decisions.template.yml
     notes: |
       The CLI 'plan' command now generates a context-aware onboarding prompt for Cursor chat, including a live schema example from @decisions.template.yml. The onboarding experience also features a modern ASCII art banner in the 'init' command, and schema validation is available via the CLI.
+    github_metadata:
+      file_status:
+        created: []
+        modified:
+          - cli/cli.mjs
+          - README.md
+          - decisions.yml
+          - decisions.schema.json
+          - decisions.template.yml
+        deleted: []
+        missing: []
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: {}
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: {}
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 6c00688
+          message: "chore(release): 1.7.0"
+          url: {}
+          date: "2025-07-14T11:01:45-04:00"
+          author: govbarnesy
+        - sha: 6c00688
+          message: "chore(release): 1.7.0"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/6c00688
+          date: "2025-07-14T11:01:45-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: {}
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: {}
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
   - id: 49
     title: Restore Map-to-Log Scroll Synchronization in UI
-    author: Clyde & AI Assistant
-    date: "2024-07-03T00:00:00Z"
+    author: Claude & Chris Barnes
+    date:
+      decision_date: "2024-07-03T00:00:00Z"
+      first_commit_date: "2025-06-30T08:48:27-04:00"
+      last_commit_date: "2025-07-15T15:52:53-04:00"
+      commit_count: 12
+      git_derived: true
     status: Done
     project: Decision Tapestry
     rationale:
@@ -1426,10 +3774,74 @@ decisions:
       - 18
     notes: |
       The log now smoothly scrolls to the selected decision when a node is clicked on the map, restoring pre-migration behavior and improving user experience.
+    github_metadata:
+      file_status:
+        created: []
+        modified:
+          - dashboard/decision-log.mjs
+          - dashboard/app.mjs
+        deleted: []
+        missing: []
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: {}
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: {}
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 6c00688
+          message: "chore(release): 1.7.0"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/6c00688
+          date: "2025-07-14T11:01:45-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: {}
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: b30ab50
+          message: "feat: implement comprehensive development automation and quality infrastructure"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/b30ab50
+          date: "2025-07-12T10:56:09-04:00"
+          author: govbarnesy
+        - sha: fe7e42a
+          message: "feat: comprehensive error handling, schema improvements, and documentation overhaul"
+          url: {}
+          date: "2025-07-06T10:11:40-04:00"
+          author: govbarnesy
   - id: 50
     title: Add Dark/Light Theme Toggle to UI
-    author: Clyde & AI Assistant
-    date: "2024-07-03T00:00:00Z"
+    author: Claude & Chris Barnes
+    date:
+      decision_date: "2024-07-03T00:00:00Z"
+      first_commit_date: "2025-06-30T08:48:27-04:00"
+      last_commit_date: "2025-07-15T03:25:12-04:00"
+      commit_count: 21
+      git_derived: true
     status: Done
     project: Decision Tapestry
     rationale:
@@ -1456,10 +3868,75 @@ decisions:
       - 49
     notes: |
       Theme toggle is fully implemented with localStorage persistence and system preference detection. Users can switch between dark and light modes with a fixed-position toggle button.
+    github_metadata:
+      file_status:
+        created: []
+        modified:
+          - dashboard/style.css
+          - dashboard/app.mjs
+          - dashboard/index.html
+        deleted: []
+        missing: []
+      commits:
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: {}
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 6c00688
+          message: "chore(release): 1.7.0"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/6c00688
+          date: "2025-07-14T11:01:45-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: {}
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: b30ab50
+          message: "feat: implement comprehensive development automation and quality infrastructure"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/b30ab50
+          date: "2025-07-12T10:56:09-04:00"
+          author: govbarnesy
+        - sha: fe7e42a
+          message: "feat: comprehensive error handling, schema improvements, and documentation overhaul"
+          url: {}
+          date: "2025-07-06T10:11:40-04:00"
+          author: govbarnesy
+        - sha: fe7e42a
+          message: "feat: comprehensive error handling, schema improvements, and documentation overhaul"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/fe7e42a
+          date: "2025-07-06T10:11:40-04:00"
+          author: govbarnesy
+        - sha: 1a6b3b2
+          message: "fix(cli): replace nodemon with node for CLI start command"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/1a6b3b2
+          date: "2025-07-06T09:41:01-04:00"
+          author: govbarnesy
   - id: 51
     title: Implement Comprehensive Development Automation and Quality Infrastructure
-    author: Clyde & AI Assistant
-    date: "2025-07-12T14:45:00Z"
+    author: Claude & Chris Barnes
+    date:
+      decision_date: "2025-07-12T14:45:00Z"
+      first_commit_date: "2025-06-23T19:40:28-04:00"
+      last_commit_date: "2025-07-15T15:52:53-04:00"
+      commit_count: 57
+      git_derived: true
     status: Done
     project: Decision Tapestry
     rationale:
@@ -1501,9 +3978,74 @@ decisions:
       - 46
     notes: |
       This decision marks the completion of a comprehensive automation overhaul including: - Pre-commit quality checks via Husky and lint-staged - Modern ESLint flat config with TypeScript support   - Updated Jest configuration using current best practices - Multi-platform CI/CD pipeline with semantic release - Development mode with concurrent server and test watching - Comprehensive documentation of automation features All background agent automation tasks from backlog item 107 are now complete.
+    github_metadata:
+      file_status:
+        created:
+          - eslint.config.js
+        modified:
+          - jest.config.mjs
+          - .github/workflows/ci.yml
+          - .github/workflows/release.yml
+          - .husky/pre-commit
+          - package.json
+          - README.md
+          - decisions.yml
+        deleted: []
+        missing: []
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: {}
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: {}
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 6c00688
+          message: "chore(release): 1.7.0"
+          url: {}
+          date: "2025-07-14T11:01:45-04:00"
+          author: govbarnesy
+        - sha: 6c00688
+          message: "chore(release): 1.7.0"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/6c00688
+          date: "2025-07-14T11:01:45-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: {}
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: {}
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
   - id: 52
     title: Utilize Background Agents for Automation and Quality
-    author: Clyde & AI Assistant
+    author: Claude & Chris Barnes
     created: "2025-06-26T14:00:00Z"
     status: Done
     rationale:
@@ -1532,8 +4074,13 @@ decisions:
     date: "2025-07-12T14:53:45.842Z"
   - id: 54
     title: Resolve Critical UX Pain Points for Real-World Development Workflows
-    author: Clyde & AI Assistant
-    date: "2025-07-12T15:40:00Z"
+    author: Claude & Chris Barnes
+    date:
+      decision_date: "2025-07-12T15:40:00Z"
+      first_commit_date: "2025-06-23T19:40:28-04:00"
+      last_commit_date: "2025-07-15T15:52:53-04:00"
+      commit_count: 33
+      git_derived: true
     status: Done
     project: Decision Tapestry
     rationale:
@@ -1575,10 +4122,79 @@ decisions:
       - 47
     notes: |
       This decision resolves four critical UX issues identified through real user feedback: 1. Manual decision updates → capture command for instant logging 2. Unclear onboarding → smart init with project-aware guidance   3. Complex README → 85% reduction with quick-start focus 4. No historical context → analyze command for existing projects The result is a seamless development workflow where decision tracking becomes natural rather than burdensome.
+    github_metadata:
+      file_status:
+        created:
+          - docs/troubleshooting.md
+          - docs/installation.md
+          - docs/collaboration-charter.md
+          - docs/development.md
+        modified:
+          - README.md
+          - cli/cli.mjs
+          - decisions.yml
+        deleted: []
+        missing: []
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: {}
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: {}
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 6c00688
+          message: "chore(release): 1.7.0"
+          url: {}
+          date: "2025-07-14T11:01:45-04:00"
+          author: govbarnesy
+        - sha: 6c00688
+          message: "chore(release): 1.7.0"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/6c00688
+          date: "2025-07-14T11:01:45-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: {}
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: {}
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
   - id: 55
     title: Implement Real-Time Development Activity Tracking Using Multi-Agent Coordination
-    author: Clyde & AI Assistant
-    date: "2025-07-12T15:50:00Z"
+    author: Claude & Chris Barnes
+    date:
+      decision_date: "2025-07-12T15:50:00Z"
+      first_commit_date: "2025-06-30T08:48:27-04:00"
+      last_commit_date: "2025-07-15T15:52:53-04:00"
+      commit_count: 36
+      git_derived: true
     status: Done
     real_time_test: Currently selected decision update test - should show immediately
     project: Decision Tapestry
@@ -1640,10 +4256,78 @@ decisions:
       This decision represents a meta-approach to development where we build real-time activity  tracking using coordinated AI agents, with the development process itself becoming a live  demonstration of the capability. The decision graph will show agent coordination, dependencies,  and feature completion in real-time as the system builds itself.
       COMPLETION STATUS (2025-07-13): ✅ Agent-1 (Infrastructure): WebSocket protocol, activity APIs, persistence - COMPLETE ✅ Agent-2 (Frontend): Visual indicators, dashboard components, animations - COMPLETE   ✅ Agent-3 (Integration): Claude Code hooks, activity detection, CLI - COMPLETE ✅ Agent-4 (Testing): End-to-end validation, performance testing - COMPLETE 🔄 Agent-5 (Documentation): Started with CLAUDE.md, coordination patterns pending
       The system successfully demonstrates real-time AI agent coordination with visual feedback in the decision graph. All core functionality is working and production-ready.
+    github_metadata:
+      file_status:
+        created:
+          - AGENT_COORDINATION_STATUS.md
+        modified:
+          - server/server.mjs
+          - dashboard/decision-map.mjs
+          - dashboard/app.mjs
+          - cli/cli.mjs
+          - decisions.yml
+        deleted: []
+        missing: []
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: {}
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: {}
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 6c00688
+          message: "chore(release): 1.7.0"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/6c00688
+          date: "2025-07-14T11:01:45-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: {}
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: {}
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: b30ab50
+          message: "feat: implement comprehensive development automation and quality infrastructure"
+          url: {}
+          date: "2025-07-12T10:56:09-04:00"
+          author: govbarnesy
   - id: 56
     title: Establish Infrastructure for Real-Time Activity Broadcasting
-    author: Agent-1 (Infrastructure)
-    date: "2025-07-12T15:50:00Z"
+    author: Claude & Chris Barnes
+    date:
+      decision_date: "2025-07-12T15:50:00Z"
+      first_commit_date: "2025-06-30T08:48:27-04:00"
+      last_commit_date: "2025-07-15T15:52:53-04:00"
+      commit_count: 24
+      git_derived: true
     status: Done
     project: Decision Tapestry - Real-Time Activity
     rationale:
@@ -1681,10 +4365,76 @@ decisions:
       - 20
     notes: |
       Agent-1 will build the foundational infrastructure that all other agents depend on. This includes extending the existing WebSocket system to handle activity states, creating APIs for activity management, and ensuring real-time broadcasting works reliably.
+    github_metadata:
+      file_status:
+        created:
+          - AGENT_COORDINATION_STATUS.md
+        modified:
+          - server/server.mjs
+          - dashboard/app.mjs
+          - decisions.yml
+        deleted: []
+        missing: []
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: {}
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: {}
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 6c00688
+          message: "chore(release): 1.7.0"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/6c00688
+          date: "2025-07-14T11:01:45-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: {}
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: {}
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: b30ab50
+          message: "feat: implement comprehensive development automation and quality infrastructure"
+          url: {}
+          date: "2025-07-12T10:56:09-04:00"
+          author: govbarnesy
   - id: 57
     title: Create Visual Activity Indicators and Real-Time Dashboard Updates
-    author: Agent-2 (Frontend)
-    date: "2025-07-12T15:50:00Z"
+    author: Claude & Chris Barnes
+    date:
+      decision_date: "2025-07-12T15:50:00Z"
+      first_commit_date: "2025-06-30T08:48:27-04:00"
+      last_commit_date: "2025-07-15T15:52:53-04:00"
+      commit_count: 27
+      git_derived: true
     status: Done
     project: Decision Tapestry - Real-Time Activity
     rationale:
@@ -1729,10 +4479,82 @@ decisions:
       - 50
     notes: |
       Agent-2 will create the visual experience that makes development activity visible and engaging. This includes real-time animations, agent status displays, and coordination visualization that brings the distributed development process to life in the dashboard.
+    github_metadata:
+      file_status:
+        created:
+          - dashboard/activity-timeline.mjs
+          - dashboard/activity-timeline.mjs
+        modified:
+          - dashboard/decision-map.mjs
+          - dashboard/app.mjs
+          - dashboard/agent-status-panel.mjs
+          - dashboard/style.css
+          - dashboard/agent-status-panel.mjs
+        deleted: []
+        missing:
+          - dashboard/test-activity.mjs
+          - dashboard/test-activity.mjs
+          - dashboard/index-with-activities.html
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: {}
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: {}
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 6c00688
+          message: "chore(release): 1.7.0"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/6c00688
+          date: "2025-07-14T11:01:45-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: {}
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: b30ab50
+          message: "feat: implement comprehensive development automation and quality infrastructure"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/b30ab50
+          date: "2025-07-12T10:56:09-04:00"
+          author: govbarnesy
+        - sha: fe7e42a
+          message: "feat: comprehensive error handling, schema improvements, and documentation overhaul"
+          url: {}
+          date: "2025-07-06T10:11:40-04:00"
+          author: govbarnesy
   - id: 58
     title: Implement Claude Code Integration and Activity Detection
-    author: Agent-3 (Integration)
-    date: "2025-07-12T15:50:00Z"
+    author: Claude & Chris Barnes
+    date:
+      decision_date: "2025-07-12T15:50:00Z"
+      first_commit_date: "2025-06-24T08:33:55-04:00"
+      last_commit_date: "2025-07-15T15:52:53-04:00"
+      commit_count: 32
+      git_derived: true
     status: Done
     project: Decision Tapestry - Real-Time Activity
     rationale:
@@ -1777,9 +4599,76 @@ decisions:
       - 54
     notes: |
       Agent-3 has successfully built the Claude Code integration system that automatically detects and classifies development activity. The system includes: - A monitoring module that hooks into Claude Code tool usage - Intelligent activity pattern recognition (working, debugging, testing, reviewing) - Automatic file-to-decision mapping based on affected_components - Real-time activity broadcasting to the Decision Tapestry server - CLI integration for easy session management The integration is now fully functional and ready for testing with real Claude Code sessions.
+    github_metadata:
+      file_status:
+        created:
+          - claude-code-integration/monitor.mjs
+          - claude-code-integration/claude-code-hook.mjs
+          - claude-code-integration/activity-cli.mjs
+          - claude-code-integration/README.md
+          - claude-code-integration/monitor.mjs
+          - claude-code-integration/claude-code-hook.mjs
+          - claude-code-integration/activity-cli.mjs
+          - claude-code-integration/README.md
+        modified:
+          - cli/cli.mjs
+          - package.json
+        deleted: []
+        missing: []
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: {}
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 6c00688
+          message: "chore(release): 1.7.0"
+          url: {}
+          date: "2025-07-14T11:01:45-04:00"
+          author: govbarnesy
+        - sha: 6c00688
+          message: "chore(release): 1.7.0"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/6c00688
+          date: "2025-07-14T11:01:45-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: {}
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: {}
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: b30ab50
+          message: "feat: implement comprehensive development automation and quality infrastructure"
+          url: {}
+          date: "2025-07-12T10:56:09-04:00"
+          author: govbarnesy
   - id: 59
     title: Validate Multi-Agent Coordination and End-to-End Activity Flow
-    author: Agent-4 (Testing)
+    author: Claude & Chris Barnes
     date: "2025-07-12T15:50:00Z"
     status: Done
     project: Decision Tapestry - Real-Time Activity
@@ -1822,10 +4711,50 @@ decisions:
       - 58
     notes: |
       Agent-4 will validate that all the pieces work together correctly and that the  meta-coordination approach actually delivers the intended experience. This includes testing the distributed development process itself.
+    github_metadata:
+      file_status:
+        created: []
+        modified: []
+        deleted: []
+        missing:
+          - server/server.mjs (testing endpoints)
+          - dashboard/app.mjs (testing real-time updates)
+          - All agent deliverables validated
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
   - id: 60
     title: Document Distributed AI Development Coordination Patterns
-    author: Agent-5 (Meta-Documentation)
-    date: "2025-07-12T15:50:00Z"
+    author: Claude & Chris Barnes
+    date:
+      decision_date: "2025-07-12T15:50:00Z"
+      first_commit_date: "2025-06-30T08:48:27-04:00"
+      last_commit_date: "2025-07-15T15:52:53-04:00"
+      commit_count: 15
+      git_derived: true
     status: Done
     project: Decision Tapestry - Real-Time Activity
     rationale:
@@ -1863,10 +4792,76 @@ decisions:
       - All agent decisions
     notes: |
       Agent-5 will document the coordination process itself, creating a reusable methodology for distributed AI development that can be applied to future complex development efforts.
+    github_metadata:
+      file_status:
+        created:
+          - CLAUDE.md
+          - AGENT_COORDINATION_STATUS.md
+        modified:
+          - docs/
+          - decisions.yml
+        deleted: []
+        missing: []
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: {}
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 6c00688
+          message: "chore(release): 1.7.0"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/6c00688
+          date: "2025-07-14T11:01:45-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: {}
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: {}
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: b30ab50
+          message: "feat: implement comprehensive development automation and quality infrastructure"
+          url: {}
+          date: "2025-07-12T10:56:09-04:00"
+          author: govbarnesy
+        - sha: b30ab50
+          message: "feat: implement comprehensive development automation and quality infrastructure"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/b30ab50
+          date: "2025-07-12T10:56:09-04:00"
+          author: govbarnesy
   - id: 69
     title: Implement Multi-Agent Framework for Parallel Development
     author: Claude & Chris Barnes
-    date: "2025-07-15T23:00:00Z"
+    date:
+      decision_date: "2025-07-15T23:00:00Z"
+      first_commit_date: "2025-07-15T15:52:53-04:00"
+      last_commit_date: "2025-07-15T15:52:53-04:00"
+      commit_count: 10
+      git_derived: true
     status: Completed
     project: Decision Tapestry
     rationale:
@@ -1912,10 +4907,42 @@ decisions:
       This framework enables multiple AI agents to work in parallel on different features,
       with proper coordination, testing, and validation. The system includes message passing,
       task assignment, and integration testing capabilities.
+    github_metadata:
+      file_status:
+        created:
+          - cli/agent-framework.mjs
+          - cli/agent-coordinator.mjs
+          - cli/agent-messaging.mjs
+          - cli/agent-commands.mjs
+          - cli/agent-test-framework.mjs
+          - cli/claude-agent.mjs
+          - cli/demo-agent.mjs
+          - __tests__/agent-integration.test.ts
+          - __tests__/agent-test-utils.js
+          - __tests__/agents/
+        modified: []
+        deleted: []
+        missing: []
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: {}
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
   - id: 70
     title: Enhance Activity System with Agent Activity Feed and Analytics
     author: Claude & Chris Barnes
-    date: "2025-07-15T23:15:00Z"
+    date:
+      decision_date: "2025-07-15T23:15:00Z"
+      first_commit_date: "2025-06-30T08:48:27-04:00"
+      last_commit_date: "2025-07-15T15:52:53-04:00"
+      commit_count: 8
+      git_derived: true
     status: Completed
     project: Decision Tapestry
     rationale:
@@ -1954,10 +4981,77 @@ decisions:
     notes: |
       Extended the activity system to provide comprehensive visibility into agent operations,
       including real-time feeds, timelines, and analytics for development coordination.
+    github_metadata:
+      file_status:
+        created:
+          - dashboard/agent-activity-feed.mjs
+          - dashboard/activity-timeline.mjs
+          - cli/test-ui-updates.mjs
+          - __tests__/activity-system-test.mjs
+        modified:
+          - server/server.mjs
+        deleted: []
+        missing: []
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: {}
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 6c00688
+          message: "chore(release): 1.7.0"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/6c00688
+          date: "2025-07-14T11:01:45-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: {}
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: f45335d
+          message: "feat: comprehensive UX overhaul for seamless development workflows"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/f45335d
+          date: "2025-07-12T11:44:55-04:00"
+          author: govbarnesy
+        - sha: b30ab50
+          message: "feat: implement comprehensive development automation and quality infrastructure"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/b30ab50
+          date: "2025-07-12T10:56:09-04:00"
+          author: govbarnesy
+        - sha: fe7e42a
+          message: "feat: comprehensive error handling, schema improvements, and documentation overhaul"
+          url: {}
+          date: "2025-07-06T10:11:40-04:00"
+          author: govbarnesy
+        - sha: fe7e42a
+          message: "feat: comprehensive error handling, schema improvements, and documentation overhaul"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/fe7e42a
+          date: "2025-07-06T10:11:40-04:00"
+          author: govbarnesy
   - id: 71
     title: Implement Advanced Time Filtering and Commit Visualization
     author: Claude & Chris Barnes
-    date: "2025-07-15T23:30:00Z"
+    date:
+      decision_date: "2025-07-15T23:30:00Z"
+      first_commit_date: "2025-07-15T15:52:53-04:00"
+      last_commit_date: "2025-07-15T15:52:53-04:00"
+      commit_count: 5
+      git_derived: true
     status: Completed
     project: Decision Tapestry
     rationale:
@@ -1995,10 +5089,37 @@ decisions:
     notes: |
       Advanced time-based features that complement the GitHub integration work,
       providing powerful tools for analyzing development patterns over time.
+    github_metadata:
+      file_status:
+        created:
+          - dashboard/enhanced-time-filter.mjs
+          - dashboard/time-range-picker.mjs
+          - dashboard/commit-activity-heatmap.mjs
+          - dashboard/commit-timeline-viz.mjs
+          - dashboard/commit-timeline.mjs
+        modified: []
+        deleted: []
+        missing: []
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: {}
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
   - id: 72
     title: Create Comprehensive Testing Infrastructure
     author: Claude & Chris Barnes
-    date: "2025-07-15T23:45:00Z"
+    date:
+      decision_date: "2025-07-15T23:45:00Z"
+      first_commit_date: "2025-07-14T10:44:55-04:00"
+      last_commit_date: "2025-07-15T15:52:53-04:00"
+      commit_count: 6
+      git_derived: true
     status: Completed
     project: Decision Tapestry
     rationale:
@@ -2038,10 +5159,63 @@ decisions:
       Comprehensive test coverage for all new features including agent framework,
       frontend components, and real-time activity tracking. Includes both automated
       and visual testing tools.
+    github_metadata:
+      file_status:
+        created:
+          - __tests__/agent-integration.test.ts
+          - __tests__/frontend-integration.test.ts
+          - __tests__/clustering-features.test.ts
+          - __tests__/activity-system-test.mjs
+          - __tests__/visual-activity-demo.mjs
+          - __tests__/claude-code-integration-test.mjs
+        modified: []
+        deleted: []
+        missing: []
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: {}
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: {}
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 5b01d09
+          message: "feat: enhanced search and filtering with inferred categorization and UX improvements"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/5b01d09
+          date: "2025-07-15T03:25:12-04:00"
+          author: govbarnesy
+        - sha: 6c00688
+          message: "chore(release): 1.7.0"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/6c00688
+          date: "2025-07-14T11:01:45-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: {}
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
+        - sha: "9855583"
+          message: "feat: comprehensive real-time collaboration system and major codebase cleanup"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/9855583
+          date: "2025-07-14T10:44:55-04:00"
+          author: govbarnesy
   - id: 73
     title: Implement GitHub Services and UI Components for Enhanced Metadata
     author: Claude & Chris Barnes
-    date: "2025-07-15T23:50:00Z"
+    date:
+      decision_date: "2025-07-15T23:50:00Z"
+      first_commit_date: "2025-07-15T15:52:53-04:00"
+      last_commit_date: "2025-07-15T15:52:53-04:00"
+      commit_count: 14
+      git_derived: true
     status: Completed
     project: Decision Tapestry
     rationale:
@@ -2096,4 +5270,35 @@ decisions:
       This completes the GitHub integration implementation with all necessary services,
       utilities, and UI components. The system now fully supports GitHub metadata
       extraction, caching, and visualization with performance optimizations.
+    github_metadata:
+      file_status:
+        created:
+          - services/github-service.mjs
+          - services/author-service.mjs
+          - services/git-analyzer.mjs
+          - services/file-tracker.mjs
+          - services/decision-enhancer.mjs
+          - services/git-performance.mjs
+          - dashboard/avatar-display.mjs
+          - dashboard/file-status-display.mjs
+          - config/github-config.mjs
+          - utils/author-migration.mjs
+          - utils/commit-matcher.mjs
+          - utils/git-utils.mjs
+          - utils/github-ui-utils.mjs
+          - styles/github-ui.css
+        modified: []
+        deleted: []
+        missing: []
+      commits:
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: {}
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
+        - sha: 58c7604
+          message: "feat: implement multi-agent framework with GitHub integration and activity tracking"
+          url: https://github.com/govbarnesy/decision-tapestry/commit/58c7604
+          date: "2025-07-15T15:52:53-04:00"
+          author: govbarnesy
 backlog: []

@@ -1,6 +1,6 @@
-import { exec } from 'child_process';
-import { promisify } from 'util';
-import { gitAnalyzer } from './git-analyzer.mjs';
+import { exec } from "child_process";
+import { promisify } from "util";
+import { gitAnalyzer } from "./git-analyzer.mjs";
 
 const execAsync = promisify(exec);
 
@@ -25,37 +25,37 @@ export class GitPerformance {
     try {
       // Get total number of commits
       const { stdout: commitCount } = await execAsync(
-        'git rev-list --count HEAD',
-        { cwd: process.cwd() }
+        "git rev-list --count HEAD",
+        { cwd: process.cwd() },
       );
 
       // Get number of files
-      const { stdout: fileList } = await execAsync(
-        'git ls-files | wc -l',
-        { cwd: process.cwd() }
-      );
+      const { stdout: fileList } = await execAsync("git ls-files | wc -l", {
+        cwd: process.cwd(),
+      });
 
       // Get repository size
-      const { stdout: repoSize } = await execAsync(
-        'du -sh .git | cut -f1',
-        { cwd: process.cwd() }
-      );
+      const { stdout: repoSize } = await execAsync("du -sh .git | cut -f1", {
+        cwd: process.cwd(),
+      });
 
       this.repoStats = {
         totalCommits: parseInt(commitCount.trim()),
         totalFiles: parseInt(fileList.trim()),
         repoSize: repoSize.trim(),
-        isLarge: parseInt(commitCount.trim()) > 10000 || parseInt(fileList.trim()) > 5000
+        isLarge:
+          parseInt(commitCount.trim()) > 10000 ||
+          parseInt(fileList.trim()) > 5000,
       };
 
       return this.repoStats;
     } catch (error) {
-      console.error('Error getting repo stats:', error.message);
+      console.error("Error getting repo stats:", error.message);
       return {
         totalCommits: 0,
         totalFiles: 0,
-        repoSize: 'unknown',
-        isLarge: false
+        repoSize: "unknown",
+        isLarge: false,
       };
     }
   }
@@ -66,7 +66,7 @@ export class GitPerformance {
    * @returns {Map} File path to history mapping
    */
   async batchGetFileHistories(filePaths) {
-    const cacheKey = filePaths.sort().join('|');
+    const cacheKey = filePaths.sort().join("|");
     if (this.batchCache.has(cacheKey)) {
       return this.batchCache.get(cacheKey);
     }
@@ -100,19 +100,19 @@ export class GitPerformance {
   async processFileChunk(filePaths, results) {
     try {
       // Use a single git command to get history for multiple files
-      const fileArgs = filePaths.map(f => `"${f}"`).join(' ');
+      const fileArgs = filePaths.map((f) => `"${f}"`).join(" ");
       const { stdout } = await execAsync(
         `git log --name-only --format='COMMIT:%H|%aI|%an|%s' -- ${fileArgs}`,
-        { cwd: process.cwd() }
+        { cwd: process.cwd() },
       );
 
       // Parse the output
       let currentCommit = null;
-      const lines = stdout.trim().split('\n');
-      
+      const lines = stdout.trim().split("\n");
+
       for (const line of lines) {
-        if (line.startsWith('COMMIT:')) {
-          const [, sha, date, author, message] = line.split('|');
+        if (line.startsWith("COMMIT:")) {
+          const [, sha, date, author, message] = line.split("|");
           currentCommit = { sha: sha.substring(0, 7), date, author, message };
         } else if (line && currentCommit) {
           // This is a file path
@@ -120,13 +120,13 @@ export class GitPerformance {
             results.set(line, {
               commits: [],
               firstCommit: null,
-              lastCommit: null
+              lastCommit: null,
             });
           }
-          
+
           const fileHistory = results.get(line);
           fileHistory.commits.push(currentCommit);
-          
+
           // Update first/last commits
           if (!fileHistory.lastCommit) {
             fileHistory.lastCommit = currentCommit;
@@ -135,7 +135,7 @@ export class GitPerformance {
         }
       }
     } catch (error) {
-      console.error('Error processing file chunk:', error.message);
+      console.error("Error processing file chunk:", error.message);
     }
   }
 
@@ -144,33 +144,35 @@ export class GitPerformance {
    */
   async getOptimizedFileHistory(filePath) {
     const stats = await this.getRepoStats();
-    
+
     // For large repos, limit the depth of history search
     const maxDepth = stats.isLarge ? 50 : 100;
-    
+
     try {
       const { stdout } = await execAsync(
         `git log --format='%H|%aI|%an|%s' -n ${maxDepth} --follow -- "${filePath}"`,
-        { cwd: process.cwd() }
+        { cwd: process.cwd() },
       );
-      
-      const commits = stdout.trim().split('\n')
-        .filter(line => line)
-        .map(line => {
-          const [sha, date, author, message] = line.split('|');
+
+      const commits = stdout
+        .trim()
+        .split("\n")
+        .filter((line) => line)
+        .map((line) => {
+          const [sha, date, author, message] = line.split("|");
           return { sha: sha.substring(0, 7), date, author, message };
         });
-      
+
       return {
         commits,
         firstCommit: commits[commits.length - 1] || null,
-        lastCommit: commits[0] || null
+        lastCommit: commits[0] || null,
       };
     } catch (error) {
       return {
         commits: [],
         firstCommit: null,
-        lastCommit: null
+        lastCommit: null,
       };
     }
   }
@@ -180,44 +182,47 @@ export class GitPerformance {
    */
   async getFileStatusBatch(filePaths) {
     const statusMap = new Map();
-    
+
     try {
       // Get current status of all files at once
       const { stdout } = await execAsync(
-        'git ls-files --others --deleted --modified',
-        { cwd: process.cwd() }
+        "git ls-files --others --deleted --modified",
+        { cwd: process.cwd() },
       );
-      
-      const gitStatus = new Set(stdout.trim().split('\n').filter(Boolean));
-      
+
+      const gitStatus = new Set(stdout.trim().split("\n").filter(Boolean));
+
       // Check each file
       for (const filePath of filePaths) {
         if (gitStatus.has(filePath)) {
-          statusMap.set(filePath, 'modified');
+          statusMap.set(filePath, "modified");
         } else {
           // Use git log to check if file exists in history
           const { stdout: logOutput } = await execAsync(
             `git log --oneline -1 -- "${filePath}"`,
-            { cwd: process.cwd() }
+            { cwd: process.cwd() },
           );
-          
+
           if (logOutput.trim()) {
             // File has history
             const { stdout: catOutput } = await execAsync(
               `git cat-file -e HEAD:"${filePath}" 2>/dev/null && echo "exists" || echo "deleted"`,
-              { cwd: process.cwd(), shell: true }
+              { cwd: process.cwd(), shell: true },
             );
-            
-            statusMap.set(filePath, catOutput.trim() === 'exists' ? 'existing' : 'deleted');
+
+            statusMap.set(
+              filePath,
+              catOutput.trim() === "exists" ? "existing" : "deleted",
+            );
           } else {
-            statusMap.set(filePath, 'missing');
+            statusMap.set(filePath, "missing");
           }
         }
       }
     } catch (error) {
-      console.error('Error in batch file status:', error.message);
+      console.error("Error in batch file status:", error.message);
     }
-    
+
     return statusMap;
   }
 
@@ -225,58 +230,72 @@ export class GitPerformance {
    * Optimize decision enhancement for large repositories
    */
   async optimizeDecisionEnhancement(decision) {
-    if (!decision.affected_components || decision.affected_components.length === 0) {
+    if (
+      !decision.affected_components ||
+      decision.affected_components.length === 0
+    ) {
       return decision;
     }
 
     const stats = await this.getRepoStats();
-    
+
     // For large repos, use more aggressive caching and batching
     if (stats.isLarge) {
       // Batch process all files at once
-      const histories = await this.batchGetFileHistories(decision.affected_components);
-      const statuses = await this.getFileStatusBatch(decision.affected_components);
-      
+      const histories = await this.batchGetFileHistories(
+        decision.affected_components,
+      );
+      const statuses = await this.getFileStatusBatch(
+        decision.affected_components,
+      );
+
       // Build enhanced decision with batched data
       const enhanced = { ...decision };
-      
+
       // Add date range
       let firstDate = null;
       let lastDate = null;
       let totalCommits = 0;
-      
+
       for (const [filePath, history] of histories) {
-        if (history.firstCommit && (!firstDate || new Date(history.firstCommit.date) < new Date(firstDate))) {
+        if (
+          history.firstCommit &&
+          (!firstDate ||
+            new Date(history.firstCommit.date) < new Date(firstDate))
+        ) {
           firstDate = history.firstCommit.date;
         }
-        if (history.lastCommit && (!lastDate || new Date(history.lastCommit.date) > new Date(lastDate))) {
+        if (
+          history.lastCommit &&
+          (!lastDate || new Date(history.lastCommit.date) > new Date(lastDate))
+        ) {
           lastDate = history.lastCommit.date;
         }
         totalCommits += history.commits.length;
       }
-      
-      if (typeof enhanced.date === 'string' && firstDate) {
+
+      if (typeof enhanced.date === "string" && firstDate) {
         enhanced.date = {
           decision_date: enhanced.date,
           first_commit_date: firstDate,
           last_commit_date: lastDate,
           commit_count: totalCommits,
-          git_derived: true
+          git_derived: true,
         };
       }
-      
+
       // Add file status
       enhanced.github_metadata = enhanced.github_metadata || {};
       enhanced.github_metadata.file_status = {
         created: [],
         modified: [],
         deleted: [],
-        missing: []
+        missing: [],
       };
-      
+
       for (const [filePath, status] of statuses) {
         switch (status) {
-          case 'existing': {
+          case "existing": {
             const history = histories.get(filePath);
             if (history && history.commits.length === 1) {
               enhanced.github_metadata.file_status.created.push(filePath);
@@ -285,32 +304,33 @@ export class GitPerformance {
             }
             break;
           }
-          case 'deleted':
+          case "deleted":
             enhanced.github_metadata.file_status.deleted.push(filePath);
             break;
-          case 'missing':
+          case "missing":
             enhanced.github_metadata.file_status.missing.push(filePath);
             break;
         }
       }
-      
+
       // Add top commits
       const allCommits = [];
       const seenShas = new Set();
-      
+
       for (const [, history] of histories) {
-        for (const commit of history.commits.slice(0, 3)) { // Limit commits per file
+        for (const commit of history.commits.slice(0, 3)) {
+          // Limit commits per file
           if (!seenShas.has(commit.sha)) {
             seenShas.add(commit.sha);
             allCommits.push(commit);
           }
         }
       }
-      
+
       enhanced.github_metadata.commits = allCommits
         .sort((a, b) => new Date(b.date) - new Date(a.date))
         .slice(0, 10);
-      
+
       return enhanced;
     } else {
       // For smaller repos, use standard enhancement

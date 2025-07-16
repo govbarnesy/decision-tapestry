@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test New Components - Decision Tapestry</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script type="module" src="./agent-status-panel.mjs"></script>
+    <script type="module" src="./activity-timeline.mjs"></script>
+    <script type="module" src="./commit-activity-heatmap.mjs"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: var(--body-bg);
+        }
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .component-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background: var(--panel-bg);
+            border-radius: 8px;
+            box-shadow: var(--panel-shadow);
+        }
+        h1 {
+            color: var(--text-main);
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: var(--text-main);
+            margin-bottom: 20px;
+        }
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <button id="theme-toggle-btn" class="theme-toggle">🌙</button>
+    
+    <div class="test-container">
+        <h1>New Components Test Page</h1>
+        
+        <div class="component-section">
+            <h2>Agent Status Panel</h2>
+            <agent-status-panel id="agent-status"></agent-status-panel>
+        </div>
+        
+        <div class="component-section">
+            <h2>Activity Timeline</h2>
+            <activity-timeline id="activity-timeline"></activity-timeline>
+        </div>
+        
+        <div class="component-section">
+            <h2>Commit Activity Heatmap</h2>
+            <commit-activity-heatmap id="commit-heatmap"></commit-activity-heatmap>
+        </div>
+    </div>
+
+    <script type="module">
+        // Theme toggle
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                document.body.classList.add('dark-theme');
+                document.getElementById('theme-toggle-btn').textContent = '☀️';
+            } else {
+                document.body.classList.remove('dark-theme');
+                document.getElementById('theme-toggle-btn').textContent = '🌙';
+            }
+        }
+
+        function getPreferredTheme() {
+            const saved = localStorage.getItem('dt-theme');
+            if (saved) return saved;
+            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+
+        document.getElementById('theme-toggle-btn').addEventListener('click', () => {
+            const currentTheme = document.body.classList.contains('dark-theme') ? 'light' : 'dark';
+            localStorage.setItem('dt-theme', currentTheme);
+            applyTheme(currentTheme);
+        });
+
+        applyTheme(getPreferredTheme());
+
+        // Load test data
+        async function loadTestData() {
+            try {
+                // Load decisions for the heatmap
+                const response = await fetch('/api/data');
+                if (response.ok) {
+                    const data = await response.json();
+                    const heatmap = document.getElementById('commit-heatmap');
+                    if (heatmap) {
+                        heatmap.decisions = data.decisions;
+                    }
+                }
+
+                // Load current activities
+                const activityResponse = await fetch('/api/activity?includeHistory=true');
+                if (activityResponse.ok) {
+                    const activityData = await activityResponse.json();
+                    
+                    // Update agent status panel
+                    const agentStatus = document.getElementById('agent-status');
+                    if (agentStatus && agentStatus.updateAgents) {
+                        // Create agent map from activities
+                        const agents = new Map();
+                        activityData.activities.forEach(activity => {
+                            agents.set(activity.agentId, {
+                                id: activity.agentId,
+                                state: activity.state,
+                                taskDescription: activity.taskDescription,
+                                decisionId: activity.decisionId,
+                                lastUpdate: activity.lastUpdate
+                            });
+                        });
+                        agentStatus.updateAgents(agents);
+                    }
+                    
+                    // Update activity timeline
+                    const timeline = document.getElementById('activity-timeline');
+                    if (timeline && activityData.history) {
+                        activityData.history.forEach(activity => {
+                            if (timeline.addActivity) {
+                                timeline.addActivity(activity);
+                            }
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading test data:', error);
+            }
+        }
+
+        // WebSocket for real-time updates
+        function initializeWebSocket() {
+            const socket = new WebSocket(`ws://${window.location.host}`);
+            
+            socket.onmessage = (event) => {
+                try {
+                    const message = JSON.parse(event.data);
+                    if (message.type === 'activity') {
+                        // Update agent status
+                        const agentStatus = document.getElementById('agent-status');
+                        if (agentStatus && agentStatus.updateAgentActivity) {
+                            agentStatus.updateAgentActivity(message.agentId, message.activity);
+                        }
+                        
+                        // Update timeline
+                        const timeline = document.getElementById('activity-timeline');
+                        if (timeline && timeline.addActivity) {
+                            timeline.addActivity({
+                                agentId: message.agentId,
+                                activity: message.activity,
+                                timestamp: message.timestamp || new Date().toISOString()
+                            });
+                        }
+                    }
+                } catch (e) {
+                    console.error('Error handling WebSocket message:', e);
+                }
+            };
+            
+            socket.onerror = (error) => console.error('WebSocket error:', error);
+            socket.onclose = () => {
+                console.log('WebSocket closed, retrying in 1s...');
+                setTimeout(initializeWebSocket, 1000);
+            };
+        }
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            loadTestData();
+            initializeWebSocket();
+        });
+    </script>
+</body>
+</html>

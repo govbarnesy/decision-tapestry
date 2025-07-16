@@ -1,7 +1,7 @@
-import { gitAnalyzer } from './git-analyzer.mjs';
-import { fileTracker } from './file-tracker.mjs';
-import { commitMatcher } from '../utils/commit-matcher.mjs';
-import { enhanceDecisionWithGitData } from '../utils/git-utils.mjs';
+import { gitAnalyzer } from "./git-analyzer.mjs";
+import { fileTracker } from "./file-tracker.mjs";
+import { commitMatcher } from "../utils/commit-matcher.mjs";
+import { enhanceDecisionWithGitData } from "../utils/git-utils.mjs";
 
 /**
  * Decision Enhancer Service
@@ -26,7 +26,7 @@ export class DecisionEnhancer {
       includeCommits = true,
       includeFileStatus = true,
       maxCommits = 10,
-      useCache = true
+      useCache = true,
     } = options;
 
     // Check cache
@@ -42,27 +42,27 @@ export class DecisionEnhancer {
     if (includeCommits && enhanced.affected_components?.length > 0) {
       const matcher = commitMatcher;
       const matchedCommits = await matcher.matchCommitsToDecision(enhanced);
-      
+
       // Ensure github_metadata exists
       enhanced.github_metadata = enhanced.github_metadata || {};
-      
+
       // Add commits array with proper formatting
-      enhanced.github_metadata.commits = matchedCommits
-        .slice(0, maxCommits)
-        .map(commit => ({
+      enhanced.github_metadata.commits = await Promise.all(
+        matchedCommits.slice(0, maxCommits).map(async (commit) => ({
           sha: commit.sha,
           message: commit.message,
           url: commit.url || (await gitAnalyzer.getCommitUrl(commit.sha)),
           date: commit.date,
-          author: commit.author
-        }));
+          author: commit.author,
+        })),
+      );
     }
 
     // Add file status tracking
     if (includeFileStatus && enhanced.affected_components?.length > 0) {
       const tracker = fileTracker;
       const fileStatus = await tracker.trackFiles(enhanced.affected_components);
-      
+
       // Ensure github_metadata exists
       enhanced.github_metadata = enhanced.github_metadata || {};
       enhanced.github_metadata.file_status = fileStatus;
@@ -84,12 +84,12 @@ export class DecisionEnhancer {
    */
   async enhanceDecisions(decisions, options = {}) {
     const enhanced = [];
-    
+
     // Process in parallel for better performance
-    const promises = decisions.map(decision => 
-      this.enhanceDecision(decision, options)
+    const promises = decisions.map((decision) =>
+      this.enhanceDecision(decision, options),
     );
-    
+
     const results = await Promise.all(promises);
     return results;
   }
@@ -101,7 +101,7 @@ export class DecisionEnhancer {
    */
   async generateActivitySummary(decision) {
     const enhanced = await this.enhanceDecision(decision);
-    
+
     const summary = {
       decisionId: decision.id,
       title: decision.title,
@@ -115,24 +115,24 @@ export class DecisionEnhancer {
           created: 0,
           modified: 0,
           deleted: 0,
-          missing: 0
-        }
-      }
+          missing: 0,
+        },
+      },
     };
 
     // Extract date range
-    if (enhanced.date && typeof enhanced.date === 'object') {
+    if (enhanced.date && typeof enhanced.date === "object") {
       summary.gitActivity.hasGitData = true;
       summary.gitActivity.dateRange = {
         first: enhanced.date.first_commit_date,
-        last: enhanced.date.last_commit_date
+        last: enhanced.date.last_commit_date,
       };
       summary.gitActivity.commitCount = enhanced.date.commit_count || 0;
     }
 
     // Extract commit authors
     if (enhanced.github_metadata?.commits) {
-      enhanced.github_metadata.commits.forEach(commit => {
+      enhanced.github_metadata.commits.forEach((commit) => {
         summary.gitActivity.authors.add(commit.author);
       });
     }
@@ -145,7 +145,7 @@ export class DecisionEnhancer {
         created: status.created?.length || 0,
         modified: status.modified?.length || 0,
         deleted: status.deleted?.length || 0,
-        missing: status.missing?.length || 0
+        missing: status.missing?.length || 0,
       };
     }
 
@@ -166,10 +166,12 @@ export class DecisionEnhancer {
     for (const decision of decisions) {
       // Check if decision has affected components but no Git metadata
       if (decision.affected_components?.length > 0) {
-        const hasEnhancedDate = decision.date && typeof decision.date === 'object';
-        const hasGitMetadata = decision.github_metadata?.commits || 
-                               decision.github_metadata?.file_status;
-        
+        const hasEnhancedDate =
+          decision.date && typeof decision.date === "object";
+        const hasGitMetadata =
+          decision.github_metadata?.commits ||
+          decision.github_metadata?.file_status;
+
         if (!hasEnhancedDate || !hasGitMetadata) {
           enhanceable.push({
             id: decision.id,
@@ -178,8 +180,8 @@ export class DecisionEnhancer {
             missingEnhancements: {
               enhancedDate: !hasEnhancedDate,
               commits: !decision.github_metadata?.commits,
-              fileStatus: !decision.github_metadata?.file_status
-            }
+              fileStatus: !decision.github_metadata?.file_status,
+            },
           });
         }
       }

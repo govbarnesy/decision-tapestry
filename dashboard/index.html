@@ -24,32 +24,33 @@
 </script>
     <script type="module" src="./advanced-filter.mjs"></script>
     <script type="module" src="./charter-map.mjs"></script>
+    <script type="module" src="./agent-test-panel.mjs"></script>
 </head>
 
 <body>
     <div class="dashboard">
-        <button id="theme-toggle-btn" style="position: fixed; top: 1rem; right: 2rem; z-index: 1000; padding: 0.5rem 1rem; border-radius: 6px; border: none; background: #eee; color: #333; cursor: pointer; font-weight: bold;">🌙 Dark Mode</button>
-        
         <div id="left-panel" class="panel">
             <tab-control></tab-control>
-            <decision-detail-panel id="decision-detail"
-                class="panel-content tab-content active"></decision-detail-panel>
-            <div id="product-backlog" class="panel-content tab-content">
-                <div id="product-backlog-content">
-                    <product-backlog-panel></product-backlog-panel>
+            <div class="left-panel-content">
+                <decision-detail-panel id="decision-detail"
+                    class="panel-view active" data-tab="decision-detail"></decision-detail-panel>
+                <div id="product-backlog" class="panel-view" data-tab="product-backlog">
+                    <div id="product-backlog-content">
+                        <product-backlog-panel></product-backlog-panel>
+                    </div>
                 </div>
-            </div>
-            <div id="analytics" class="panel-content tab-content">
-                <decision-velocity-chart
-                    style="height: 50%; display: flex; flex-direction: column; padding-bottom: 1rem; box-sizing: border-box;">
-                </decision-velocity-chart>
-                <div id="health-metrics"
-                    style="height: 50%; display: flex; flex-direction: column; position: relative; border-top: 1px solid #eee; padding-top: 1rem; box-sizing: border-box;">
-                    <h3>Health Metrics</h3>
-                    <div style="display: flex; align-items: center; gap: 2rem; flex-grow: 1;">
-                        <health-metrics-panel id="health-metrics-stats" style="flex-grow: 1;"></health-metrics-panel>
-                        <div id="decision-health-chart-container" style="flex-basis: 200px; height: 100%;">
-                            <decision-health-chart></decision-health-chart>
+                <div id="analytics" class="panel-view" data-tab="analytics">
+                    <decision-velocity-chart
+                        style="height: 50%; display: flex; flex-direction: column; padding-bottom: 1rem; box-sizing: border-box;">
+                    </decision-velocity-chart>
+                    <div id="health-metrics"
+                        style="height: 50%; display: flex; flex-direction: column; position: relative; border-top: 1px solid #eee; padding-top: 1rem; box-sizing: border-box;">
+                        <h3>Health Metrics</h3>
+                        <div style="display: flex; align-items: center; gap: 2rem; flex-grow: 1;">
+                            <health-metrics-panel id="health-metrics-stats" style="flex-grow: 1;"></health-metrics-panel>
+                            <div id="decision-health-chart-container" style="flex-basis: 200px; height: 100%;">
+                                <decision-health-chart></decision-health-chart>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -70,21 +71,20 @@
         <div id="controls-panel" class="panel">
             <div class="controls-header">
                 <div class="controls-tabs">
-                    <button class="controls-tab active" data-tab="search">Search</button>
+                    <button class="controls-tab active" data-tab="log">Log</button>
+                    <button class="controls-tab" data-tab="search">Search</button>
                     <button class="controls-tab" data-tab="filters">Filters</button>
                     <button class="controls-tab" data-tab="patterns">Patterns</button>
+                    <button class="controls-tab" data-tab="agents">Agents</button>
                 </div>
+                <button id="theme-toggle-btn" class="theme-toggle">🌙</button>
             </div>
             <div class="controls-content">
-                <search-panel id="search-controls" class="controls-view active" data-tab="search"></search-panel>
+                <decision-log-panel id="decision-log-content" class="controls-view active" data-tab="log"></decision-log-panel>
+                <search-panel id="search-controls" class="controls-view" data-tab="search"></search-panel>
                 <advanced-filter id="advanced-filter" class="controls-view" data-tab="filters"></advanced-filter>
                 <pathway-explorer id="pathway-explorer" class="controls-view" data-tab="patterns"></pathway-explorer>
-            </div>
-        </div>
-        <div id="decision-log" class="panel-content tab-content active">
-            <h2>Decision Log</h2>
-            <div id="decision-log-container" style="height: calc(100% - 40px);">
-                <decision-log-panel id="decision-log-content"></decision-log-panel>
+                <agent-test-panel id="agent-test" class="controls-view" data-tab="agents"></agent-test-panel>
             </div>
         </div>
     </div>
