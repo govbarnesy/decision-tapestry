@@ -444,7 +444,8 @@ export class AgentCoordinator {
             // Get or create reviewer agent
             let reviewerAgent = this.agents.get(reviewerAgentId);
             if (!reviewerAgent) {
-                reviewerAgent = new DecisionTapestryAgent(reviewerAgentId, null); // No specific decision for reviewer
+                // Create reviewer with null decision ID - it will load decisions data but not a specific decision
+                reviewerAgent = new DecisionTapestryAgent(reviewerAgentId, null);
                 await reviewerAgent.initialize();
                 this.agents.set(reviewerAgentId, reviewerAgent);
             }
@@ -526,3 +527,86 @@ export class AgentCoordinator {
         console.log(`[${timestamp}] [Coordinator] ${message}`);
     }
 }
+
+// Main execution block - commented out to prevent interference with CLI
+// This block was used for direct execution but now we use the CLI commands
+/*
+if (process.argv.length > 2) {
+    const decisionId = parseInt(process.argv[2]);
+    
+    if (isNaN(decisionId)) {
+        console.error('Please provide a valid decision ID');
+        process.exit(1);
+    }
+    
+    const coordinator = new AgentCoordinator();
+    
+    async function runCoordination() {
+        try {
+            console.log(`🚀 Starting agent coordination for Decision #${decisionId}`);
+            await coordinator.initialize();
+            
+            const results = await coordinator.coordinateDecisions([decisionId]);
+            
+            console.log('\n📊 Coordination Results:');
+            console.log(`   Total Agents: ${results.total}`);
+            console.log(`   Completed: ${results.completed}`);
+            console.log(`   Failed: ${results.failed}`);
+            
+            if (results.errors.length > 0) {
+                console.log('\n❌ Errors:');
+                results.errors.forEach(error => console.log(`   - ${error}`));
+            }
+            
+            console.log('\n✅ Agent coordination completed!');
+            
+        } catch (error) {
+            console.error(`❌ Coordination failed: ${error.message}`);
+            process.exit(1);
+        }
+    }
+    
+    runCoordination();
+}
+*/
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 80
+// Task: Audit decision metadata for completeness and accuracy
+// Timestamp: 2025-07-16T05:43:48.869Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 80
+// Task: Validate decision relationships and cross-references
+// Timestamp: 2025-07-16T05:43:48.917Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 80
+// Task: Check for missing or inconsistent date formats
+// Timestamp: 2025-07-16T05:43:48.963Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 80
+// Task: Verify affected_components accuracy against actual file structure
+// Timestamp: 2025-07-16T05:43:49.009Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 80
+// Task: Suggest improvements for decision categorization
+// Timestamp: 2025-07-16T05:43:49.056Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 80
+// Task: Generate recommendations for decision lifecycle management
+// Timestamp: 2025-07-16T05:43:49.103Z
+

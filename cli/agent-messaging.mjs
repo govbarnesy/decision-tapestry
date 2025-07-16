@@ -154,6 +154,35 @@ export class AgentMessaging {
     }
 
     /**
+     * Send activity update to HTTP API for dashboard display
+     */
+    async sendActivityUpdate(state, decisionId, taskDescription) {
+        try {
+            const response = await fetch('http://localhost:8080/api/activity', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    agentId: this.agentId,
+                    state: state,
+                    decisionId: decisionId,
+                    taskDescription: taskDescription
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+
+            this.log(`Activity sent: ${state} - ${taskDescription}`);
+        } catch (error) {
+            this.log(`Failed to send activity update: ${error.message}`);
+            // Don't fail the agent if activity update fails
+        }
+    }
+
+    /**
      * Broadcast task completion
      */
     async broadcastTaskCompletion(taskData) {

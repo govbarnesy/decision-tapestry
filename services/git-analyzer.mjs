@@ -128,9 +128,9 @@ export class GitAnalyzer {
   }
 
   /**
-   * Get commit URL (GitHub format by default)
+   * Get remote repository URL
    */
-  async getCommitUrl(sha) {
+  async getRemoteUrl() {
     try {
       const { stdout: remoteUrl } = await execAsync(
         "git config --get remote.origin.url",
@@ -140,16 +140,26 @@ export class GitAnalyzer {
       const url = remoteUrl.trim();
       if (url.includes("github.com")) {
         // Convert SSH to HTTPS format
-        const httpsUrl = url
+        return url
           .replace("git@github.com:", "https://github.com/")
           .replace(".git", "");
-        return `${httpsUrl}/commit/${sha}`;
       }
 
-      return null;
+      return url;
     } catch {
       return null;
     }
+  }
+
+  /**
+   * Get commit URL (GitHub format by default)
+   */
+  async getCommitUrl(sha) {
+    const remoteUrl = await this.getRemoteUrl();
+    if (remoteUrl && remoteUrl.includes("github.com")) {
+      return `${remoteUrl}/commit/${sha}`;
+    }
+    return null;
   }
 
   /**

@@ -343,6 +343,73 @@
                     "items": { "type": "string" }
                   }
                 }
+              },
+              "commit_status": {
+                "type": "object",
+                "description": "CI/CD status for the most recent commit",
+                "properties": {
+                  "state": {
+                    "type": "string",
+                    "enum": ["success", "failure", "pending", "error"]
+                  },
+                  "total_count": { "type": "integer" },
+                  "statuses": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "context": { "type": "string" },
+                        "state": { "type": "string" },
+                        "description": { "type": "string" },
+                        "target_url": { "type": "string" }
+                      }
+                    }
+                  }
+                }
+              },
+              "workflow_runs": {
+                "type": "array",
+                "description": "GitHub Actions workflow runs related to this decision",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "integer" },
+                    "name": { "type": "string" },
+                    "status": {
+                      "type": "string",
+                      "enum": ["completed", "in_progress", "queued"]
+                    },
+                    "conclusion": {
+                      "type": "string",
+                      "enum": [
+                        "success",
+                        "failure",
+                        "cancelled",
+                        "skipped",
+                        "neutral",
+                        "timed_out",
+                        "action_required",
+                        null
+                      ]
+                    },
+                    "created_at": { "type": "string" },
+                    "updated_at": { "type": "string" },
+                    "url": { "type": "string" },
+                    "head_sha": { "type": "string" },
+                    "head_branch": { "type": "string" }
+                  }
+                }
+              },
+              "release": {
+                "type": "object",
+                "description": "Release information mentioning this decision",
+                "properties": {
+                  "tag_name": { "type": "string" },
+                  "name": { "type": "string" },
+                  "published_at": { "type": "string" },
+                  "url": { "type": "string" },
+                  "body": { "type": "string" }
+                }
               }
             },
             "additionalProperties": false

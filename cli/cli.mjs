@@ -12,7 +12,8 @@ import {
     showAgentHelp,
     launchAgents,
     executeAgentTask,
-    monitorAgents
+    monitorAgents,
+    enrichDecisions
 } from './agent-commands.mjs';
 
 const commands = {
@@ -676,6 +677,10 @@ async function manageAgent() {
             
         case 'test':
             await runAgentTests();
+            break;
+            
+        case 'enrich':
+            await enrichDecisions();
             break;
             
         case 'help':

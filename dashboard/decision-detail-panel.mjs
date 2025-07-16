@@ -494,7 +494,8 @@ class DecisionDetailPanel extends LitElement {
             <ul class="task-list">
               ${tasks.map((task) => {
                 const taskStatusClass = `task-status-${task.status.toLowerCase()}`;
-                const icon = task.status === "Done" ? "✅" : "⚪";
+                const isComplete = task.status === "Done" || task.status === "Completed";
+                const icon = isComplete ? "✅" : "⚪";
                 return html`<li class="task-item">
                   <span class="${taskStatusClass}"
                     >${icon} ${task.description}</span
@@ -536,6 +537,9 @@ class DecisionDetailPanel extends LitElement {
 
     // Render PRs and Issues
     const prsAndIssuesHtml = this._renderPRsAndIssues(github_metadata);
+    
+    // Render additional GitHub data (CI status, workflow runs, releases)
+    const additionalGitHubHtml = this._renderAdditionalGitHubData(github_metadata);
 
     return html`
       <h2>Decision #${id}: ${title}</h2>
@@ -553,8 +557,120 @@ class DecisionDetailPanel extends LitElement {
         ${tradeoffsHtml}
       </ul>
       ${tasksHtml} ${fileStatusHtml} ${commitTimelineHtml} ${prsAndIssuesHtml}
+      ${additionalGitHubHtml}
     `;
+  }
+
+  _renderAdditionalGitHubData(githubMetadata) {
+    if (!githubMetadata) return "";
+
+    const { commit_status, workflow_runs, release } = githubMetadata;
+    let html = "";
+
+    // Render commit status
+    if (commit_status) {
+      const statusIcon = {
+        success: "✅",
+        failure: "❌",
+        pending: "⏳",
+        error: "⚠️"
+      }[commit_status.state] || "❓";
+
+      html += `
+        <div class="github-metadata-section">
+          <h3>CI/CD Status</h3>
+          <div class="commit-status">
+            <span class="status-icon">${statusIcon}</span>
+            <span class="status-state ${commit_status.state}">${commit_status.state}</span>
+            ${commit_status.total_count > 0 ? `
+              <div class="status-checks">
+                ${commit_status.statuses.map(check => `
+                  <div class="status-check">
+                    <span class="check-context">${check.context}:</span>
+                    <span class="check-state ${check.state}">${check.state}</span>
+                    ${check.target_url ? `<a href="${check.target_url}" target="_blank">Details</a>` : ""}
+                  </div>
+                `).join("")}
+              </div>
+            ` : ""}
+          </div>
+        </div>
+      `;
+    }
+
+    // Render workflow runs
+    if (workflow_runs && workflow_runs.length > 0) {
+      html += `
+        <div class="github-metadata-section">
+          <h3>GitHub Actions Runs</h3>
+          <div class="workflow-runs">
+            ${workflow_runs.map(run => `
+              <div class="workflow-run">
+                <a href="${run.url}" target="_blank" class="workflow-link">
+                  <span class="workflow-name">${run.name}</span>
+                  <span class="workflow-status ${run.status}">${run.status}</span>
+                  ${run.conclusion ? `<span class="workflow-conclusion ${run.conclusion}">${run.conclusion}</span>` : ""}
+                </a>
+                <div class="workflow-details">
+                  Branch: ${run.head_branch} | 
+                  <time>${new Date(run.created_at).toLocaleString()}</time>
+                </div>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+      `;
+    }
+
+    // Render release info
+    if (release) {
+      html += `
+        <div class="github-metadata-section">
+          <h3>Released In</h3>
+          <div class="release-info">
+            <a href="${release.url}" target="_blank" class="release-link">
+              <span class="release-tag">${release.tag_name}</span>
+              ${release.name ? `<span class="release-name">${release.name}</span>` : ""}
+            </a>
+            <div class="release-date">
+              Published: <time>${new Date(release.published_at).toLocaleString()}</time>
+            </div>
+            ${release.body ? `
+              <div class="release-body">
+                <details>
+                  <summary>Release Notes</summary>
+                  <pre>${release.body}</pre>
+                </details>
+              </div>
+            ` : ""}
+          </div>
+        </div>
+      `;
+    }
+
+    return html;
   }
 }
 
 customElements.define("decision-detail-panel", DecisionDetailPanel);
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 85
+// Task: Create webhook endpoint for GitHub events
+// Timestamp: 2025-07-16T07:10:03.591Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 85
+// Task: Add webhook signature validation
+// Timestamp: 2025-07-16T07:10:03.673Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 85
+// Task: Update decision display with real-time GitHub updates
+// Timestamp: 2025-07-16T07:10:03.759Z
+

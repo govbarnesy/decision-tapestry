@@ -2,6 +2,7 @@ import { gitAnalyzer } from "./git-analyzer.mjs";
 import { fileTracker } from "./file-tracker.mjs";
 import { commitMatcher } from "../utils/commit-matcher.mjs";
 import { enhanceDecisionWithGitData } from "../utils/git-utils.mjs";
+import githubService from "./github-service.mjs";
 
 /**
  * Decision Enhancer Service
@@ -25,6 +26,7 @@ export class DecisionEnhancer {
     const {
       includeCommits = true,
       includeFileStatus = true,
+      includeGitHubData = true,
       maxCommits = 10,
       useCache = true,
     } = options;
@@ -66,6 +68,11 @@ export class DecisionEnhancer {
       // Ensure github_metadata exists
       enhanced.github_metadata = enhanced.github_metadata || {};
       enhanced.github_metadata.file_status = fileStatus;
+    }
+
+    // Add GitHub API data
+    if (includeGitHubData && githubService.getStatus().configured) {
+      await this.enhanceWithGitHubData(enhanced);
     }
 
     // Cache the result
@@ -188,6 +195,85 @@ export class DecisionEnhancer {
     }
 
     return enhanceable;
+  }
+
+  /**
+   * Enhance decision with GitHub API data
+   * @param {Object} decision - The decision object to enhance
+   * @returns {Promise<void>}
+   */
+  async enhanceWithGitHubData(decision) {
+    try {
+      // Get repository info from git
+      const repoUrl = await gitAnalyzer.getRemoteUrl();
+      if (!repoUrl) return;
+
+      // Parse owner and repo from URL
+      const match = repoUrl.match(/github\.com[/:]([^/]+)\/([^.]+)/);
+      if (!match) return;
+
+      const [, owner, repo] = match;
+
+      // Ensure github_metadata exists
+      decision.github_metadata = decision.github_metadata || {};
+
+      // Fetch GitHub data in parallel
+      const [pullRequests, issues, release] = await Promise.all([
+        githubService.getPullRequestsForDecision(owner, repo, decision.id),
+        githubService.getIssuesForDecision(owner, repo, decision.id),
+        githubService.getReleaseForDecision(owner, repo, decision.id)
+      ]);
+
+      // Add pull requests if found
+      if (pullRequests.length > 0) {
+        decision.github_metadata.pull_requests = pullRequests;
+      }
+
+      // Add issues if found
+      if (issues.length > 0) {
+        decision.github_metadata.issues = issues;
+      }
+
+      // Add release info if found
+      if (release) {
+        decision.github_metadata.release = release;
+      }
+
+      // Add commit status checks for recent commits
+      if (decision.github_metadata.commits?.length > 0) {
+        // Check status for the most recent commit
+        const recentCommit = decision.github_metadata.commits[0];
+        if (recentCommit.sha) {
+          const status = await githubService.getCommitStatus(owner, repo, recentCommit.sha);
+          if (status) {
+            decision.github_metadata.commit_status = status;
+          }
+        }
+      }
+
+      // Add workflow runs for the branch
+      if (decision.github_metadata.commits?.length > 0) {
+        const workflowRuns = await githubService.getWorkflowRuns(owner, repo, {
+          limit: 5
+        });
+        
+        if (workflowRuns.length > 0) {
+          // Find runs related to our commits
+          const commitShas = decision.github_metadata.commits.map(c => c.sha);
+          const relatedRuns = workflowRuns.filter(run => 
+            commitShas.includes(run.head_sha)
+          );
+          
+          if (relatedRuns.length > 0) {
+            decision.github_metadata.workflow_runs = relatedRuns;
+          }
+        }
+      }
+
+    } catch (error) {
+      console.error(`Failed to enhance decision ${decision.id} with GitHub data:`, error.message);
+      // Continue without GitHub enhancement
+    }
   }
 
   /**

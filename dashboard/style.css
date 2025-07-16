@@ -1,3 +1,6 @@
+/* Import GitHub enhanced styles */
+@import url('../styles/github-enhanced.css');
+
 html {
     --background: #f4f7f6;
     --panel-bg: #fff;
@@ -203,7 +206,8 @@ p {
     padding-left: 0;
 }
 
-.task-status-done {
+.task-status-done,
+.task-status-completed {
     color: var(--status-accepted);
 }
 

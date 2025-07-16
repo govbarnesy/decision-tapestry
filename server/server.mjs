@@ -153,7 +153,11 @@ function handleAgentRegistration(ws, data) {
     lastHeartbeat: new Date().toISOString(),
   });
 
-  console.log(`Agent ${agentId} registered for decision ${decisionId}`);
+  if (decisionId) {
+    console.log(`Agent ${agentId} registered for decision ${decisionId}`);
+  } else {
+    console.log(`${agentId} registered (coordinator mode)`);
+  }
 
   // Broadcast agent registration to all clients
   broadcast({

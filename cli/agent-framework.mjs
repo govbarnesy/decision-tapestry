@@ -11,6 +11,8 @@ import yaml from 'js-yaml';
 import { fileURLToPath } from 'url';
 import { AgentMessaging } from './agent-messaging.mjs';
 import { AgentTestFramework } from './agent-test-framework.mjs';
+import { DecisionEnhancer } from '../services/decision-enhancer.mjs';
+import githubService from '../services/github-service.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -32,6 +34,11 @@ export class DecisionTapestryAgent {
         // Core systems
         this.messaging = new AgentMessaging(agentId);
         this.testFramework = new AgentTestFramework(agentId);
+        
+        // GitHub integration
+        this.githubService = null;
+        this.decisionEnhancer = null;
+        this.fileOperations = []; // Track file operations for GitHub metadata
         
         // Schema validation
         this.ajv = new Ajv({ allErrors: true, strict: false });
@@ -68,6 +75,9 @@ export class DecisionTapestryAgent {
             
             // Initialize test framework
             await this.testFramework.initialize();
+            
+            // Initialize GitHub services if token is available
+            await this.initializeGitHubServices();
             
             this.status = 'ready';
             await this.broadcastStatus('Agent ready to work');
@@ -106,6 +116,12 @@ export class DecisionTapestryAgent {
             // Load decisions.yml
             const decisionsContent = await fs.readFile(this.decisionsPath, 'utf8');
             this.decisionsData = yaml.load(decisionsContent);
+            
+            // For reviewer agents, we don't need a specific decision
+            if (this.decisionId === null) {
+                this.log('Loaded decisions data for reviewer mode');
+                return;
+            }
             
             // Find specific decision
             this.decision = this.decisionsData.decisions.find(d => d.id === this.decisionId);
@@ -327,6 +343,7 @@ export class DecisionTapestryAgent {
                     // Create new file
                     await fs.writeFile(file.path, file.content, 'utf8');
                     this.log(`✅ Created: ${file.path}`);
+                    this.trackFileOperation('created', file.path, 'success');
                 } else {
                     // Enhance existing file
                     await this.enhanceExistingFile(file.path, file.content);
@@ -590,8 +607,12 @@ export default { process };
             
             await fs.writeFile(filePath, enhancedContent, 'utf8');
             
+            // Track file operation for GitHub metadata
+            this.trackFileOperation('enhanced', filePath, 'success');
+            
         } catch (error) {
             this.log(`Failed to enhance ${filePath}: ${error.message}`);
+            this.trackFileOperation('enhanced', filePath, 'failed');
             throw error;
         }
     }
@@ -638,6 +659,18 @@ export default { process };
             
             // Save changes
             await this.saveDecisions();
+            
+            // If marking task as completed, check if we should enrich the decision
+            if (status === 'Completed' || status === 'Done') {
+                // Check if all tasks are now completed
+                const allTasksCompleted = this.decisionsData.decisions[decisionIndex].tasks
+                    .every(t => t.status === 'Completed' || t.status === 'Done');
+                
+                if (allTasksCompleted && !this.decisionsData.decisions[decisionIndex].github_metadata) {
+                    // All tasks completed and no GitHub metadata yet - enrich the decision
+                    await this.enrichDecisionMetadata();
+                }
+            }
             
             // Broadcast task status update
             await this.broadcastStatus(`Task ${status.toLowerCase()}: ${task.description}`);
@@ -703,6 +736,362 @@ export default { process };
     }
 
     /**
+     * Initialize GitHub services if token is available
+     */
+    async initializeGitHubServices() {
+        try {
+            const githubToken = process.env.GITHUB_TOKEN;
+            
+            if (githubToken) {
+                // Initialize GitHub service
+                this.githubService = githubService;
+                await this.githubService.initialize(githubToken);
+                
+                // Initialize decision enhancer
+                this.decisionEnhancer = new DecisionEnhancer();
+                
+                this.log('GitHub services initialized');
+            } else {
+                this.log('No GitHub token found, GitHub enrichment will be skipped');
+            }
+        } catch (error) {
+            this.log(`Failed to initialize GitHub services: ${error.message}`);
+            // Continue without GitHub integration
+        }
+    }
+
+    /**
+     * Enrich decision with GitHub metadata
+     */
+    async enrichDecisionMetadata() {
+        // If no decision enhancer, add basic file metadata
+        if (!this.decisionEnhancer) {
+            this.log('Decision enhancer not available, adding basic file metadata');
+            await this.addBasicFileMetadata();
+            return;
+        }
+
+        try {
+            await this.broadcastStatus('Enriching decision with GitHub metadata...');
+            
+            // Get the current decision data
+            const decisionIndex = this.decisionsData.decisions.findIndex(d => d.id === this.decisionId);
+            if (decisionIndex === -1) {
+                throw new Error(`Decision ${this.decisionId} not found`);
+            }
+            
+            // Enrich the decision
+            const enrichedDecision = await this.decisionEnhancer.enhanceDecision(
+                this.decisionsData.decisions[decisionIndex]
+            );
+            
+            // Update the decision with enriched data
+            this.decisionsData.decisions[decisionIndex] = enrichedDecision;
+            this.decision = enrichedDecision;
+            
+            // Add file operations to GitHub metadata if available
+            if (this.fileOperations.length > 0 && enrichedDecision.github_metadata) {
+                enrichedDecision.github_metadata.agent_file_operations = this.fileOperations;
+            }
+            
+            await this.saveDecisions();
+            
+            this.log('Decision enriched with GitHub metadata');
+            await this.broadcastStatus('GitHub metadata added successfully');
+            
+        } catch (error) {
+            this.log(`Failed to enrich decision: ${error.message}`);
+            // Continue without enrichment
+        }
+    }
+
+    /**
+     * Track file operation for GitHub metadata
+     */
+    trackFileOperation(operation, filePath, status) {
+        this.fileOperations.push({
+            operation,
+            filePath,
+            status,
+            timestamp: new Date().toISOString(),
+            agentId: this.agentId
+        });
+    }
+
+    /**
+     * Analyze and add related decisions based on various criteria
+     */
+    async analyzeAndAddRelatedDecisions() {
+        try {
+            await this.broadcastStatus('Analyzing related decisions...');
+            this.log('Analyzing relationships with other decisions...');
+            
+            const decisionIndex = this.decisionsData.decisions.findIndex(d => d.id === this.decisionId);
+            if (decisionIndex === -1) return;
+            
+            const currentDecision = this.decisionsData.decisions[decisionIndex];
+            const relatedIds = new Set(currentDecision.related_to || []);
+            const originalCount = relatedIds.size;
+            
+            // 1. Find decisions with overlapping affected components
+            this.findRelatedByComponents(currentDecision, relatedIds);
+            
+            // 2. Find decisions by similar keywords in title/rationale
+            this.findRelatedByKeywords(currentDecision, relatedIds);
+            
+            // 3. Find decisions that mention this decision ID
+            this.findDecisionsThatMentionThis(currentDecision, relatedIds);
+            
+            // 4. Find decisions with shared authors
+            this.findRelatedByAuthor(currentDecision, relatedIds);
+            
+            // 5. Find decisions in similar time period (within 7 days)
+            this.findRelatedByTimeProximity(currentDecision, relatedIds);
+            
+            // 6. Find decisions with shared tasks/patterns
+            this.findRelatedByTaskPatterns(currentDecision, relatedIds);
+            
+            // Convert Set to array and update decision
+            const newRelatedTo = Array.from(relatedIds).filter(id => id !== this.decisionId).sort((a, b) => a - b);
+            
+            if (newRelatedTo.length > originalCount) {
+                currentDecision.related_to = newRelatedTo;
+                this.decisionsData.decisions[decisionIndex] = currentDecision;
+                
+                await this.saveDecisions();
+                
+                const addedCount = newRelatedTo.length - originalCount;
+                this.log(`Added ${addedCount} related decisions: ${newRelatedTo.slice(originalCount).join(', ')}`);
+                await this.broadcastStatus(`Found ${addedCount} related decisions`);
+            } else {
+                this.log('No new related decisions found');
+            }
+            
+        } catch (error) {
+            this.log(`Failed to analyze related decisions: ${error.message}`);
+            // Continue without relationship analysis
+        }
+    }
+    
+    /**
+     * Find decisions with overlapping affected components
+     */
+    findRelatedByComponents(currentDecision, relatedIds) {
+        if (!currentDecision.affected_components || currentDecision.affected_components.length === 0) return;
+        
+        const currentComponents = new Set(currentDecision.affected_components);
+        
+        for (const decision of this.decisionsData.decisions) {
+            if (decision.id === this.decisionId) continue;
+            if (!decision.affected_components) continue;
+            
+            // Check for any overlapping components
+            const hasOverlap = decision.affected_components.some(component => 
+                currentComponents.has(component) ||
+                // Also check for partial matches (same directory)
+                currentComponents.has(component.split('/').slice(0, -1).join('/')) ||
+                Array.from(currentComponents).some(c => 
+                    c.split('/').slice(0, -1).join('/') === component.split('/').slice(0, -1).join('/')
+                )
+            );
+            
+            if (hasOverlap) {
+                relatedIds.add(decision.id);
+                this.log(`Found related decision #${decision.id} with overlapping components`);
+            }
+        }
+    }
+    
+    /**
+     * Find decisions by similar keywords in title and rationale
+     */
+    findRelatedByKeywords(currentDecision, relatedIds) {
+        // Extract keywords from current decision
+        const keywords = this.extractKeywords(currentDecision);
+        if (keywords.size === 0) return;
+        
+        for (const decision of this.decisionsData.decisions) {
+            if (decision.id === this.decisionId) continue;
+            
+            const decisionKeywords = this.extractKeywords(decision);
+            
+            // Calculate keyword overlap
+            const overlap = Array.from(keywords).filter(k => decisionKeywords.has(k)).length;
+            const overlapRatio = overlap / Math.min(keywords.size, decisionKeywords.size);
+            
+            // If more than 30% keyword overlap, consider related
+            if (overlapRatio > 0.3) {
+                relatedIds.add(decision.id);
+                this.log(`Found related decision #${decision.id} with ${Math.round(overlapRatio * 100)}% keyword overlap`);
+            }
+        }
+    }
+    
+    /**
+     * Extract keywords from a decision
+     */
+    extractKeywords(decision) {
+        const keywords = new Set();
+        const stopWords = new Set(['the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'as', 'by', 'from', 'up', 'out', 'if', 'then', 'than', 'this', 'that', 'these', 'those', 'is', 'are', 'was', 'were', 'been', 'be', 'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'should', 'could', 'may', 'might', 'can', 'must', 'shall']);
+        
+        // Extract from title
+        const titleWords = decision.title.toLowerCase().split(/\W+/).filter(w => w.length > 3 && !stopWords.has(w));
+        titleWords.forEach(w => keywords.add(w));
+        
+        // Extract from rationale
+        if (decision.rationale) {
+            decision.rationale.forEach(r => {
+                const words = r.toLowerCase().split(/\W+/).filter(w => w.length > 3 && !stopWords.has(w));
+                words.forEach(w => keywords.add(w));
+            });
+        }
+        
+        return keywords;
+    }
+    
+    /**
+     * Find decisions that mention this decision ID
+     */
+    findDecisionsThatMentionThis(currentDecision, relatedIds) {
+        const idPattern = new RegExp(`#?${this.decisionId}\\b`, 'i');
+        
+        for (const decision of this.decisionsData.decisions) {
+            if (decision.id === this.decisionId) continue;
+            
+            // Check title
+            if (idPattern.test(decision.title)) {
+                relatedIds.add(decision.id);
+                this.log(`Found decision #${decision.id} that mentions this decision in title`);
+                continue;
+            }
+            
+            // Check rationale
+            if (decision.rationale && decision.rationale.some(r => idPattern.test(r))) {
+                relatedIds.add(decision.id);
+                this.log(`Found decision #${decision.id} that mentions this decision in rationale`);
+            }
+        }
+    }
+    
+    /**
+     * Find decisions with shared authors
+     */
+    findRelatedByAuthor(currentDecision, relatedIds) {
+        const currentAuthor = typeof currentDecision.author === 'string' 
+            ? currentDecision.author.toLowerCase() 
+            : currentDecision.author?.display_name?.toLowerCase();
+            
+        if (!currentAuthor || currentAuthor === 'quick capture') return;
+        
+        for (const decision of this.decisionsData.decisions) {
+            if (decision.id === this.decisionId) continue;
+            
+            const decisionAuthor = typeof decision.author === 'string' 
+                ? decision.author.toLowerCase() 
+                : decision.author?.display_name?.toLowerCase();
+                
+            if (decisionAuthor && decisionAuthor === currentAuthor) {
+                relatedIds.add(decision.id);
+            }
+        }
+    }
+    
+    /**
+     * Find decisions in similar time period
+     */
+    findRelatedByTimeProximity(currentDecision, relatedIds) {
+        const currentDate = this.getDecisionDate(currentDecision);
+        if (!currentDate) return;
+        
+        const weekInMs = 7 * 24 * 60 * 60 * 1000;
+        
+        for (const decision of this.decisionsData.decisions) {
+            if (decision.id === this.decisionId) continue;
+            
+            const decisionDate = this.getDecisionDate(decision);
+            if (!decisionDate) continue;
+            
+            const timeDiff = Math.abs(currentDate.getTime() - decisionDate.getTime());
+            
+            if (timeDiff <= weekInMs) {
+                relatedIds.add(decision.id);
+            }
+        }
+    }
+    
+    /**
+     * Get date from decision (handles both string and object formats)
+     */
+    getDecisionDate(decision) {
+        if (!decision.date) return null;
+        
+        if (typeof decision.date === 'string') {
+            return new Date(decision.date);
+        } else if (typeof decision.date === 'object' && decision.date.decision_date) {
+            return new Date(decision.date.decision_date);
+        }
+        
+        return null;
+    }
+    
+    /**
+     * Find decisions with similar task patterns
+     */
+    findRelatedByTaskPatterns(currentDecision, relatedIds) {
+        if (!currentDecision.tasks || currentDecision.tasks.length === 0) return;
+        
+        const currentTaskPatterns = currentDecision.tasks.map(t => 
+            this.extractTaskPattern(t.description)
+        ).filter(p => p);
+        
+        if (currentTaskPatterns.length === 0) return;
+        
+        for (const decision of this.decisionsData.decisions) {
+            if (decision.id === this.decisionId) continue;
+            if (!decision.tasks || decision.tasks.length === 0) continue;
+            
+            const decisionTaskPatterns = decision.tasks.map(t => 
+                this.extractTaskPattern(t.description)
+            ).filter(p => p);
+            
+            // Check for matching patterns
+            const hasMatchingPattern = currentTaskPatterns.some(pattern => 
+                decisionTaskPatterns.includes(pattern)
+            );
+            
+            if (hasMatchingPattern) {
+                relatedIds.add(decision.id);
+                this.log(`Found related decision #${decision.id} with similar task patterns`);
+            }
+        }
+    }
+    
+    /**
+     * Extract common task patterns
+     */
+    extractTaskPattern(taskDescription) {
+        const patterns = [
+            { regex: /implement\s+(\w+)/i, extract: (m) => `implement-${m[1].toLowerCase()}` },
+            { regex: /create\s+(\w+)/i, extract: (m) => `create-${m[1].toLowerCase()}` },
+            { regex: /add\s+(\w+)/i, extract: (m) => `add-${m[1].toLowerCase()}` },
+            { regex: /update\s+(\w+)/i, extract: (m) => `update-${m[1].toLowerCase()}` },
+            { regex: /fix\s+(\w+)/i, extract: (m) => `fix-${m[1].toLowerCase()}` },
+            { regex: /refactor\s+(\w+)/i, extract: (m) => `refactor-${m[1].toLowerCase()}` },
+            { regex: /test\s+(\w+)/i, extract: (m) => `test-${m[1].toLowerCase()}` },
+            { regex: /integrate\s+(\w+)/i, extract: (m) => `integrate-${m[1].toLowerCase()}` }
+        ];
+        
+        for (const pattern of patterns) {
+            const match = taskDescription.match(pattern.regex);
+            if (match) {
+                return pattern.extract(match);
+            }
+        }
+        
+        return null;
+    }
+
+    /**
      * Complete the agent's work
      */
     async complete() {
@@ -715,6 +1104,12 @@ export default { process };
             if (incompleteTasks.length > 0) {
                 throw new Error(`${incompleteTasks.length} tasks still incomplete`);
             }
+            
+            // Enrich decision with GitHub metadata before marking complete
+            await this.enrichDecisionMetadata();
+            
+            // Analyze and add related decisions
+            await this.analyzeAndAddRelatedDecisions();
             
             // Update decision status
             await this.updateDecisionStatus('Completed');
@@ -796,8 +1191,37 @@ export default { process };
                 timestamp: new Date().toISOString(),
                 ...additionalData
             });
+
+            // Also send activity update to HTTP API for dashboard visualization
+            const activityState = this._mapStatusToActivityState(this.status);
+            await this.messaging.sendActivityUpdate(
+                activityState,
+                this.decisionId,
+                this.currentTask?.description || message
+            );
         } catch (error) {
             this.log(`Failed to broadcast status: ${error.message}`);
+        }
+    }
+
+    /**
+     * Map agent status to activity state for dashboard visualization
+     */
+    _mapStatusToActivityState(status) {
+        switch (status) {
+            case 'working':
+            case 'ready':
+                return 'working';
+            case 'error':
+            case 'debugging':
+                return 'debugging';
+            case 'testing':
+            case 'completing':
+                return 'testing';
+            case 'reviewing':
+                return 'reviewing';
+            default:
+                return 'idle';
         }
     }
 
@@ -1174,3 +1598,114 @@ export default { process };
         }
     }
 }
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 80
+// Task: Audit decision metadata for completeness and accuracy
+// Timestamp: 2025-07-16T05:43:48.870Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 80
+// Task: Validate decision relationships and cross-references
+// Timestamp: 2025-07-16T05:43:48.918Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 80
+// Task: Check for missing or inconsistent date formats
+// Timestamp: 2025-07-16T05:43:48.964Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 80
+// Task: Verify affected_components accuracy against actual file structure
+// Timestamp: 2025-07-16T05:43:49.010Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 80
+// Task: Suggest improvements for decision categorization
+// Timestamp: 2025-07-16T05:43:49.056Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 80
+// Task: Generate recommendations for decision lifecycle management
+// Timestamp: 2025-07-16T05:43:49.103Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 81
+// Task: Scan filesystem for implemented components in decisions 62-80
+// Timestamp: 2025-07-16T05:50:15.423Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 81
+// Task: Scan filesystem for implemented components in decisions 62-80
+// Timestamp: 2025-07-16T05:53:13.882Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 81
+// Task: Scan filesystem for implemented components in decisions 62-80
+// Timestamp: 2025-07-16T05:55:54.525Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 81
+// Task: Scan filesystem for implemented components in decisions 62-80
+// Timestamp: 2025-07-16T06:00:23.070Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 81
+// Task: Cross-reference task descriptions with actual file existence
+// Timestamp: 2025-07-16T06:00:23.134Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 81
+// Task: Evaluate component functionality vs task requirements
+// Timestamp: 2025-07-16T06:00:23.201Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 81
+// Task: Update task statuses from Pending to Completed where work is done
+// Timestamp: 2025-07-16T06:00:23.260Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 81
+// Task: Identify genuinely incomplete tasks that need work
+// Timestamp: 2025-07-16T06:00:23.320Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 81
+// Task: Validate affected_components lists match actual implementations
+// Timestamp: 2025-07-16T06:00:23.382Z
+
+
+
+// Enhanced by Decision Tapestry Agent Framework
+// Decision ID: 81
+// Task: Update decision statuses based on task completion rates
+// Timestamp: 2025-07-16T06:00:23.467Z
+

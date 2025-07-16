@@ -370,6 +370,7 @@ Commands:
   task <description>                Execute a specific task description
   monitor                           Monitor all agents in real-time
   test [type|agent-id]             Run agent tests (all, integration, schema, or specific agent)
+  enrich <ids>                      Enrich decisions with GitHub metadata
   help                             Show this help message
 
 Examples:
@@ -382,6 +383,9 @@ Examples:
   decision-tapestry agent task "Fix search panel"     # Execute specific task
   decision-tapestry agent test all                    # Run all agent tests
   decision-tapestry agent test Agent-A               # Run tests for Agent-A
+  decision-tapestry agent enrich 74                   # Enrich single decision with GitHub data
+  decision-tapestry agent enrich 74-81                # Enrich range of decisions (74 through 81)
+  decision-tapestry agent enrich 62,65,68             # Enrich specific decisions
 
 Real-time Updates:
   • Agent activities are displayed in the dashboard when running 'decision-tapestry start'
@@ -617,4 +621,115 @@ async function runTestFile(testFile) {
         });
         });
     });
+}
+
+/**
+ * Enrich decisions with GitHub metadata
+ */
+export async function enrichDecisions() {
+    const args = process.argv.slice(4); // Skip 'node', 'cli.mjs', 'agent', 'enrich'
+    
+    if (args.length === 0) {
+        console.error('❌ Please provide decision IDs or a range:');
+        console.error('   decision-tapestry agent enrich <decision-id>');
+        console.error('   decision-tapestry agent enrich 74');
+        console.error('   decision-tapestry agent enrich 74-81');
+        console.error('   decision-tapestry agent enrich 62,65,68');
+        return;
+    }
+    
+    try {
+        // Parse decision IDs
+        const decisionIds = [];
+        const input = args[0];
+        
+        if (input.includes('-')) {
+            // Range format: 74-81
+            const [start, end] = input.split('-').map(n => parseInt(n));
+            for (let i = start; i <= end; i++) {
+                decisionIds.push(i);
+            }
+        } else if (input.includes(',')) {
+            // List format: 62,65,68
+            decisionIds.push(...input.split(',').map(n => parseInt(n)));
+        } else {
+            // Single ID: 74
+            decisionIds.push(parseInt(input));
+        }
+        
+        console.log(`🔧 Enriching decisions: ${decisionIds.join(', ')}`);
+        
+        // Import required modules
+        const { DecisionEnhancer } = await import('../services/decision-enhancer.mjs');
+        const githubServiceModule = await import('../services/github-service.mjs');
+        
+        // Initialize services
+        const githubToken = process.env.GITHUB_TOKEN;
+        if (!githubToken) {
+            console.warn('⚠️  No GITHUB_TOKEN found, some enrichment features may be limited');
+        } else {
+            await githubServiceModule.default.initialize(githubToken);
+        }
+        
+        const enhancer = new DecisionEnhancer();
+        
+        // Load decisions
+        const decisionsPath = path.resolve('decisions.yml');
+        const decisionsContent = await fs.readFile(decisionsPath, 'utf8');
+        const decisionsData = yaml.load(decisionsContent);
+        
+        let enrichedCount = 0;
+        let failedCount = 0;
+        
+        // Process each decision
+        for (const decisionId of decisionIds) {
+            try {
+                const decisionIndex = decisionsData.decisions.findIndex(d => d.id === decisionId);
+                
+                if (decisionIndex === -1) {
+                    console.error(`❌ Decision #${decisionId} not found`);
+                    failedCount++;
+                    continue;
+                }
+                
+                console.log(`📦 Enriching Decision #${decisionId}...`);
+                
+                const decision = decisionsData.decisions[decisionIndex];
+                const enrichedDecision = await enhancer.enhanceDecision(decision);
+                
+                // Update the decision
+                decisionsData.decisions[decisionIndex] = enrichedDecision;
+                
+                console.log(`✅ Decision #${decisionId} enriched successfully`);
+                enrichedCount++;
+                
+            } catch (error) {
+                console.error(`❌ Failed to enrich Decision #${decisionId}: ${error.message}`);
+                failedCount++;
+            }
+        }
+        
+        // Save updated decisions
+        if (enrichedCount > 0) {
+            const yamlContent = yaml.dump(decisionsData, {
+                lineWidth: -1,
+                quotingType: '"',
+                forceQuotes: false,
+                noRefs: true
+            });
+            
+            await fs.writeFile(decisionsPath, yamlContent, 'utf8');
+            console.log('\n💾 Decisions file updated');
+        }
+        
+        // Summary
+        console.log('\n📊 Enrichment Summary:');
+        console.log(`   ✅ Enriched: ${enrichedCount}`);
+        console.log(`   ❌ Failed: ${failedCount}`);
+        console.log(`   📁 Total: ${decisionIds.length}`);
+        
+    } catch (error) {
+        console.error(`❌ Enrichment failed: ${error.message}`);
+        process.exit(1);
+    }
 }

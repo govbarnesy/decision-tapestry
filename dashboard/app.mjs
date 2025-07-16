@@ -1230,6 +1230,12 @@ function initializeWebSocket() {
         } else if (isAgentCoordinationMessage(message)) {
           // Forward agent coordination messages to the agent status panel
           handleAgentCoordinationMessage(message);
+          
+          // If it's a decision update, also reload the dashboard
+          if (message.type === "decision_update") {
+            console.log("Decision updated by agent, reloading...");
+            initializeDashboard(message.decisionId);
+          }
         } else {
           console.log("Unknown WebSocket message type:", message.type);
         }
