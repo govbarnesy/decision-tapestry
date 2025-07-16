@@ -296,57 +296,13 @@ class AdvancedFilter extends LitElement {
         : ""}
 
       <div class="filter-content expanded">
-        <!-- Status -->
-        <div class="filter-group">
-          <div class="filter-group-title">Status</div>
-          <div>
-            <div class="filter-checkbox-group">
-              ${this._getUniqueStatuses().map(
-                (status) => html`
-                  <div class="filter-checkbox">
-                    <input
-                      type="checkbox"
-                      id="status-${status}"
-                      .checked=${this.filters.statuses.includes(status)}
-                      @change=${() => this._toggleStatus(status)}
-                    />
-                    <label for="status-${status}">${status}</label>
-                  </div>
-                `,
-              )}
-            </div>
-          </div>
-        </div>
 
-        <!-- Authors -->
         <div class="filter-group">
           <author-filter
             .authors="${extractUniqueAuthors(this.decisions)}"
             .selectedAuthors="${this.filters.authors}"
             @author-filter-change="${this._handleAuthorFilterChange}"
           ></author-filter>
-        </div>
-
-        <!-- Categories -->
-        <div class="filter-group">
-          <div class="filter-group-title">Categories</div>
-          <div>
-            <div class="filter-checkbox-group">
-              ${this._getUniqueCategories().map(
-                (category) => html`
-                  <div class="filter-checkbox">
-                    <input
-                      type="checkbox"
-                      id="category-${category}"
-                      .checked=${this.filters.categories.includes(category)}
-                      @change=${() => this._toggleCategory(category)}
-                    />
-                    <label for="category-${category}">${category}</label>
-                  </div>
-                `,
-              )}
-            </div>
-          </div>
         </div>
 
         <!-- Has Components Toggle -->
@@ -391,64 +347,6 @@ class AdvancedFilter extends LitElement {
               style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.25rem; display: block;"
               >Pull Requests</label
             >
-            <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
-              <button
-                class="toggle-button ${this.filters.hasPullRequests === null
-                  ? "active"
-                  : ""}"
-                @click=${() => this._updateFilter("hasPullRequests", null)}
-              >
-                All
-              </button>
-              <button
-                class="toggle-button ${this.filters.hasPullRequests === true
-                  ? "active"
-                  : ""}"
-                @click=${() => this._updateFilter("hasPullRequests", true)}
-              >
-                Yes
-              </button>
-              <button
-                class="toggle-button ${this.filters.hasPullRequests === false
-                  ? "active"
-                  : ""}"
-                @click=${() => this._updateFilter("hasPullRequests", false)}
-              >
-                No
-              </button>
-            </div>
-
-            <!-- Issues Toggle -->
-            <label
-              style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.25rem; display: block;"
-              >Issues</label
-            >
-            <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
-              <button
-                class="toggle-button ${this.filters.hasIssues === null
-                  ? "active"
-                  : ""}"
-                @click=${() => this._updateFilter("hasIssues", null)}
-              >
-                All
-              </button>
-              <button
-                class="toggle-button ${this.filters.hasIssues === true
-                  ? "active"
-                  : ""}"
-                @click=${() => this._updateFilter("hasIssues", true)}
-              >
-                Yes
-              </button>
-              <button
-                class="toggle-button ${this.filters.hasIssues === false
-                  ? "active"
-                  : ""}"
-                @click=${() => this._updateFilter("hasIssues", false)}
-              >
-                No
-              </button>
-            </div>
 
             <!-- Minimum Commits -->
             <label
