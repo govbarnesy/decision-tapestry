@@ -305,39 +305,6 @@ class AdvancedFilter extends LitElement {
           ></author-filter>
         </div>
 
-        <!-- Has Components Toggle -->
-        <div class="filter-group">
-          <div class="filter-group-title">Has Components</div>
-          <div>
-            <div style="display: flex; gap: 0.5rem;">
-              <button
-                class="toggle-button ${this.filters.hasComponents === null
-                  ? "active"
-                  : ""}"
-                @click=${() => this._updateFilter("hasComponents", null)}
-              >
-                All
-              </button>
-              <button
-                class="toggle-button ${this.filters.hasComponents === true
-                  ? "active"
-                  : ""}"
-                @click=${() => this._updateFilter("hasComponents", true)}
-              >
-                Yes
-              </button>
-              <button
-                class="toggle-button ${this.filters.hasComponents === false
-                  ? "active"
-                  : ""}"
-                @click=${() => this._updateFilter("hasComponents", false)}
-              >
-                No
-              </button>
-            </div>
-          </div>
-        </div>
-
         <!-- GitHub Activity Filters -->
         <div class="filter-group">
           <div class="filter-group-title">GitHub Activity</div>

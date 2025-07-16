@@ -1599,6 +1599,9 @@ export default { process };
     }
 }
 
+// Export alias for compatibility with resilient framework
+export const AgentBase = DecisionTapestryAgent;
+
 // Enhanced by Decision Tapestry Agent Framework
 // Decision ID: 80
 // Task: Audit decision metadata for completeness and accuracy

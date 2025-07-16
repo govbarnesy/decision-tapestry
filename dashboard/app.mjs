@@ -1079,11 +1079,11 @@ function handleActivityUpdate(message) {
     }
   }
 
-  // Update agent status panel if it exists
-  const agentStatusPanel = document.querySelector("agent-status-panel");
-  if (agentStatusPanel && agentStatusPanel.updateAgentActivity) {
-    agentStatusPanel.updateAgentActivity(message.agentId, message.activity);
-  }
+  // Update agent status panel if it exists (currently only in test-components.html)
+  // const agentStatusPanel = document.querySelector("agent-status-panel");
+  // if (agentStatusPanel && agentStatusPanel.updateAgentActivity) {
+  //   agentStatusPanel.updateAgentActivity(message.agentId, message.activity);
+  // }
 
   // Also check for agent status panel inside agent-test-panel
   const agentTestPanel = document.querySelector("agent-test-panel");
@@ -1120,11 +1120,11 @@ function handleActivityReset() {
     decisionMap.clearAllActivities();
   }
 
-  // Clear agent status panel
-  const agentStatusPanel = document.querySelector("agent-status-panel");
-  if (agentStatusPanel && agentStatusPanel.clearAllAgents) {
-    agentStatusPanel.clearAllAgents();
-  }
+  // Clear agent status panel (currently only in test-components.html)
+  // const agentStatusPanel = document.querySelector("agent-status-panel");
+  // if (agentStatusPanel && agentStatusPanel.clearAllAgents) {
+  //   agentStatusPanel.clearAllAgents();
+  // }
 
   // Clear agent status panel inside agent-test-panel
   const agentTestPanel = document.querySelector("agent-test-panel");
@@ -1142,11 +1142,7 @@ function handleActivityReset() {
     activityTimeline.clearActivities();
   }
 
-  // Clear agent activity feed
-  const activityFeed = document.querySelector("agent-activity-feed");
-  if (activityFeed && activityFeed.clearActivities) {
-    activityFeed.clearActivities();
-  }
+  // Agent activity feed component was deprecated and removed
 
   // Clear decision detail panel
   const detailPanel = document.getElementById("decision-detail");
@@ -1186,13 +1182,13 @@ function isAgentCoordinationMessage(message) {
 function handleAgentCoordinationMessage(message) {
   console.log('[App] Forwarding agent coordination message:', message.type, message);
   
-  // Find the agent status panel and forward the message
-  const agentStatusPanel = document.querySelector('agent-status-panel');
-  if (agentStatusPanel && typeof agentStatusPanel.handleWebSocketMessage === 'function') {
-    agentStatusPanel.handleWebSocketMessage(message);
-  } else {
-    console.warn('[App] Agent status panel not found or not ready for coordination messages');
-  }
+  // Forward to agent status panel if present (currently only in test-components.html)
+  // const agentStatusPanel = document.querySelector('agent-status-panel');
+  // if (agentStatusPanel && typeof agentStatusPanel.handleWebSocketMessage === 'function') {
+  //   agentStatusPanel.handleWebSocketMessage(message);
+  // } else {
+  //   console.warn('[App] Agent status panel not found or not ready for coordination messages');
+  // }
 }
 
 function initializeWebSocket() {
