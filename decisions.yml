@@ -5295,7 +5295,7 @@ decisions:
       last_commit_date: "2025-07-15T15:52:53-04:00"
       commit_count: 5
       git_derived: true
-    status: Pending
+    status: In Progress
     project: Decision Tapestry
     rationale:
       - Enable sophisticated time-based filtering of decisions
@@ -5309,15 +5309,15 @@ decisions:
       - Time zone handling adds implementation complexity
     tasks:
       - description: Create enhanced time filter component
-        status: Pending
+        status: Done
       - description: Implement time range picker UI
-        status: Pending
+        status: Done
       - description: Build commit activity heatmap visualization
-        status: Pending
+        status: Done
       - description: Add commit timeline visualization
-        status: Pending
+        status: Done
       - description: Integrate with existing filter system
-        status: Pending
+        status: In Progress
     affected_components:
       - dashboard/enhanced-time-filter.mjs
       - dashboard/time-range-picker.mjs
@@ -5332,6 +5332,14 @@ decisions:
     notes: |
       Advanced time-based features that complement the GitHub integration work,
       providing powerful tools for analyzing development patterns over time.
+
+      Current status:
+      - All components have been created and are functional
+      - Basic time filtering is integrated in search-panel.mjs (days back, commit ranges)
+      - Commit timeline is integrated in decision-detail-panel.mjs
+      - Heatmap exists but only in test-components.html
+      - Enhanced time filter and time-range-picker components exist but not integrated
+      - Complex date range slider is commented out as "temporarily disabled"
     github_metadata:
       file_status:
         created:
