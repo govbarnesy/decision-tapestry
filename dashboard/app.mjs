@@ -1035,20 +1035,20 @@ function handleActivityUpdate(message) {
       );
     }
 
-    // Auto-select and focus on the node when activity starts (not for idle state)
+    // Don't auto-select decisions anymore - just update the visual state
     if (message.activity.state !== "idle") {
-      // Check if the decision exists before trying to select it
+      // Check if the decision exists before updating visual state
       const decision = allDecisions.find(
         (d) => d.id === message.activity.decisionId,
       );
       if (decision) {
         console.log(
-          `[Activity] Auto-selecting decision ${message.activity.decisionId} for ${message.agentId}`,
+          `[Activity] Agent ${message.agentId} working on decision ${message.activity.decisionId}`,
         );
-        handleDecisionSelection(message.activity.decisionId, true); // true = animate focus
+        // Visual updates will be handled by the decision map component
       } else {
         console.warn(
-          `[Activity] Decision ${message.activity.decisionId} not found in current decisions, skipping auto-selection`,
+          `[Activity] Decision ${message.activity.decisionId} not found in current decisions`,
         );
       }
     }

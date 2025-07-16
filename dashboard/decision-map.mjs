@@ -76,8 +76,8 @@ class DecisionMap extends LitElement {
     clusterByCategory: { type: Boolean },
   };
 
-  // Track agent activities on nodes
-  _nodeActivities = new Map(); // nodeId -> { agentId, state, timestamp }
+  // Track agent activities on nodes - now supports multiple agents per node
+  _nodeActivities = new Map(); // nodeId -> Map(agentId -> { state, timestamp })
 
   _nodes = [];
   _edges = [];
@@ -210,7 +210,7 @@ class DecisionMap extends LitElement {
     }, 100);
   }
 
-  // Update node with activity state
+  // Update node with activity state - enhanced for multiple agents
   updateNodeActivity(nodeId, agentId, activityState) {
     if (!this._nodesDataSet) return;
 
@@ -230,94 +230,119 @@ class DecisionMap extends LitElement {
       idle: "💤",
     };
 
-    // Store activity info
+    // Store activity info - now supports multiple agents per node
+    if (!this._nodeActivities.has(nodeId)) {
+      this._nodeActivities.set(nodeId, new Map());
+    }
+    const nodeAgents = this._nodeActivities.get(nodeId);
+    
     if (activityState !== "idle") {
-      this._nodeActivities.set(nodeId, {
-        agentId,
+      nodeAgents.set(agentId, {
         state: activityState,
         timestamp: new Date(),
       });
     } else {
-      this._nodeActivities.delete(nodeId);
+      nodeAgents.delete(agentId);
+      // Clean up empty maps
+      if (nodeAgents.size === 0) {
+        this._nodeActivities.delete(nodeId);
+      }
     }
 
     // Find the original node
     const originalNode = this._originalNodes?.find((n) => n.id === nodeId);
     if (!originalNode) return;
 
+    // Get active agents for this node
+    const nodeAgents = this._nodeActivities.get(nodeId);
+    const hasActiveAgents = nodeAgents && nodeAgents.size > 0;
+    
+    // Determine primary state (most recent agent)
+    let primaryState = "idle";
+    if (hasActiveAgents) {
+      const latestAgent = Array.from(nodeAgents.entries())
+        .sort((a, b) => b[1].timestamp - a[1].timestamp)[0];
+      primaryState = latestAgent[1].state;
+    }
+
     // Create updated node with activity visualization
     const updatedNode = {
       ...originalNode,
-      borderWidth: activityState !== "idle" ? 4 : 2,
-      borderWidthSelected: activityState !== "idle" ? 5 : 3,
+      borderWidth: hasActiveAgents ? 4 : 2,
+      borderWidthSelected: hasActiveAgents ? 5 : 3,
       shapeProperties: {
         ...(originalNode.shapeProperties || {}),
-        ...(activityState !== "idle"
+        ...(hasActiveAgents
           ? {}
           : { borderDashes: originalNode.shapeProperties?.borderDashes }),
       },
       color: {
         ...originalNode.color,
         border:
-          activityState !== "idle"
-            ? activityColors[activityState]
+          hasActiveAgents
+            ? activityColors[primaryState]
             : originalNode.color.border,
         background:
-          activityState !== "idle"
-            ? this._hexToRgba(activityColors[activityState], 0.8)
+          hasActiveAgents
+            ? this._hexToRgba(activityColors[primaryState], 0.8)
             : originalNode.color.background,
         highlight: {
           ...originalNode.color.highlight,
           border:
-            activityState !== "idle"
-              ? activityColors[activityState]
+            hasActiveAgents
+              ? activityColors[primaryState]
               : originalNode.color.highlight?.border,
           background:
-            activityState !== "idle"
-              ? this._hexToRgba(activityColors[activityState], 0.8)
+            hasActiveAgents
+              ? this._hexToRgba(activityColors[primaryState], 0.8)
               : originalNode.color.highlight?.background,
         },
         hover: {
           ...originalNode.color.hover,
           border:
-            activityState !== "idle"
-              ? activityColors[activityState]
+            hasActiveAgents
+              ? activityColors[primaryState]
               : originalNode.color.hover?.border,
           background:
-            activityState !== "idle"
-              ? this._hexToRgba(activityColors[activityState], 0.8)
+            hasActiveAgents
+              ? this._hexToRgba(activityColors[primaryState], 0.8)
               : originalNode.color.hover?.background,
         },
       },
       shadow:
-        activityState !== "idle"
+        hasActiveAgents
           ? {
               enabled: true,
-              color: activityColors[activityState],
-              size: 10,
+              color: activityColors[primaryState],
+              size: 15,
               x: 0,
               y: 0,
             }
           : false,
     };
 
-    // Update label with activity info using visual separators
-    if (activityState !== "idle") {
+    // Update label with activity info for multiple agents
+    const agents = this._nodeActivities.get(nodeId);
+    if (agents && agents.size > 0) {
       // Parse the original label to get decision number and title
       const originalLabel = originalNode.label;
       const labelParts = originalLabel.split(":");
       const decisionNumber = labelParts[0]; // e.g., "#55"
       const decisionTitle = labelParts.slice(1).join(":").replace(/^\n/, ""); // Remove leading newline
 
-      const emoji = activityEmojis[activityState];
-      const agentName = agentId.toUpperCase();
-      const stateName = activityState.toUpperCase();
+      // Create badges for all active agents
+      const agentBadges = Array.from(agents.entries())
+        .map(([agId, info]) => {
+          const emoji = activityEmojis[info.state];
+          const agentName = agId.replace('Agent-', 'A');
+          return `<code>${emoji} ${agentName}</code>`;
+        })
+        .join(' ');
 
       // Create enhanced label with bigger decision number and better spacing
       const enhancedDecisionNumber = `<b>${decisionNumber}</b>`;
       const separator = "\n\n"; // Double line break for spacing
-      const badge = `<code>${emoji} ${agentName}: ${stateName}</code>`;
-      updatedNode.label = `${enhancedDecisionNumber}:\n\n${decisionTitle}${separator}${badge}`;
+      updatedNode.label = `${enhancedDecisionNumber}:\n\n${decisionTitle}${separator}${agentBadges}`;
       updatedNode.font = {
         size: 12,
         face: "helvetica",
@@ -442,6 +467,9 @@ class DecisionMap extends LitElement {
     });
 
     // Reset all nodes to original state
+    this._nodeActivities.forEach((agentMap, nodeId) => {
+      agentMap.clear();
+    });
     this._nodeActivities.clear();
     if (this._originalNodes && this._nodesDataSet) {
       this._nodesDataSet.update(this._originalNodes);

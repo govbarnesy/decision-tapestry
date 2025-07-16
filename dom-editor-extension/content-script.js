@@ -181,8 +181,8 @@ function setupMessageListeners() {
         undoAllChanges();
         sendResponse({ success: true });
         break;
-      case 'devtools_element_selected':
-        handleDevToolsSelection(request.element);
+      case 'serverMessage':
+        handleServerMessage(request.data);
         sendResponse({ success: true });
         break;
     }
