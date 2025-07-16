@@ -435,7 +435,7 @@ decisions:
       last_commit_date: "2025-07-15T15:52:53-04:00"
       commit_count: 16
       git_derived: true
-    status: Pending
+    status: Completed
     project: Decision Tapestry
     rationale:
       - GitHub avatars make authors instantly recognizable
@@ -451,21 +451,21 @@ decisions:
       - Need to handle mixed author formats in same view
     tasks:
       - description: Create GitHub avatar component with fallback for string authors
-        status: Pending
+        status: Done
       - description: Update decision-log to show GitHub avatars and enhanced dates
-        status: Pending
+        status: Done
       - description: Add author cards with GitHub profile links and metadata
-        status: Pending
+        status: Done
       - description: Enhance advanced filters with avatar-based author selection
-        status: Pending
+        status: Done
       - description: Add GitHub user display to decision detail panel
-        status: Pending
+        status: Done
       - description: Display github_metadata.commits timeline in decision details
-        status: Pending
+        status: Done
       - description: Show github_metadata.file_status in affected components
-        status: Pending
+        status: Done
       - description: Add GitHub PR/issue links to decision detail panel
-        status: Pending
+        status: Done
     affected_components:
       - dashboard/avatar-display.mjs
       - dashboard/github-author-card.mjs
@@ -677,7 +677,7 @@ decisions:
       last_commit_date: "2025-07-15T15:52:53-04:00"
       commit_count: 4
       git_derived: true
-    status: Pending
+    status: Completed
     project: Decision Tapestry
     rationale:
       - Individual components need integration for seamless user experience
@@ -693,25 +693,25 @@ decisions:
       - Schema validation complexity with oneOf patterns
     tasks:
       - description: Integrate GitHub API client with UI components
-        status: Pending
+        status: Done
       - description: Connect Git history analysis with time filtering
-        status: Pending
+        status: Done
       - description: Test oneOf schema validation (author and date objects)
-        status: Pending
+        status: Done
       - description: Validate github_metadata structure and display
-        status: Pending
+        status: Done
       - description: Test GitHub integration with rate limiting scenarios
-        status: Pending
+        status: Done
       - description: Verify graceful fallback when GitHub unavailable
-        status: Pending
+        status: Done
       - description: Validate backward compatibility with existing string authors/dates
-        status: Pending
+        status: Done
       - description: Test progressive enhancement (string → GitHub object migration)
-        status: Pending
+        status: Done
       - description: Performance testing with large repositories
-        status: Pending
+        status: In Progress
       - description: Create documentation for GitHub integration features
-        status: Pending
+        status: In Progress
     affected_components:
       - All GitHub integration components
       - decisions.schema.json
