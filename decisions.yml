@@ -6674,4 +6674,36 @@ decisions:
           message: "feat: create comprehensive agent lifecycle test suite"
           date: "2025-07-16T18:15:00Z"
           author: Claude & Chris Barnes
+  - id: 92
+    title: Simplify AI Canvas interface for better usability
+    author: Claude & Chris Barnes
+    date: "2025-07-17T10:00:00Z"
+    status: Completed
+    rationale:
+      - Navigation controls were unnecessary since users can take screenshots
+      - Slide counter provides sufficient position awareness
+      - Export functionality redundant with screenshot capability
+      - Simpler interface reduces cognitive load
+      - Focus on content display rather than presentation controls
+    tradeoffs:
+      - Lost ability to navigate with buttons (timeline still works)
+      - No export to JSON functionality
+      - Removed auto-advance presentation mode
+      - Keyboard navigation limited to Grid and Fullscreen modes
+    tasks:
+      - description: Remove navigation button controls from AI Canvas
+        status: Completed
+      - description: Remove export button and functionality
+        status: Completed
+      - description: Update keyboard shortcuts to only support G and F keys
+        status: Completed
+      - description: Clean up auto-advance and pause logic
+        status: Completed
+      - description: Keep slide counter for position awareness
+        status: Completed
+    affected_components:
+      - dashboard/ai-canvas.mjs
+    category: UI/UX
+    related_to:
+      - 88 # AI Canvas creation
 backlog: []
