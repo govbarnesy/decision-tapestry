@@ -34,6 +34,8 @@ Open http://localhost:8080 to view your decision dashboard.
 - `decision-tapestry validate` - Check decisions.yml format
 - `decision-tapestry plan` - Generate AI planning prompt
 - `decision-tapestry capture "title"` - Quick decision logging
+- `decision-tapestry quick-task "description"` - Create decision & start agent immediately ⚡
+- `decision-tapestry agent` - Manage AI agents
 - `decision-tapestry help` - Show all commands
 
 ## Documentation
@@ -87,6 +89,29 @@ decision-tapestry plan --context-export
 - **Agent Activity Visualization**: See who's working on what in real-time
 - **Improved Reliability**: Robust file watching with automatic fallbacks
 - **Better Visual Feedback**: Activity badges and animations on decision nodes  
+
+### ⚡ Quick Tasks: From Idea to Execution in One Command
+```bash
+# Create decision and start agent immediately
+decision-tapestry quick-task "Fix login button styling"
+
+# With specific files
+decision-tapestry qt "Refactor user auth" -f src/auth/login.js src/auth/validate.js
+
+# With multiple tasks
+decision-tapestry qt "Add profile page" -t "Create component" "Add route" "Add tests"
+
+# High priority without agent
+decision-tapestry qt "Fix production bug" -p high --no-agent
+```
+
+Quick tasks are perfect for:
+- Bug fixes that need immediate attention
+- Small refactoring jobs
+- Feature additions with clear scope
+- Experimentation and prototyping
+
+Visual indicators (⚡) in the dashboard show which decisions were created as quick tasks.
 
 ---
 

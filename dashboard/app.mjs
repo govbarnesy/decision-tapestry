@@ -43,7 +43,7 @@ async function initializeDashboard(focusNodeId = null) {
       const nodeBg = isDark ? "#000" : "#fff";
       const nodes = decisions.map((d) => ({
         id: d.id,
-        label: `#${d.id}:\n${d.title}`, // Add line break for better spacing
+        label: `${d.quick_task ? '⚡ ' : ''}#${d.id}:\n${d.title}`, // Add lightning bolt for quick tasks
         color: {
           border: statusColorMapping[d.status] || "#007bff",
           background: nodeBg,
@@ -568,7 +568,7 @@ function updateDecisionMapWithFiltered(filteredDecisions) {
 
   const nodes = filteredDecisions.map((d) => ({
     id: d.id,
-    label: `#${d.id}:\n${d.title}`,
+    label: `${d.quick_task ? '⚡ ' : ''}#${d.id}:\n${d.title}`, // Add lightning bolt for quick tasks
     color: {
       border: statusColorMapping[d.status] || "#007bff",
       background: nodeBg,

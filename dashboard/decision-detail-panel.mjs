@@ -603,7 +603,7 @@ class DecisionDetailPanel extends LitElement {
     const additionalGitHubHtml = this._renderAdditionalGitHubData(github_metadata);
 
     return html`
-      <h2>Decision #${id}: ${title}</h2>
+      <h2>Decision #${id}: ${title}${this.decision.quick_task ? ' <span style="background: #ffc107; color: #000; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; vertical-align: middle;">⚡ Quick Task</span>' : ''}</h2>
       <p>
         <strong>Status:</strong> <span class="${statusClass}">${status}</span>
       </p>

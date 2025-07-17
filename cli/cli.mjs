@@ -15,6 +15,9 @@ import {
     monitorAgents,
     enrichDecisions
 } from './agent-commands.mjs';
+import { quickDecisionBuilder } from './quick-decision-builder.mjs';
+import { DecisionTapestryAgent } from './agent-framework.mjs';
+import chalk from 'chalk';
 
 const commands = {
     init: {
@@ -48,6 +51,14 @@ const commands = {
     agent: {
         description: "Manage AI agents for decision implementation (start, status, coordinate, test).",
         action: manageAgent
+    },
+    "quick-task": {
+        description: "Create a decision and start an agent immediately for ad-hoc work.",
+        action: quickTaskCommand
+    },
+    qt: {
+        description: "Alias for quick-task.",
+        action: quickTaskCommand
     },
     help: {
         description: "Show this help message.",
@@ -687,5 +698,166 @@ async function manageAgent() {
         default:
             await showAgentHelp();
             break;
+    }
+}
+
+async function quickTaskCommand() {
+    const args = process.argv.slice(3);
+    
+    // Check if description was provided
+    if (args.length === 0) {
+        console.error(chalk.red("❌ Please provide a task description"));
+        console.log(chalk.gray("\nUsage: decision-tapestry quick-task <description> [options]"));
+        console.log(chalk.gray("       decision-tapestry qt <description> [options]"));
+        console.log(chalk.gray("\nOptions:"));
+        console.log(chalk.gray("  -f, --files <files...>     Affected component files"));
+        console.log(chalk.gray("  -t, --tasks <tasks...>     Break into multiple tasks"));
+        console.log(chalk.gray("  -c, --category <category>  Decision category (default: 'Ad-hoc')"));
+        console.log(chalk.gray("  -p, --priority <priority>  high|medium|low (default: 'medium')"));
+        console.log(chalk.gray("  -r, --related <ids...>     Related decision IDs"));
+        console.log(chalk.gray("  --no-agent                 Create decision without starting agent"));
+        console.log(chalk.gray("\nExamples:"));
+        console.log(chalk.gray('  decision-tapestry qt "Fix login button styling"'));
+        console.log(chalk.gray('  decision-tapestry qt "Refactor auth" -f src/auth/*.js'));
+        console.log(chalk.gray('  decision-tapestry qt "Add profile page" -t "Create component" "Add route"'));
+        return;
+    }
+    
+    // Parse description (everything before first flag)
+    let description = '';
+    let optionStartIndex = -1;
+    
+    for (let i = 0; i < args.length; i++) {
+        if (args[i].startsWith('-')) {
+            optionStartIndex = i;
+            break;
+        }
+        description += (description ? ' ' : '') + args[i];
+    }
+    
+    // Parse options
+    const options = {
+        files: [],
+        tasks: [],
+        category: 'Ad-hoc',
+        priority: 'medium',
+        related: [],
+        agent: true
+    };
+    
+    if (optionStartIndex !== -1) {
+        for (let i = optionStartIndex; i < args.length; i++) {
+            switch (args[i]) {
+                case '-f':
+                case '--files':
+                    i++;
+                    while (i < args.length && !args[i].startsWith('-')) {
+                        options.files.push(args[i]);
+                        i++;
+                    }
+                    i--;
+                    break;
+                    
+                case '-t':
+                case '--tasks':
+                    i++;
+                    while (i < args.length && !args[i].startsWith('-')) {
+                        options.tasks.push(args[i]);
+                        i++;
+                    }
+                    i--;
+                    break;
+                    
+                case '-c':
+                case '--category':
+                    i++;
+                    if (i < args.length) {
+                        options.category = args[i];
+                    }
+                    break;
+                    
+                case '-p':
+                case '--priority':
+                    i++;
+                    if (i < args.length && ['high', 'medium', 'low'].includes(args[i])) {
+                        options.priority = args[i];
+                    }
+                    break;
+                    
+                case '-r':
+                case '--related':
+                    i++;
+                    while (i < args.length && !args[i].startsWith('-')) {
+                        const id = parseInt(args[i]);
+                        if (!isNaN(id)) {
+                            options.related.push(id);
+                        }
+                        i++;
+                    }
+                    i--;
+                    break;
+                    
+                case '--no-agent':
+                    options.agent = false;
+                    break;
+            }
+        }
+    }
+    
+    try {
+        console.log(chalk.blue(`\n🚀 Creating quick task decision...`));
+        
+        // Create the decision
+        const decision = await quickDecisionBuilder.createQuickDecision(description, options);
+        
+        // Add to decisions.yml
+        await quickDecisionBuilder.addDecisionToFile(decision);
+        
+        console.log(chalk.green(`✅ Created Decision #${decision.id}: ${decision.title}`));
+        console.log(chalk.gray(`   Category: ${decision.category}`));
+        console.log(chalk.gray(`   Priority: ${decision.priority}`));
+        console.log(chalk.gray(`   Tasks: ${decision.tasks.length}`));
+        
+        if (decision.affected_components.length > 0) {
+            console.log(chalk.gray(`   Files: ${decision.affected_components.join(', ')}`));
+        }
+        
+        // Start agent if requested
+        if (options.agent) {
+            console.log(chalk.blue('\n🤖 Starting agent...'));
+            
+            const agent = new DecisionTapestryAgent(`Agent-${decision.id}`, decision.id);
+            
+            try {
+                await agent.initialize();
+                console.log(chalk.green('✅ Agent initialized successfully'));
+                
+                // Start the agent work
+                const report = await agent.start();
+                
+                console.log(chalk.green('\n✅ Agent completed work successfully!'));
+                console.log(chalk.gray(`\n📊 Completion Report:`));
+                console.log(chalk.gray(`   Duration: ${report.duration}`));
+                console.log(chalk.gray(`   Tasks Completed: ${report.completedTasks.length}/${report.totalTasks}`));
+                
+                if (report.errors.length > 0) {
+                    console.log(chalk.yellow(`\n⚠️  Errors encountered:`));
+                    report.errors.forEach(error => {
+                        console.log(chalk.yellow(`   - ${error}`));
+                    });
+                }
+            } catch (error) {
+                console.error(chalk.red(`\n❌ Agent failed: ${error.message}`));
+                console.log(chalk.yellow('💡 You can restart the agent later with:'));
+                console.log(chalk.gray(`   decision-tapestry agent start ${decision.id}`));
+            }
+        }
+        
+        // Show dashboard link
+        console.log(chalk.gray(`\n🔗 View progress at: http://localhost:8080/#decision-${decision.id}`));
+        
+    } catch (error) {
+        console.error(chalk.red(`\n❌ Failed to create quick task: ${error.message}`));
+        process.exit(1);
     }
 }
