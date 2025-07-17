@@ -630,6 +630,31 @@ app.get("/api/activity", (req, res) => {
   res.json(response);
 });
 
+// AI Canvas endpoint for visual communication
+app.post("/api/canvas/show", express.json(), (req, res) => {
+  const { type, content, options = {} } = req.body;
+
+  if (!type || !content) {
+    return res.status(400).json({ error: "type and content are required" });
+  }
+
+  // Broadcast canvas update to all connected clients
+  const canvasData = {
+    type: "canvas-update",
+    data: { type, content, options },
+    timestamp: new Date().toISOString(),
+  };
+
+  wss.clients.forEach((client) => {
+    if (client.readyState === 1) { // WebSocket.OPEN
+      client.send(JSON.stringify(canvasData));
+    }
+  });
+
+  console.log(`[AI Canvas] New content: ${type}`);
+  res.status(200).json({ message: "Canvas updated successfully" });
+});
+
 // New endpoint for activity history analytics
 app.get("/api/activity/analytics", (req, res) => {
   const { timeRange = "1h" } = req.query;

@@ -1232,6 +1232,13 @@ function initializeWebSocket() {
             console.log("Decision updated by agent, reloading...");
             initializeDashboard(message.decisionId);
           }
+        } else if (message.type === "canvas-update") {
+          // Dispatch canvas update to AI Canvas component
+          const canvasEvent = new CustomEvent('canvas-update', { 
+            detail: message.data 
+          });
+          window.dispatchEvent(canvasEvent);
+          console.log("AI Canvas update received:", message.data.type);
         } else {
           console.log("Unknown WebSocket message type:", message.type);
         }

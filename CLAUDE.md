@@ -179,3 +179,72 @@ The meta-experience demonstrates how AI agents can coordinate development work w
 
 - The filtering component is called "Filters" (not "Advanced Filters")
 - When the user says "we shall" this indicates a permanent rule change that should be remembered
+
+## AI Canvas Visual Communication Rules
+
+### Automatic Visual Generation
+When responding, ALWAYS check if visual communication would enhance understanding. Use the AI Canvas automatically for:
+
+1. **Code Explanations** (trigger: explain/how does/implement)
+   - Show syntax-highlighted code with inline annotations
+   - Visualize execution flow for complex logic
+   - Display before/after code transformations
+
+2. **Architecture Discussions** (trigger: architecture/system/design)
+   - Generate system diagrams showing components and relationships
+   - Create interactive architecture maps
+   - Show service dependencies and data flow
+
+3. **Comparisons** (trigger: compare/difference/vs/alternative)
+   - Side-by-side visualizations of options
+   - Pros/cons matrices
+   - Visual diffs for code or configurations
+
+4. **Multi-step Processes** (trigger: step/process/workflow)
+   - Flowcharts with decision points
+   - Progress trackers for ongoing tasks
+   - Sequential diagrams for complex procedures
+
+5. **UI/UX Discussions** (trigger: ui/interface/wireframe/layout)
+   - Instant wireframe generation
+   - Interactive mockups
+   - Component layout demonstrations
+
+6. **Data Structures** (trigger: data/schema/model/structure)
+   - Visual JSON/object representations
+   - Database schema diagrams
+   - Entity relationship visualizations
+
+7. **Debugging Sessions** (trigger: error/bug/issue/debug)
+   - Error flow diagrams
+   - Stack trace visualizations
+   - Debugging step sequences
+
+8. **Progress Updates** (trigger: progress/status/todo/complete)
+   - Live progress bars
+   - Task completion trackers
+   - Milestone visualizations
+
+### Visual Generation Guidelines
+- **Automatic Triggering**: Generate visuals WITHOUT being asked when patterns match
+- **Seamless Integration**: Display visuals alongside text responses
+- **Context Awareness**: Choose appropriate visual types based on discussion
+- **Non-Intrusive**: Visuals enhance but don't interrupt conversation flow
+- **Smart Timing**: Wait 30+ seconds between visuals to avoid spam
+
+### Canvas Integration
+```javascript
+// Always available in responses:
+import { visualCoordinator } from './claude-code-integration/ai-visual-coordinator.mjs';
+import canvas from './claude-code-integration/ai-canvas-helper.mjs';
+
+// Analyze every response for visual opportunities
+const enhanced = await visualCoordinator.processResponse(myResponse);
+```
+
+### Visual Priority Rules
+- **High Priority**: Architecture, code explanations, UI mockups, debugging
+- **Medium Priority**: Comparisons, data structures, progress updates
+- **Low Priority**: Simple lists, basic descriptions, confirmations
+
+Remember: The AI Canvas is YOUR visual voice. Use it proactively to communicate complex ideas clearly and efficiently.

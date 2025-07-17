@@ -27,6 +27,7 @@
     <script type="module" src="./agent-test-panel.mjs"></script>
     <script type="module" src="./simple-analytics.mjs"></script>
     <script type="module" src="./hot-update-client.mjs"></script>
+    <script type="module" src="./ai-canvas.mjs"></script>
 </head>
 
 <body>
@@ -51,11 +52,16 @@
                 <div class="center-tabs">
                     <button class="center-tab active" data-view="decisions">Decisions</button>
                     <button class="center-tab" data-view="architecture">Architecture</button>
+                    <button class="center-tab" data-view="ai-canvas">
+                        AI Canvas
+                        <span class="canvas-alert" id="canvas-alert" style="display: none;">•</span>
+                    </button>
                 </div>
             </div>
             <div class="center-panel-content">
                 <decision-map id="decision-map" class="center-view active" data-view="decisions"></decision-map>
                 <architecture-map id="architecture-map" class="center-view" data-view="architecture"></architecture-map>
+                <ai-canvas id="ai-canvas" class="center-view" data-view="ai-canvas"></ai-canvas>
             </div>
         </div>
         <div id="controls-panel" class="panel">
