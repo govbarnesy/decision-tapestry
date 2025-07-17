@@ -3,6 +3,7 @@
 import { spawn } from 'child_process';
 import fs from 'fs/promises';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import Ajv from 'ajv';
 import { 
     startAgent, 
@@ -59,6 +60,10 @@ const commands = {
     qt: {
         description: "Alias for quick-task.",
         action: quickTaskCommand
+    },
+    diagnose: {
+        description: "Diagnose issues with Decision Tapestry components.",
+        action: runDiagnostics
     },
     help: {
         description: "Show this help message.",
@@ -859,5 +864,46 @@ async function quickTaskCommand() {
     } catch (error) {
         console.error(chalk.red(`\n❌ Failed to create quick task: ${error.message}`));
         process.exit(1);
+    }
+}
+
+async function runDiagnostics() {
+    const diagnosticArgs = process.argv.slice(3);
+    const component = diagnosticArgs[0] || 'general';
+    
+    if (component === 'architecture' || component === 'arch') {
+        console.log(chalk.blue('\n🔍 Running Architecture Graph Diagnostics...\n'));
+        
+        try {
+            // Run the architecture diagnostic
+            const { spawn } = await import('child_process');
+            const diagnosticPath = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'troubleshooting', 'architecture-graph-diagnostic.mjs');
+            
+            const proc = spawn('node', [diagnosticPath], { stdio: 'inherit' });
+            
+            proc.on('error', (error) => {
+                console.error(chalk.red('Failed to run diagnostic:'), error.message);
+                process.exit(1);
+            });
+            
+            proc.on('exit', (code) => {
+                process.exit(code || 0);
+            });
+        } catch (error) {
+            console.error(chalk.red('Error running diagnostics:'), error.message);
+            process.exit(1);
+        }
+    } else if (component === 'help' || component === 'general') {
+        console.log(chalk.blue('\n📋 Decision Tapestry Diagnostics\n'));
+        console.log('Available diagnostic commands:');
+        console.log(chalk.gray('  decision-tapestry diagnose              - General system diagnostics'));
+        console.log(chalk.gray('  decision-tapestry diagnose architecture - Diagnose Architecture graph issues'));
+        console.log(chalk.gray('  decision-tapestry diagnose arch         - Alias for architecture'));
+        console.log(chalk.gray('\nExamples:'));
+        console.log(chalk.gray('  decision-tapestry diagnose arch'));
+        console.log(chalk.gray('  cd /path/to/other/project && decision-tapestry diagnose arch'));
+    } else {
+        console.log(chalk.yellow(`Unknown diagnostic component: ${component}`));
+        console.log(chalk.gray('Run "decision-tapestry diagnose help" for available options'));
     }
 }

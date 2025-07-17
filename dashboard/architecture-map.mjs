@@ -137,6 +137,13 @@ class ArchitectureMap extends LitElement {
       }
     });
 
+    // Check if we have any components to display
+    if (componentMap.size === 0) {
+      // Show helpful message instead of empty graph
+      this._showNoDataMessage();
+      return;
+    }
+
     // Generate nodes for components
     const nodes = Array.from(componentMap.values()).map((component) => {
       const typeConfig = this._componentTypes[component.type];
@@ -417,6 +424,53 @@ class ArchitectureMap extends LitElement {
     });
 
     this.selectedDecisionId = null;
+  }
+
+  _showNoDataMessage() {
+    // Clear any existing nodes/edges
+    if (this._nodesDataSet) {
+      this._nodesDataSet.clear();
+    }
+    if (this._edgesDataSet) {
+      this._edgesDataSet.clear();
+    }
+
+    // Add a single node with helpful message
+    const messageNode = {
+      id: 'no-data-message',
+      label: 'No Architecture Data Available\n\nTo see your architecture:\n1. Add "affected_components" to decisions\n2. List files/modules each decision impacts\n\nExample:\naffected_components:\n  - src/components/Login.js\n  - server/api/auth.mjs\n  - docs/auth.md',
+      shape: 'box',
+      color: {
+        background: '#f0f0f0',
+        border: '#cccccc',
+      },
+      font: {
+        size: 14,
+        color: '#666666',
+        face: 'monospace',
+        multi: true,
+        align: 'left'
+      },
+      size: 50,
+      mass: 5,
+      fixed: true,
+      x: 0,
+      y: 0
+    };
+
+    if (this._nodesDataSet) {
+      this._nodesDataSet.add(messageNode);
+    }
+
+    // Center the view on the message
+    if (this._network) {
+      setTimeout(() => {
+        this._network.fit({
+          nodes: ['no-data-message'],
+          animation: true
+        });
+      }, 100);
+    }
   }
 }
 
