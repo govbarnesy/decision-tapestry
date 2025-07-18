@@ -34,7 +34,7 @@ class CommitTimelineViz extends LitElement {
     :host {
       display: block;
       background: var(--panel-bg);
-      border-radius: 8px;
+      border-radius: 4px;
       padding: 16px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
@@ -154,7 +154,7 @@ class CommitTimelineViz extends LitElement {
       color: var(--text-main);
       background: var(--panel-bg);
       padding: 2px 6px;
-      border-radius: 10px;
+      border-radius: 4px;
       border: 1px solid var(--border);
       white-space: nowrap;
     }
@@ -206,7 +206,7 @@ class CommitTimelineViz extends LitElement {
       margin-top: 16px;
       padding: 12px;
       background: rgba(0, 82, 204, 0.05);
-      border-radius: 8px;
+      border-radius: 4px;
       border: 1px solid rgba(0, 82, 204, 0.2);
     }
 

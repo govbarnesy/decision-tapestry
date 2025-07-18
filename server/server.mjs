@@ -9,6 +9,7 @@ import { WebSocketServer } from "ws";
 import { spawn } from "child_process";
 import { readDecisionsFile, writeDecisionsFile } from "../shared/yaml-utils.js";
 import { initializeGeminiRoutes } from "./gemini-api.mjs";
+import { galleryRouter } from "./gallery-server.mjs";
 
 // Helper to get __dirname in ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -39,6 +40,9 @@ app.use(express.json());
 
 // Initialize Gemini API routes
 initializeGeminiRoutes(app);
+
+// Gallery routes
+app.use(galleryRouter);
 
 // Serve CSS files with the correct MIME type
 app.get("/*.css", (req, res) => {
@@ -388,6 +392,10 @@ const activityHistory = [];
 const activityStates = ["idle", "working", "debugging", "testing", "reviewing"];
 const MAX_HISTORY_ENTRIES = 1000;
 
+// Console stream storage for debugging
+const consoleStreamHistory = [];
+const MAX_CONSOLE_ENTRIES = 500;
+
 function broadcastActivity(agentId, activity) {
   const activityData = {
     type: "activity",
@@ -653,6 +661,43 @@ app.post("/api/canvas/show", express.json(), (req, res) => {
 
   console.log(`[AI Canvas] New content: ${type}`);
   res.status(200).json({ message: "Canvas updated successfully" });
+});
+
+// AI Canvas save endpoint
+app.post("/api/canvas/save", express.json({ limit: '10mb' }), async (req, res) => {
+  const { html, type, isPublic = false } = req.body;
+  
+  if (!html) {
+    return res.status(400).json({ error: "html content is required" });
+  }
+  
+  try {
+    // Determine folder based on privacy setting
+    const folder = isPublic ? 'ai-canvas-gallery/public' : 'ai-canvas-gallery/private';
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const filename = `canvas-${type || 'visual'}-${timestamp}.html`;
+    const filepath = path.join(CWD, folder, filename);
+    
+    // Ensure directory exists
+    await fsp.mkdir(path.join(CWD, folder), { recursive: true });
+    
+    // Save the file
+    await fsp.writeFile(filepath, html, 'utf8');
+    
+    console.log(`[AI Canvas] Saved ${isPublic ? 'public' : 'private'} visual: ${filename}`);
+    res.status(200).json({ 
+      message: "Visual saved successfully",
+      filename,
+      isPublic,
+      path: `${folder}/${filename}`
+    });
+  } catch (error) {
+    console.error('[AI Canvas] Save error:', error.message, error.stack);
+    res.status(500).json({ 
+      error: "Failed to save visual",
+      details: error.message 
+    });
+  }
 });
 
 // New endpoint for activity history analytics

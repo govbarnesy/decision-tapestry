@@ -1,0 +1,44 @@
+{
+  "aiCanvas": {
+    "frequency": "unhinged",
+    "timeBudget": {
+      "enabled": true,
+      "seconds": 10,
+      "warningAt": 7
+    },
+    "frequencyOptions": {
+      "moderate": {
+        "description": "Show visuals for complex concepts, architecture, and key workflows",
+        "threshold": 0.7,
+        "triggers": [
+          "architecture",
+          "workflow",
+          "comparison",
+          "complex-explanation",
+          "user-request"
+        ]
+      },
+      "unhinged": {
+        "description": "MAXIMUM VISUAL CHAOS! Diagrams for EVERYTHING! 🎨🚀",
+        "threshold": 0.2,
+        "triggers": [
+          "any-explanation",
+          "code-snippet",
+          "file-structure",
+          "decision-update",
+          "status-change",
+          "random-thought",
+          "greeting",
+          "error-message",
+          "success-celebration"
+        ],
+        "extras": {
+          "randomVisuals": true,
+          "emojiExplosions": true,
+          "progressBarsForEverything": true,
+          "autoGenerateMemes": false
+        }
+      }
+    }
+  }
+}

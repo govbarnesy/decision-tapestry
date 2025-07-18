@@ -117,7 +117,7 @@ class ActivityTimeline extends LitElement {
     .timeline-content {
       background: var(--panel-bg);
       border: 1px solid var(--border);
-      border-radius: 6px;
+      border-radius: 4px;
       padding: 0.75rem;
       position: relative;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);

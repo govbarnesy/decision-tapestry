@@ -77,7 +77,7 @@ class GeminiPrompt extends LitElement {
       padding: 0.75rem 1.5rem;
       background: white;
       border: 1px solid #dadce0;
-      border-radius: 8px;
+      border-radius: 4px;
       font-size: 1rem;
       color: #3c4043;
       cursor: pointer;
@@ -109,7 +109,7 @@ class GeminiPrompt extends LitElement {
       justify-content: space-between;
       padding: 0.75rem;
       background: var(--tab-bg);
-      border-radius: 8px;
+      border-radius: 4px;
       font-size: 0.85rem;
     }
 
@@ -156,7 +156,7 @@ class GeminiPrompt extends LitElement {
       flex: 1;
       padding: 0.75rem;
       border: 2px solid var(--border);
-      border-radius: 8px;
+      border-radius: 4px;
       font-size: 1rem;
       font-family: inherit;
       background: var(--panel-bg);
@@ -181,7 +181,7 @@ class GeminiPrompt extends LitElement {
       background: var(--accent);
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 4px;
       font-size: 1rem;
       font-weight: 500;
       cursor: pointer;
@@ -204,7 +204,7 @@ class GeminiPrompt extends LitElement {
       overflow-y: auto;
       padding: 1rem;
       background: var(--tab-bg);
-      border-radius: 8px;
+      border-radius: 4px;
       border: 1px solid var(--border);
     }
 
@@ -242,7 +242,7 @@ class GeminiPrompt extends LitElement {
       padding: 0.25rem 0.75rem;
       background: var(--tab-bg);
       border: 1px solid var(--border);
-      border-radius: 16px;
+      border-radius: 4px;
       font-size: 0.8rem;
       color: var(--text-secondary);
       cursor: pointer;

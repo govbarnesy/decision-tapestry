@@ -97,7 +97,7 @@ body.dark-theme {
     align-items: center;
     gap: 4px;
     padding: 2px 8px;
-    border-radius: 12px;
+    border-radius: 4px;
     font-size: 12px;
     font-weight: 500;
     white-space: nowrap;
@@ -139,7 +139,7 @@ body.dark-theme {
 .file-status-icon {
     width: 14px;
     height: 14px;
-    border-radius: 2px;
+    border-radius: 4px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -171,7 +171,7 @@ body.dark-theme {
     background: var(--github-black);
     color: white;
     font-size: 12px;
-    border-radius: 6px;
+    border-radius: 4px;
     white-space: nowrap;
     pointer-events: none;
     opacity: 0;

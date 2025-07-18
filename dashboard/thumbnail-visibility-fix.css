@@ -1,0 +1,222 @@
+/**
+ * Thumbnail Visibility Fixes
+ * Ensures AI Canvas content is visible in thumbnails
+ */
+
+/* Override thumbnail container styles */
+set-editor .slide-thumbnail {
+  height: 200px !important;
+  background: transparent !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 8px !important;
+  overflow: visible !important;
+  position: relative !important;
+}
+
+/* Fix iframe rendering */
+set-editor .slide-thumbnail iframe {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  transform: none !important;
+  border: none !important;
+  pointer-events: none !important;
+  background: white !important;
+  border-radius: 8px !important;
+}
+
+/* Create a zoom effect for better visibility */
+set-editor .slide-card {
+  position: relative;
+  overflow: hidden;
+}
+
+set-editor .slide-card .slide-thumbnail {
+  transition: transform 0.3s ease;
+}
+
+set-editor .slide-card:hover .slide-thumbnail {
+  transform: scale(1.05);
+}
+
+/* Ensure slide content is visible */
+set-editor .slide-thumbnail::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: transparent;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Fix slide number visibility */
+set-editor .slide-number {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba(0, 0, 0, 0.9) !important;
+  color: white !important;
+  padding: 6px 10px !important;
+  border-radius: 4px !important;
+  font-size: 0.8em !important;
+  font-weight: 700 !important;
+  z-index: 10;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Fix slide actions visibility */
+set-editor .slide-actions {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 10;
+}
+
+set-editor .slide-action {
+  background: rgba(0, 0, 0, 0.9) !important;
+  color: white !important;
+  padding: 6px 10px !important;
+  font-size: 0.9em !important;
+  font-weight: 700 !important;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Improve slide info contrast */
+set-editor .slide-info {
+  background: var(--card-bg) !important;
+  border-top: 1px solid var(--border-color) !important;
+  padding: 12px !important;
+  border-radius: 0 0 8px 8px !important;
+}
+
+body.dark-theme set-editor .slide-info {
+  background: var(--background) !important;
+  border-top-color: var(--border-dark) !important;
+}
+
+set-editor .slide-title {
+  color: var(--text-primary) !important;
+  font-weight: 600 !important;
+  font-size: 0.9em !important;
+}
+
+/* Available slides container improvements */
+set-editor .available-slides {
+  background: var(--background-secondary) !important;
+  border: 1px solid var(--border-color) !important;
+  padding: 20px !important;
+  gap: 20px !important;
+  max-height: 450px !important;
+}
+
+body.dark-theme set-editor .available-slides {
+  background: var(--background) !important;
+  border-color: var(--border-dark) !important;
+}
+
+/* Selected slides improvements */
+set-editor .selected-slides {
+  background: var(--background-secondary) !important;
+  border: 2px dashed var(--border-color) !important;
+  padding: 20px !important;
+  gap: 20px !important;
+  min-height: 250px !important;
+}
+
+body.dark-theme set-editor .selected-slides {
+  background: var(--background) !important;
+  border-color: var(--border-dark) !important;
+}
+
+/* Loading state for thumbnails */
+set-editor .slide-thumbnail.loading::after {
+  content: 'Loading...';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--text-secondary);
+  font-size: 0.9em;
+  font-weight: 500;
+}
+
+/* Error state for thumbnails */
+set-editor .slide-thumbnail.error::after {
+  content: 'Failed to load';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--color-error);
+  font-size: 0.9em;
+  font-weight: 500;
+  background: var(--panel-bg);
+  padding: 8px 12px;
+  border-radius: 4px;
+}
+
+/* Ensure thumbnails show content by using object-fit */
+set-editor .slide-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Alternative: Use background images for better control */
+set-editor .slide-preview {
+  width: 100%;
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Placeholder while loading */
+set-editor .slide-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-size: 1.5em;
+  font-weight: 600;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+body.dark-theme set-editor .slide-placeholder {
+  background: linear-gradient(135deg, #434190 0%, #5a3780 100%);
+}
+
+set-editor .slide-placeholder.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Gallery Sets thumbnails */
+gallery-sets .thumbnail-slide {
+  background: rgba(255, 255, 255, 0.2) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Presentation launcher thumbnails */
+presentation-launcher .thumbnail-content iframe {
+  width: 100% !important;
+  height: 100% !important;
+  transform: none !important;
+  background: white !important;
+}

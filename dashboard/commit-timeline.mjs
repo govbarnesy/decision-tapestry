@@ -115,7 +115,7 @@ class CommitTimeline extends LitElement {
       font-size: 12px;
       padding: 2px 8px;
       background: rgba(0, 82, 204, 0.1);
-      border-radius: 12px;
+      border-radius: 4px;
       color: var(--accent);
       font-weight: 500;
     }

@@ -13,7 +13,7 @@ class SmartAnalytics extends LitElement {
       overflow-y: auto;
       background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
       padding: 20px;
-      border-radius: 8px;
+      border-radius: 4px;
     }
 
     .analytics-header {
@@ -51,7 +51,7 @@ class SmartAnalytics extends LitElement {
 
     .insight-card {
       background: white;
-      border-radius: 12px;
+      border-radius: 4px;
       padding: 20px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -127,7 +127,7 @@ class SmartAnalytics extends LitElement {
 
     .recommendations-section {
       background: white;
-      border-radius: 12px;
+      border-radius: 4px;
       padding: 20px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       margin-bottom: 24px;
@@ -148,7 +148,7 @@ class SmartAnalytics extends LitElement {
       align-items: flex-start;
       gap: 12px;
       padding: 12px;
-      border-radius: 8px;
+      border-radius: 4px;
       margin-bottom: 8px;
       background: #f8f9fa;
       border-left: 4px solid #0066ff;
@@ -179,7 +179,7 @@ class SmartAnalytics extends LitElement {
 
     .patterns-section {
       background: white;
-      border-radius: 12px;
+      border-radius: 4px;
       padding: 20px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
@@ -199,7 +199,7 @@ class SmartAnalytics extends LitElement {
       align-items: center;
       gap: 16px;
       padding: 12px;
-      border-radius: 8px;
+      border-radius: 4px;
       margin-bottom: 8px;
       background: #f8f9fa;
       transition: background 0.2s ease;

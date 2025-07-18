@@ -26,7 +26,7 @@ class FileStatusDisplay extends LitElement {
     .status-group {
       background: var(--panel-bg);
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 4px;
       padding: 12px;
     }
 
@@ -75,7 +75,7 @@ class FileStatusDisplay extends LitElement {
       font-size: 12px;
       padding: 2px 6px;
       background: rgba(0, 0, 0, 0.1);
-      border-radius: 10px;
+      border-radius: 4px;
       color: var(--text-secondary);
     }
 

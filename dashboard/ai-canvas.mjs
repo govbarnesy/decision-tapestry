@@ -19,11 +19,28 @@ class AICanvas extends HTMLElement {
   }
 
   setupWebSocket() {
+    // Prevent duplicate listeners
+    if (this._wsListenerAttached) return;
+    this._wsListenerAttached = true;
+    
     // Listen for canvas updates via WebSocket
-    window.addEventListener('canvas-update', (event) => {
-      this.addToHistory(event.detail);
-      this.showContent(event.detail);
-    });
+    this._canvasUpdateHandler = (event) => {
+      // Prevent duplicate processing
+      const data = event.detail;
+      const now = Date.now();
+      const isDuplicate = this.visualHistory.some(v => 
+        v.type === data.type && 
+        v.content === data.content && 
+        Math.abs(v.id - now) < 1000 // Within 1 second (using ID which is timestamp-based)
+      );
+      
+      if (!isDuplicate) {
+        this.addToHistory(data);
+        this.showContent(data, false); // false = don't add to history again
+      }
+    };
+    
+    window.addEventListener('canvas-update', this._canvasUpdateHandler);
   }
 
   setupKeyboardListeners() {
@@ -32,7 +49,36 @@ class AICanvas extends HTMLElement {
       // Only handle if AI Canvas is visible
       if (!this.classList.contains('active')) return;
       
+      // Don't handle if user is typing in an input
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      
       switch(e.key) {
+        case 'ArrowLeft':
+        case 'a':
+        case 'A':
+          if (!e.ctrlKey && !e.metaKey) {
+            e.preventDefault();
+            this.navigatePrevious();
+          }
+          break;
+        case 'ArrowRight':
+        case 'd':
+        case 'D':
+          if (!e.ctrlKey && !e.metaKey) {
+            e.preventDefault();
+            this.navigateNext();
+          }
+          break;
+        case 'ArrowUp':
+        case 'Home':
+          e.preventDefault();
+          this.navigateFirst();
+          break;
+        case 'ArrowDown':
+        case 'End':
+          e.preventDefault();
+          this.navigateLast();
+          break;
         case 'f':
         case 'F':
           if (!e.ctrlKey && !e.metaKey) {
@@ -44,6 +90,45 @@ class AICanvas extends HTMLElement {
         case 'G':
           e.preventDefault();
           this.toggleGridView();
+          break;
+        case 'c':
+        case 'C':
+          e.preventDefault();
+          this.clear();
+          break;
+        case 'h':
+        case 'H':
+        case '?':
+          e.preventDefault();
+          this.showKeyboardHelp();
+          break;
+        case 'Escape':
+          if (this.shadowRoot.querySelector('.fullscreen')) {
+            e.preventDefault();
+            this.toggleFullscreen();
+          }
+          if (this.shadowRoot.querySelector('.keyboard-help')) {
+            e.preventDefault();
+            this.hideKeyboardHelp();
+          }
+          break;
+        // Number keys for quick navigation
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+          if (!e.ctrlKey && !e.metaKey) {
+            e.preventDefault();
+            const index = parseInt(e.key) - 1;
+            if (index < this.visualHistory.length) {
+              this.navigateToIndex(index);
+            }
+          }
           break;
       }
     });
@@ -192,7 +277,7 @@ class AICanvas extends HTMLElement {
 
         .grid-item {
           border: 1px solid var(--border, #eee);
-          border-radius: 8px;
+          border-radius: 4px;
           overflow: hidden;
           cursor: pointer;
           transition: all 0.2s;
@@ -223,13 +308,89 @@ class AICanvas extends HTMLElement {
           background: rgba(0,0,0,0.8);
           color: white;
           padding: 10px 15px;
-          border-radius: 8px;
+          border-radius: 4px;
           font-size: 0.8em;
           display: none;
         }
 
         .keyboard-hint.show {
           display: block;
+        }
+
+        /* Keyboard help overlay */
+        .keyboard-help {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.85);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 10000;
+          animation: fadeIn 0.2s ease;
+        }
+
+        .keyboard-help-content {
+          background: var(--panel-bg, #fff);
+          padding: 40px;
+          border-radius: 8px;
+          max-width: 600px;
+          width: 90%;
+          max-height: 80vh;
+          overflow-y: auto;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .keyboard-help h3 {
+          margin: 0 0 20px 0;
+          color: var(--text-main, #000);
+          font-size: 1.5em;
+          text-align: center;
+        }
+
+        .keyboard-help h4 {
+          margin: 0 0 10px 0;
+          color: var(--accent, #0052cc);
+          font-size: 1.1em;
+        }
+
+        .keyboard-help-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+          gap: 30px;
+          margin-bottom: 20px;
+        }
+
+        .help-section {
+          border-left: 3px solid var(--accent, #0052cc);
+          padding-left: 15px;
+        }
+
+        .help-item {
+          margin: 8px 0;
+          color: var(--text-secondary, #333);
+          font-size: 0.9em;
+        }
+
+        .help-item kbd {
+          background: #f0f0f0;
+          border: 1px solid #ccc;
+          border-radius: 3px;
+          padding: 2px 6px;
+          font-family: monospace;
+          font-size: 0.9em;
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+          margin-right: 5px;
+        }
+
+        .help-footer {
+          text-align: center;
+          color: var(--text-secondary, #666);
+          font-size: 0.9em;
+          margin-top: 20px;
+          font-style: italic;
         }
 
         .canvas-button {
@@ -257,7 +418,7 @@ class AICanvas extends HTMLElement {
           width: 100%;
           min-height: 400px;
           background: var(--panel-bg, #fff);
-          border-radius: 8px;
+          border-radius: 4px;
           padding: 20px;
           box-sizing: border-box;
         }
@@ -291,7 +452,7 @@ class AICanvas extends HTMLElement {
         /* Wireframe styles */
         .wireframe {
           border: 2px dashed #999;
-          border-radius: 8px;
+          border-radius: 4px;
           padding: 20px;
           background: #fafafa;
         }
@@ -351,7 +512,7 @@ class AICanvas extends HTMLElement {
         .comparison-side {
           padding: 20px;
           border: 1px solid var(--border, #eee);
-          border-radius: 8px;
+          border-radius: 4px;
         }
 
         .comparison-label {
@@ -407,6 +568,11 @@ class AICanvas extends HTMLElement {
               <button class="mode-button" id="gridMode" title="Grid View (G)">📊</button>
               <button class="mode-button" id="fullscreenMode" title="Fullscreen (F)">🎬</button>
             </div>
+            <button class="canvas-button secondary" id="saveBtn">💾 Save</button>
+            <label style="margin-left: 10px; font-size: 0.9em;">
+              <input type="checkbox" id="publicToggle" style="margin-right: 5px;">
+              Public
+            </label>
             <button class="canvas-button secondary" id="clearBtn">Clear All</button>
           </div>
         </div>
@@ -424,12 +590,13 @@ class AICanvas extends HTMLElement {
           <!-- Timeline items will be added here -->
         </div>
         <div class="keyboard-hint" id="keyboardHint">
-          G: Grid View | F: Fullscreen
+          ← → Navigate | G: Gallery | F: Fullscreen | H: Help
         </div>
       </div>
     `;
 
     // Add event listeners
+    this.shadowRoot.getElementById('saveBtn').addEventListener('click', () => this.saveCurrentVisual());
     this.shadowRoot.getElementById('clearBtn').addEventListener('click', () => this.clearAll());
     
     // Mode buttons
@@ -724,6 +891,137 @@ class AICanvas extends HTMLElement {
     return div.innerHTML;
   }
 
+  // Save current visual
+  async saveCurrentVisual() {
+    if (!this.currentContent) {
+      alert('No visual to save!');
+      return;
+    }
+    
+    const isPublic = this.shadowRoot.getElementById('publicToggle').checked;
+    const timestamp = new Date().toISOString();
+    const filename = `ai-canvas-${timestamp.replace(/[:.]/g, '-')}.html`;
+    
+    // Create full HTML document
+    const fullHTML = `<!DOCTYPE html>
+<html>
+<head>
+  <title>AI Canvas Visual - ${timestamp}</title>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .canvas-saved {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 4px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .metadata {
+      border-bottom: 1px solid #eee;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+    .metadata h1 {
+      margin: 0 0 10px 0;
+      color: #333;
+    }
+    .metadata p {
+      margin: 5px 0;
+      color: #666;
+    }
+    .content {
+      line-height: 1.6;
+    }
+    ${this.getContentStyles()}
+  </style>
+</head>
+<body>
+  <div class="canvas-saved">
+    <div class="metadata">
+      <h1>AI Canvas Visual</h1>
+      <p><strong>Type:</strong> ${this.currentContent.type}</p>
+      <p><strong>Saved:</strong> ${new Date().toLocaleString()}</p>
+      ${this.currentContent.options?.title ? `<p><strong>Title:</strong> ${this.currentContent.options.title}</p>` : ''}
+    </div>
+    <div class="content">
+      ${this.shadowRoot.getElementById('contentArea').innerHTML}
+    </div>
+  </div>
+</body>
+</html>`;
+    
+    // Save to server instead of downloading
+    try {
+      const response = await fetch('/api/canvas/save', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          html: fullHTML,
+          type: this.currentContent.type,
+          isPublic: isPublic
+        })
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to save visual');
+      }
+      
+      const result = await response.json();
+      console.log('Visual saved:', result);
+      
+      // Visual feedback
+      this.showSaveConfirmation(isPublic);
+    } catch (error) {
+      console.error('Save error:', error);
+      alert('Failed to save visual: ' + error.message);
+    }
+  }
+  
+  getContentStyles() {
+    // Extract relevant styles based on content type
+    return `
+      .code-block { background: #f4f4f4; border: 1px solid #ddd; border-radius: 4px; padding: 16px; overflow-x: auto; font-family: monospace; }
+      .diagram-container { display: flex; justify-content: center; align-items: center; min-height: 300px; }
+      .wireframe { border: 2px dashed #999; border-radius: 8px; padding: 20px; background: #fafafa; }
+      .comparison-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+      .comparison-side { padding: 20px; border: 1px solid #eee; border-radius: 8px; }
+      .progress-container { max-width: 600px; margin: 0 auto; }
+      .progress-step { display: flex; align-items: center; margin: 10px 0; padding: 10px; border-radius: 4px; background: #f0f0f0; }
+      .progress-step.active { background: #e3f2fd; border: 1px solid #2196f3; }
+      .progress-step.completed { background: #e8f5e9; border: 1px solid #4caf50; }
+    `;
+  }
+  
+  showSaveConfirmation(isPublic) {
+    const contentArea = this.shadowRoot.getElementById('contentArea');
+    const originalContent = contentArea.innerHTML;
+    
+    contentArea.innerHTML = `
+      <div style="text-align: center; padding: 60px 20px;">
+        <div style="font-size: 5em; margin-bottom: 20px;">${isPublic ? '🌍' : '🔒'}</div>
+        <h2 style="color: #4caf50; margin-bottom: 10px;">Visual Saved!</h2>
+        <p style="color: #666;">Saved to ${isPublic ? 'public' : 'private'} gallery</p>
+        <p style="color: #999; font-size: 0.9em; margin-top: 10px;">
+          ${isPublic ? 'This visual will be committed to the repository' : 'This visual will remain private'}
+        </p>
+      </div>
+    `;
+    
+    // Restore original content after 2 seconds
+    setTimeout(() => {
+      contentArea.innerHTML = originalContent;
+    }, 2000);
+  }
+
   // Grid view methods
   toggleGridView() {
     const contentArea = this.shadowRoot.getElementById('contentArea');
@@ -814,6 +1112,59 @@ class AICanvas extends HTMLElement {
     const hint = this.shadowRoot.getElementById('keyboardHint');
     if (hint) {
       hint.classList.remove('show');
+    }
+  }
+
+  showKeyboardHelp() {
+    const helpOverlay = document.createElement('div');
+    helpOverlay.className = 'keyboard-help';
+    helpOverlay.innerHTML = `
+      <div class="keyboard-help-content">
+        <h3>⌨️ Keyboard Shortcuts</h3>
+        <div class="keyboard-help-grid">
+          <div class="help-section">
+            <h4>Navigation</h4>
+            <div class="help-item"><kbd>←</kbd> / <kbd>A</kbd> Previous visual</div>
+            <div class="help-item"><kbd>→</kbd> / <kbd>D</kbd> Next visual</div>
+            <div class="help-item"><kbd>↑</kbd> / <kbd>Home</kbd> First visual</div>
+            <div class="help-item"><kbd>↓</kbd> / <kbd>End</kbd> Last visual</div>
+            <div class="help-item"><kbd>1</kbd>-<kbd>9</kbd> Jump to visual N</div>
+          </div>
+          <div class="help-section">
+            <h4>View Options</h4>
+            <div class="help-item"><kbd>G</kbd> Toggle gallery view</div>
+            <div class="help-item"><kbd>F</kbd> Toggle fullscreen</div>
+            <div class="help-item"><kbd>C</kbd> Clear all visuals</div>
+          </div>
+          <div class="help-section">
+            <h4>Other</h4>
+            <div class="help-item"><kbd>H</kbd> / <kbd>?</kbd> Show this help</div>
+            <div class="help-item"><kbd>Esc</kbd> Exit fullscreen/help</div>
+          </div>
+        </div>
+        <p class="help-footer">Press any key to close</p>
+      </div>
+    `;
+    
+    this.shadowRoot.appendChild(helpOverlay);
+    
+    // Close on any key press
+    const closeHelp = (e) => {
+      e.preventDefault();
+      this.hideKeyboardHelp();
+      document.removeEventListener('keydown', closeHelp);
+    };
+    
+    // Add slight delay to prevent immediate close from the 'h' key
+    setTimeout(() => {
+      document.addEventListener('keydown', closeHelp);
+    }, 100);
+  }
+
+  hideKeyboardHelp() {
+    const helpOverlay = this.shadowRoot.querySelector('.keyboard-help');
+    if (helpOverlay) {
+      helpOverlay.remove();
     }
   }
 }

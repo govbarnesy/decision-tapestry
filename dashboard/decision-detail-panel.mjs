@@ -88,7 +88,7 @@ class DecisionDetailPanel extends LitElement {
       align-items: center;
       gap: 4px;
       padding: 4px 8px;
-      border-radius: 12px;
+      border-radius: 4px;
       font-size: 11px;
       font-weight: 600;
       text-transform: uppercase;
@@ -139,7 +139,7 @@ class DecisionDetailPanel extends LitElement {
       gap: 12px;
       padding: 12px;
       background: rgba(0, 82, 204, 0.05);
-      border-radius: 8px;
+      border-radius: 4px;
       margin: 12px 0;
     }
 
@@ -216,7 +216,7 @@ class DecisionDetailPanel extends LitElement {
       padding: 8px 12px;
       background: var(--panel-bg);
       border: 1px solid var(--border);
-      border-radius: 6px;
+      border-radius: 4px;
       text-decoration: none;
       color: var(--text-main);
       transition: all 0.2s ease;
@@ -232,7 +232,7 @@ class DecisionDetailPanel extends LitElement {
       align-items: center;
       gap: 4px;
       padding: 2px 8px;
-      border-radius: 12px;
+      border-radius: 4px;
       font-size: 11px;
       font-weight: 600;
       white-space: nowrap;

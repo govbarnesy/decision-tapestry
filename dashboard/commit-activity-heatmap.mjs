@@ -26,7 +26,7 @@ class CommitActivityHeatmap extends LitElement {
     :host {
       display: block;
       background: var(--panel-bg);
-      border-radius: 8px;
+      border-radius: 4px;
       padding: 16px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
@@ -118,7 +118,7 @@ class CommitActivityHeatmap extends LitElement {
       width: 12px;
       height: 12px;
       background: var(--border);
-      border-radius: 2px;
+      border-radius: 4px;
       cursor: pointer;
       transition: all 0.2s ease;
       position: relative;
@@ -202,14 +202,14 @@ class CommitActivityHeatmap extends LitElement {
     .legend-item {
       width: 12px;
       height: 12px;
-      border-radius: 2px;
+      border-radius: 4px;
     }
 
     .summary {
       margin-top: 16px;
       padding: 12px;
       background: rgba(0, 82, 204, 0.05);
-      border-radius: 8px;
+      border-radius: 4px;
       border: 1px solid rgba(0, 82, 204, 0.2);
     }
 

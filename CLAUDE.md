@@ -248,3 +248,47 @@ const enhanced = await visualCoordinator.processResponse(myResponse);
 - **Low Priority**: Simple lists, basic descriptions, confirmations
 
 Remember: The AI Canvas is YOUR visual voice. Use it proactively to communicate complex ideas clearly and efficiently.
+
+## AI Canvas Frequency Modes
+
+You can control how often I use the AI Canvas for visual communication:
+
+```bash
+# Set to moderate mode (default) - visuals for complex concepts
+decision-tapestry canvas-mode moderate
+
+# Set to UNHINGED mode - MAXIMUM VISUAL CHAOS! 
+decision-tapestry canvas-mode unhinged
+```
+
+**Moderate Mode** (default):
+- Architecture diagrams when explaining system design
+- Flowcharts for complex workflows
+- Code comparisons for significant changes
+- Progress tracking for multi-step implementations
+- Only when it adds clear value to the explanation
+
+**UNHINGED Mode** 🚀:
+- Diagrams for EVERYTHING
+- Progress bars for basic tasks
+- Visualizations of thought processes
+- Random architecture drawings
+- Celebration graphics for success
+- Visual representations of errors
+- Basically, if I can draw it, I WILL draw it
+
+The setting is stored in `settings/ai-canvas-settings.json` and persists across sessions.
+
+### Time Budget
+
+To prevent spending too long on visuals (especially in UNHINGED mode), there's a time budget:
+
+```json
+"timeBudget": {
+  "enabled": true,
+  "seconds": 10,     // Maximum time to create a visual
+  "warningAt": 7     // Warning threshold
+}
+```
+
+This keeps visual creation snappy and prevents analysis paralysis!

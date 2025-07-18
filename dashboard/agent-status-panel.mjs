@@ -23,7 +23,7 @@ class AgentStatusPanel extends LitElement {
       margin-bottom: 1rem;
       padding: 0.5rem;
       background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark, #0056b3) 100%);
-      border-radius: 8px;
+      border-radius: 4px;
       color: white;
     }
 
@@ -61,7 +61,7 @@ class AgentStatusPanel extends LitElement {
       margin-bottom: 1rem;
       background: var(--panel-bg);
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 4px;
       padding: 1rem;
       max-height: 200px;
       overflow-y: auto;
@@ -117,7 +117,7 @@ class AgentStatusPanel extends LitElement {
       margin-bottom: 1rem;
       background: var(--panel-bg);
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 4px;
       padding: 1rem;
     }
 
@@ -158,7 +158,7 @@ class AgentStatusPanel extends LitElement {
       margin-bottom: 1rem;
       background: var(--panel-bg);
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 4px;
       padding: 1rem;
       max-height: 150px;
       overflow-y: auto;
@@ -186,7 +186,7 @@ class AgentStatusPanel extends LitElement {
       background: var(--accent);
       color: white;
       padding: 0.1rem 0.4rem;
-      border-radius: 3px;
+      border-radius: 4px;
       font-size: 0.7rem;
       font-weight: bold;
     }
@@ -203,7 +203,7 @@ class AgentStatusPanel extends LitElement {
     .agent-card {
       background: var(--panel-bg);
       border: 2px solid var(--border);
-      border-radius: 8px;
+      border-radius: 4px;
       padding: 1rem;
       transition: all 0.3s ease;
       cursor: pointer;

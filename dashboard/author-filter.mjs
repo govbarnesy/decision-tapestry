@@ -69,7 +69,7 @@ class AuthorFilter extends LitElement {
       padding: 12px;
       background: var(--panel-bg);
       border: 2px solid var(--border);
-      border-radius: 8px;
+      border-radius: 4px;
       cursor: pointer;
       transition: all 0.2s ease;
       position: relative;
@@ -200,7 +200,7 @@ class AuthorFilter extends LitElement {
       background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
       background-size: 200% 100%;
       animation: loading 1.5s infinite;
-      border-radius: 8px;
+      border-radius: 4px;
     }
 
     @keyframes loading {

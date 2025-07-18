@@ -32,7 +32,7 @@
     gap: 4px;
     font-size: 11px;
     padding: 2px 8px;
-    border-radius: 12px;
+    border-radius: 4px;
     font-weight: 500;
 }
 
@@ -60,7 +60,7 @@
     padding: 2px 8px;
     background: rgba(0, 82, 204, 0.1);
     color: var(--accent);
-    border-radius: 12px;
+    border-radius: 4px;
     font-weight: 600;
 }
 

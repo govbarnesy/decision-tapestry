@@ -65,6 +65,10 @@ const commands = {
         description: "Diagnose issues with Decision Tapestry components.",
         action: runDiagnostics
     },
+    "canvas-mode": {
+        description: "Set AI Canvas frequency (moderate or unhinged).",
+        action: setCanvasMode
+    },
     help: {
         description: "Show this help message.",
         action: showHelp
@@ -239,6 +243,10 @@ function showHelp() {
     console.log("  • decision-tapestry agent coordinate <id1> <id2> # Coordinate agents");
     console.log("  • decision-tapestry agent test                   # Run agent tests");
     console.log("  • decision-tapestry agent help                   # Agent help");
+    console.log("");
+    console.log("🎨 AI Canvas:");
+    console.log("  • decision-tapestry canvas-mode moderate         # Default visual mode");
+    console.log("  • decision-tapestry canvas-mode unhinged        # MAXIMUM VISUAL CHAOS!");
 }
 
 async function analyzeProject() {
@@ -864,6 +872,59 @@ async function quickTaskCommand() {
     } catch (error) {
         console.error(chalk.red(`\n❌ Failed to create quick task: ${error.message}`));
         process.exit(1);
+    }
+}
+
+async function setCanvasMode() {
+    const modeArg = process.argv[3];
+    
+    if (!modeArg || !['moderate', 'unhinged'].includes(modeArg.toLowerCase())) {
+        console.log(chalk.yellow('\n🎨 AI Canvas Frequency Modes:\n'));
+        console.log(chalk.gray('  moderate   - Show visuals for complex concepts (default)'));
+        console.log(chalk.gray('  unhinged   - MAXIMUM VISUAL CHAOS! Diagrams for EVERYTHING!'));
+        console.log(chalk.gray('\nUsage: decision-tapestry canvas-mode [moderate|unhinged]'));
+        
+        // Check current mode
+        try {
+            const settings = JSON.parse(await fs.readFile('./settings/ai-canvas-settings.json', 'utf8'));
+            console.log(chalk.blue(`\nCurrent mode: ${settings.aiCanvas.frequency}`));
+        } catch (e) {
+            console.log(chalk.blue('\nCurrent mode: moderate (default)'));
+        }
+        return;
+    }
+    
+    const mode = modeArg.toLowerCase();
+    
+    try {
+        // Read current settings
+        let settings;
+        try {
+            settings = JSON.parse(await fs.readFile('./settings/ai-canvas-settings.json', 'utf8'));
+        } catch (e) {
+            // Use default if file doesn't exist
+            settings = { aiCanvas: { frequency: 'moderate' } };
+        }
+        
+        // Update frequency
+        settings.aiCanvas.frequency = mode;
+        
+        // Save settings
+        await fs.mkdir('./settings', { recursive: true });
+        await fs.writeFile('./settings/ai-canvas-settings.json', JSON.stringify(settings, null, 2));
+        
+        if (mode === 'unhinged') {
+            console.log(chalk.red('\n🚀💥🎨 UNHINGED MODE ACTIVATED! 🎨💥🚀'));
+            console.log(chalk.yellow('PREPARE FOR MAXIMUM VISUAL CHAOS!'));
+            console.log(chalk.cyan('Every thought will be a diagram!'));
+            console.log(chalk.magenta('Every action will be visualized!'));
+            console.log(chalk.green('THE AI CANVAS HUNGERS FOR PIXELS!'));
+        } else {
+            console.log(chalk.green(`\n✅ AI Canvas mode set to: ${mode}`));
+            console.log(chalk.gray('Visuals will appear for complex concepts and architecture'));
+        }
+    } catch (error) {
+        console.error(chalk.red(`\n❌ Failed to update canvas mode: ${error.message}`));
     }
 }
 

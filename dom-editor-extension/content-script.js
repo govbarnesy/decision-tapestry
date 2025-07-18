@@ -2279,12 +2279,18 @@ function addToHistory(action, description) {
     changeHistory = changeHistory.slice(0, 50);
   }
   
-  updateHistoryDisplay();
+  // Only update display if panel is ready
+  if (floatingPanel) {
+    updateHistoryDisplay();
+  }
 }
 
 // Update history display
 function updateHistoryDisplay() {
+  if (!floatingPanel) return; // Exit if panel not created yet
+  
   const historyList = floatingPanel.querySelector('#dt-history-list');
+  if (!historyList) return; // Exit if history list doesn't exist
   
   if (changeHistory.length === 0) {
     historyList.innerHTML = '<div class="dt-no-history">No changes yet</div>';

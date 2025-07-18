@@ -1,0 +1,224 @@
+/**
+ * Gallery Components Theme Overrides
+ * 
+ * Specific theme enhancements for gallery, sets, and presentation components
+ */
+
+/* ===== GALLERY SETS COMPONENT ===== */
+gallery-sets {
+  /* Gradient overlays for dark mode */
+  --set-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --set-gradient-dark: linear-gradient(135deg, #434190 0%, #5a3780 100%);
+}
+
+body.dark-theme gallery-sets {
+  --set-gradient: var(--set-gradient-dark);
+}
+
+/* Set card hover effects */
+gallery-sets .set-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body.dark-theme gallery-sets .set-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+}
+
+body.dark-theme gallery-sets .set-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-primary), var(--shadow-lg);
+}
+
+/* ===== SET EDITOR COMPONENT ===== */
+set-editor {
+  /* Modal specific overrides */
+  --modal-bg: var(--panel-bg);
+  --input-focus-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+body.dark-theme set-editor {
+  --modal-overlay: rgba(0, 0, 0, 0.85);
+  --input-bg: var(--background);
+  --input-focus-shadow: 0 0 0 3px rgba(88, 166, 255, 0.3);
+}
+
+/* Slide thumbnails in editor */
+body.dark-theme set-editor .slide-thumbnail {
+  background: var(--background);
+  border: 1px solid var(--border-color);
+}
+
+body.dark-theme set-editor .slide-card:hover {
+  border-color: var(--color-primary);
+}
+
+/* ===== PRESENTATION LAUNCHER ===== */
+presentation-launcher {
+  /* Presentation mode specific */
+  --presentation-bg: #000000;
+  --slide-bg: #ffffff;
+  --controls-bg: rgba(0, 0, 0, 0.8);
+  --controls-text: #ffffff;
+}
+
+body.dark-theme presentation-launcher {
+  /* Keep presentation dark for better viewing */
+  --presentation-bg: #000000;
+  --slide-bg: #0d1117;
+  --controls-bg: rgba(0, 0, 0, 0.9);
+}
+
+/* Control buttons in presentation */
+presentation-launcher .control-button {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+body.dark-theme presentation-launcher .control-button {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-theme presentation-launcher .control-button:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* ===== ENHANCED GALLERY COMPONENT ===== */
+canvas-gallery-enhanced {
+  /* Legacy component theme support */
+  --gallery-bg: var(--background);
+  --gallery-card-bg: var(--card-bg);
+}
+
+body.dark-theme canvas-gallery-enhanced {
+  --gallery-bg: var(--background);
+  --gallery-card-bg: var(--card-bg);
+}
+
+/* ===== COMMON PATTERNS ===== */
+
+/* Glass morphism effect for modals and overlays */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+body.dark-theme .glass-effect {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Smooth transitions for theme switching */
+* {
+  transition: background-color 0.3s ease, 
+              color 0.3s ease, 
+              border-color 0.3s ease,
+              box-shadow 0.3s ease;
+}
+
+/* Preserve fast transitions for interactive elements */
+button,
+a,
+.card,
+.slide-card,
+.set-card {
+  transition: all 0.2s ease;
+}
+
+/* ===== ACCESSIBILITY ENHANCEMENTS ===== */
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  gallery-sets .set-card,
+  set-editor .slide-card {
+    border-width: 2px;
+  }
+  
+  presentation-launcher .control-button {
+    border: 2px solid currentColor;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  gallery-sets .set-card,
+  set-editor .slide-card,
+  presentation-launcher .slide {
+    transition: none;
+  }
+}
+
+/* ===== RESPONSIVE DARK MODE ===== */
+
+/* Automatically apply dark theme based on system preference */
+@media (prefers-color-scheme: dark) {
+  :root:not(body.light-theme) {
+    /* Apply dark theme variables */
+    --background: #0d1117;
+    --panel-bg: #1c2128;
+    --text-primary: #f0f6fc;
+    --text-secondary: #8b949e;
+    --border-color: #30363d;
+    --color-primary: #58a6ff;
+  }
+}
+
+/* ===== ANIMATION ENHANCEMENTS ===== */
+
+/* Smooth slide transitions in presentation mode */
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutToLeft {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+/* Pulse animation for active elements */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 var(--color-primary);
+  }
+  70% {
+    box-shadow: 0 0 0 10px transparent;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+/* Apply pulse to launch buttons */
+gallery-sets .set-action-button.launch:focus {
+  animation: pulse 2s infinite;
+}
+
+/* ===== PRINT STYLES ===== */
+
+@media print {
+  gallery-sets,
+  set-editor,
+  presentation-launcher {
+    color: black;
+    background: white;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
