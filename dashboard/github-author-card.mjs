@@ -142,8 +142,8 @@ class GitHubAuthorCard extends LitElement {
       gap: 6px;
       margin-top: 12px;
       padding: 8px 16px;
-      background: #24292e;
-      color: white;
+      background: var(--panel-bg);
+      color: var(--text-primary);
       border-radius: 6px;
       text-decoration: none;
       font-size: 14px;
@@ -151,7 +151,7 @@ class GitHubAuthorCard extends LitElement {
     }
 
     .github-link:hover {
-      background: #1a1e22;
+      background: var(--hover-bg);
     }
 
     .github-icon {

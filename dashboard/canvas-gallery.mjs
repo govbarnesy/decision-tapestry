@@ -11,7 +11,7 @@ export class CanvasGallery extends LitElement {
       width: 100%;
       height: 100%;
       overflow: auto;
-      background: var(--panel-bg, #fff);
+      background: var(--panel-bg);
     }
 
     .gallery-container {
@@ -24,13 +24,13 @@ export class CanvasGallery extends LitElement {
       align-items: center;
       margin-bottom: 30px;
       padding-bottom: 20px;
-      border-bottom: 1px solid var(--border, #eee);
+      border-bottom: 1px solid var(--border-color);
     }
 
     .gallery-title {
       font-size: 1.5em;
       font-weight: 600;
-      color: var(--text-main, #000);
+      color: var(--text-primary);
     }
 
     .gallery-tabs {
@@ -41,7 +41,7 @@ export class CanvasGallery extends LitElement {
     .tab-button {
       padding: 8px 16px;
       background: transparent;
-      border: 1px solid var(--border, #ddd);
+      border: 1px solid var(--border-color);
       border-radius: 4px;
       cursor: pointer;
       font-size: 0.9em;
@@ -49,13 +49,13 @@ export class CanvasGallery extends LitElement {
     }
 
     .tab-button:hover {
-      background: var(--hover-bg, #f5f5f5);
+      background: var(--hover-bg);
     }
 
     .tab-button.active {
-      background: var(--accent, #2196f3);
-      color: white;
-      border-color: var(--accent, #2196f3);
+      background: var(--color-primary);
+      color: var(--text-inverse);
+      border-color: var(--color-primary);
     }
 
     .gallery-grid {
@@ -64,10 +64,114 @@ export class CanvasGallery extends LitElement {
       gap: 20px;
       margin-bottom: 40px;
     }
+    
+    .gallery-sets-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+    
+    .gallery-set-card {
+      background: var(--background-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 20px;
+      transition: all 0.2s ease;
+    }
+    
+    .gallery-set-card:hover {
+      border-color: var(--color-primary);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .set-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    
+    .set-icon {
+      font-size: 32px;
+    }
+    
+    .set-name {
+      flex: 1;
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    
+    .delete-button {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      opacity: 0.6;
+      transition: opacity 0.2s;
+      padding: 5px;
+    }
+    
+    .delete-button:hover {
+      opacity: 1;
+      background: rgba(255, 0, 0, 0.1);
+      border-radius: 4px;
+    }
+    
+    .set-description {
+      color: var(--text-secondary);
+      margin: 0 0 15px 0;
+      font-size: 14px;
+    }
+    
+    .set-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    
+    .slide-count {
+      font-weight: 600;
+      color: var(--color-primary);
+    }
+    
+    .set-actions {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .action-button {
+      flex: 1;
+      padding: 8px 16px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: transparent;
+    }
+    
+    .action-button.primary {
+      background: var(--color-primary);
+      color: white;
+      border-color: var(--color-primary);
+    }
+    
+    .action-button.primary:hover {
+      background: var(--color-primary-dark);
+    }
+    
+    .action-button.secondary:hover {
+      background: var(--hover-bg);
+    }
 
     .visual-card {
-      background: var(--card-bg, #fff);
-      border: 1px solid var(--border, #eee);
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
       border-radius: 4px;
       overflow: hidden;
       cursor: pointer;
@@ -85,7 +189,7 @@ export class CanvasGallery extends LitElement {
       height: 200px;
       overflow: hidden;
       position: relative;
-      background: #f5f5f5;
+      background: var(--hover-bg);
     }
 
     .visual-thumbnail iframe {
@@ -106,12 +210,12 @@ export class CanvasGallery extends LitElement {
     .visual-title {
       font-weight: 600;
       margin-bottom: 8px;
-      color: var(--text-main, #000);
+      color: var(--text-primary);
     }
 
     .visual-meta {
       font-size: 0.85em;
-      color: var(--text-secondary, #666);
+      color: var(--text-secondary);
     }
 
     .visual-actions {
@@ -129,8 +233,8 @@ export class CanvasGallery extends LitElement {
     }
 
     .action-button {
-      background: rgba(0,0,0,0.7);
-      color: white;
+      background: var(--modal-overlay);
+      color: var(--text-inverse);
       border: none;
       padding: 6px 10px;
       border-radius: 4px;
@@ -139,23 +243,23 @@ export class CanvasGallery extends LitElement {
     }
 
     .action-button:hover {
-      background: rgba(0,0,0,0.9);
+      background: rgba(0, 0, 0, 0.9);
     }
 
     .gallery-empty {
       text-align: center;
       padding: 60px 20px;
-      color: var(--text-secondary, #666);
+      color: var(--text-secondary);
     }
 
     .gallery-empty h3 {
       margin-bottom: 10px;
-      color: var(--text-main, #000);
+      color: var(--text-primary);
     }
 
     .presentation-group {
-      background: var(--card-bg, #fff);
-      border: 2px solid var(--accent, #2196f3);
+      background: var(--card-bg);
+      border: 2px solid var(--color-primary);
       border-radius: 8px;
       padding: 20px;
       margin-bottom: 30px;
@@ -171,23 +275,23 @@ export class CanvasGallery extends LitElement {
     .presentation-title {
       font-size: 1.2em;
       font-weight: 600;
-      color: var(--text-main, #000);
+      color: var(--text-primary);
       display: flex;
       align-items: center;
       gap: 10px;
     }
 
     .slide-count {
-      background: var(--accent, #2196f3);
-      color: white;
+      background: var(--color-primary);
+      color: var(--text-inverse);
       padding: 4px 12px;
       border-radius: 20px;
       font-size: 0.85em;
     }
 
     .launch-slideshow {
-      background: var(--accent, #2196f3);
-      color: white;
+      background: var(--color-primary);
+      color: var(--text-inverse);
       border: none;
       padding: 8px 20px;
       border-radius: 4px;
@@ -200,7 +304,7 @@ export class CanvasGallery extends LitElement {
     }
 
     .launch-slideshow:hover {
-      background: var(--accent-hover, #1976d2);
+      background: var(--color-primary-hover);
       transform: translateY(-1px);
       box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     }
@@ -212,8 +316,8 @@ export class CanvasGallery extends LitElement {
     }
 
     .slide-thumbnail {
-      background: #f5f5f5;
-      border: 1px solid var(--border, #eee);
+      background: var(--hover-bg);
+      border: 1px solid var(--border-color);
       border-radius: 4px;
       padding: 10px;
       text-align: center;
@@ -224,26 +328,26 @@ export class CanvasGallery extends LitElement {
 
     .slide-thumbnail:hover {
       background: var(--hover-bg, #f0f0f0);
-      border-color: var(--accent, #2196f3);
+      border-color: var(--color-primary);
     }
 
     .slide-number {
       font-size: 0.9em;
-      color: var(--text-secondary, #666);
+      color: var(--text-secondary);
     }
 
     .loading {
       text-align: center;
       padding: 40px;
-      color: var(--text-secondary, #666);
+      color: var(--text-secondary);
     }
 
     .privacy-badge {
       position: absolute;
       top: 10px;
       left: 10px;
-      background: rgba(0,0,0,0.7);
-      color: white;
+      background: var(--modal-overlay);
+      color: var(--text-inverse);
       padding: 4px 8px;
       border-radius: 4px;
       font-size: 0.75em;
@@ -262,23 +366,47 @@ export class CanvasGallery extends LitElement {
     activeTab: { type: String },
     privateVisuals: { type: Array },
     publicVisuals: { type: Array },
-    loading: { type: Boolean }
+    loading: { type: Boolean },
+    gallerySets: { type: Array }
   };
 
   constructor() {
     super();
-    this.activeTab = 'all';
+    this.activeTab = 'sets';  // Default to sets view
     this.privateVisuals = [];
     this.publicVisuals = [];
     this.loading = true;
+    this.gallerySets = [];
     this.thumbnailCache = new Map();
     this.presentations = new Map();
   }
 
   async connectedCallback() {
     super.connectedCallback();
+    await this.loadGallerySets();
     await this.loadVisuals();
     this.detectPresentations();
+    
+    // Listen for gallery set updates
+    window.addEventListener('gallery-set-updated', () => this.loadGallerySets());
+    window.addEventListener('gallery-set-created', () => this.loadGallerySets());
+  }
+  
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    window.removeEventListener('gallery-set-updated', () => this.loadGallerySets());
+    window.removeEventListener('gallery-set-created', () => this.loadGallerySets());
+  }
+  
+  async loadGallerySets() {
+    try {
+      const response = await fetch('/api/gallery/sets');
+      if (response.ok) {
+        this.gallerySets = await response.json();
+      }
+    } catch (error) {
+      console.error('Failed to load gallery sets:', error);
+    }
   }
 
   async loadVisuals() {
@@ -312,9 +440,14 @@ export class CanvasGallery extends LitElement {
           <h2 class="gallery-title">🎨 Canvas Gallery</h2>
           <div class="gallery-tabs">
             <button 
+              class="tab-button ${this.activeTab === 'sets' ? 'active' : ''}"
+              @click=${() => this.activeTab = 'sets'}>
+              📁 Gallery Sets
+            </button>
+            <button 
               class="tab-button ${this.activeTab === 'all' ? 'active' : ''}"
               @click=${() => this.activeTab = 'all'}>
-              All
+              All Files
             </button>
             <button 
               class="tab-button ${this.activeTab === 'private' ? 'active' : ''}"
@@ -337,6 +470,12 @@ export class CanvasGallery extends LitElement {
   }
 
   renderGallery() {
+    // Handle gallery sets tab
+    if (this.activeTab === 'sets') {
+      return this.renderGallerySets();
+    }
+    
+    // Handle visual files tabs
     let visuals = [];
     
     if (this.activeTab === 'all') {
@@ -448,6 +587,123 @@ export class CanvasGallery extends LitElement {
 
   openVisual(visual) {
     window.open(visual.path, '_blank');
+  }
+  
+  renderGallerySets() {
+    if (this.gallerySets.length === 0) {
+      return html`
+        <div class="gallery-empty">
+          <h3>No gallery sets yet</h3>
+          <p>Save some AI Canvas slides as a gallery to see them here!</p>
+        </div>
+      `;
+    }
+    
+    return html`
+      <div class="gallery-sets-grid">
+        ${this.gallerySets.map(set => this.renderGallerySet(set))}
+      </div>
+    `;
+  }
+  
+  renderGallerySet(set) {
+    return html`
+      <div class="gallery-set-card">
+        <div class="set-header">
+          <span class="set-icon">${set.icon}</span>
+          <h3 class="set-name">${set.name}</h3>
+          <button 
+            class="delete-button" 
+            @click=${(e) => this.deleteGallerySet(e, set)}
+            title="Delete gallery set">
+            🗑️
+          </button>
+        </div>
+        <p class="set-description">${set.description || 'No description'}</p>
+        <div class="set-info">
+          <span class="slide-count">${set.slideIds.length} slides</span>
+          <span class="set-date">${new Date(set.created).toLocaleDateString()}</span>
+        </div>
+        <div class="set-actions">
+          <button 
+            class="action-button primary"
+            @click=${() => this.launchPresentation(set)}>
+            🎬 Present
+          </button>
+          <button 
+            class="action-button secondary"
+            @click=${() => this.editSet(set)}>
+            ✏️ Edit
+          </button>
+        </div>
+      </div>
+    `;
+  }
+  
+  async deleteGallerySet(event, set) {
+    event.stopPropagation();
+    
+    if (!confirm(`Delete gallery set "${set.name}"? This will only remove the set, not the individual slides.`)) {
+      return;
+    }
+    
+    try {
+      const response = await fetch(`/api/gallery/sets/${set.id}`, {
+        method: 'DELETE'
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to delete gallery set');
+      }
+      
+      // Reload gallery sets
+      await this.loadGallerySets();
+      
+      // Show success feedback
+      this.showNotification('Gallery set deleted successfully');
+    } catch (error) {
+      console.error('Failed to delete gallery set:', error);
+      alert('Failed to delete gallery set: ' + error.message);
+    }
+  }
+  
+  launchPresentation(set) {
+    // Emit event to launch presentation
+    window.dispatchEvent(new CustomEvent('launch-presentation', {
+      detail: { set, slides: set.slideIds.map(id => ({ path: `/ai-canvas-gallery/public/${id}` })) }
+    }));
+  }
+  
+  editSet(set) {
+    // Dispatch event to open the set editor in edit mode
+    window.dispatchEvent(new CustomEvent('open-set-editor', {
+      detail: {
+        mode: 'edit',
+        set: set
+      }
+    }));
+  }
+  
+  showNotification(message) {
+    // Simple notification (could be improved with a toast component)
+    const notification = document.createElement('div');
+    notification.textContent = message;
+    notification.style.cssText = `
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #4caf50;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      z-index: 1000;
+    `;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      notification.remove();
+    }, 3000);
   }
 
   async deleteVisual(event, visual) {
@@ -612,7 +868,7 @@ export class CanvasGallery extends LitElement {
         top: 20px;
         right: 20px;
         background: #4CAF50;
-        color: white;
+        color: var(--text-inverse);
         padding: 15px 25px;
         border-radius: 4px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.2);

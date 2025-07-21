@@ -193,9 +193,9 @@ function displayErrorMessage(message) {
             <div style="background: #ffebee; border: 1px solid #f44336; border-radius: 4px; padding: 16px; margin-bottom: 20px;">
                 <p style="margin: 0; color: #d32f2f;"><strong>Error:</strong> ${message}</p>
             </div>
-            <div style="background: #e3f2fd; border: 1px solid #2196f3; border-radius: 4px; padding: 16px;">
-                <h3 style="margin: 0 0 10px 0; color: #1976d2;">💡 Troubleshooting Tips:</h3>
-                <ul style="margin: 0; color: #1976d2;">
+            <div style="background: var(--color-primary-light); border: 1px solid var(--color-primary); border-radius: 4px; padding: 16px;">
+                <h3 style="margin: 0 0 10px 0; color: var(--color-primary);">💡 Troubleshooting Tips:</h3>
+                <ul style="margin: 0; color: var(--text-primary);">
                     <li>If you see "decisions.yml not found", run <code>decision-tapestry init</code> to create a new file</li>
                     <li>If you see "Invalid YAML syntax", check your YAML file for formatting errors</li>
                     <li>If you see "must be an array", ensure your decisions and backlog are formatted as arrays</li>
@@ -203,10 +203,10 @@ function displayErrorMessage(message) {
                 </ul>
             </div>
             <div style="margin-top: 20px;">
-                <button onclick="window.location.reload()" style="background: #4caf50; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">
+                <button onclick="window.location.reload()" style="background: var(--color-success); color: var(--text-inverse); border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">
                     🔄 Retry
                 </button>
-                <button onclick="window.open('/api/health', '_blank')" style="background: #2196f3; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; margin-left: 10px;">
+                <button onclick="window.open('/api/health', '_blank')" style="background: var(--color-info); color: var(--text-inverse); border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; margin-left: 10px;">
                     🔍 Health Check
                 </button>
             </div>

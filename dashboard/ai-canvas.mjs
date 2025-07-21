@@ -16,6 +16,7 @@ class AICanvas extends HTMLElement {
 
   connectedCallback() {
     this.render();
+    this.loadGallerySets();
   }
 
   setupWebSocket() {
@@ -142,7 +143,7 @@ class AICanvas extends HTMLElement {
           width: 100%;
           height: 100%;
           overflow: auto;
-          background: var(--panel-bg, #fff);
+          background: var(--panel-bg);
           position: relative;
         }
 
@@ -153,24 +154,27 @@ class AICanvas extends HTMLElement {
         .canvas-container {
           width: 100%;
           height: 100%;
-          padding: 20px;
           box-sizing: border-box;
           position: relative;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
         }
 
         .canvas-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 20px;
+          padding: 20px;
           padding-bottom: 10px;
-          border-bottom: 1px solid var(--border, #eee);
+          border-bottom: 1px solid var(--border-color);
+          flex-shrink: 0;
         }
 
         .canvas-title {
           font-size: 1.2em;
           font-weight: 600;
-          color: var(--text-main, #000);
+          color: var(--text-primary);
         }
 
         .canvas-actions {
@@ -182,7 +186,7 @@ class AICanvas extends HTMLElement {
         .slide-counter {
           padding: 0 15px;
           font-size: 0.9em;
-          color: var(--text-secondary, #666);
+          color: var(--text-secondary);
           margin-right: 20px;
         }
 
@@ -190,32 +194,33 @@ class AICanvas extends HTMLElement {
           display: flex;
           gap: 5px;
           padding: 10px;
-          background: var(--panel-bg, #fff);
-          border-top: 1px solid var(--border, #eee);
+          background: var(--panel-bg);
+          border-top: 1px solid var(--border-color);
           overflow-x: auto;
           min-height: 80px;
+          flex-shrink: 0;
         }
 
         .timeline-item {
           min-width: 100px;
           height: 60px;
-          border: 2px solid var(--border, #eee);
+          border: 2px solid var(--border-color);
           border-radius: 4px;
           cursor: pointer;
           overflow: hidden;
           position: relative;
-          background: #f5f5f5;
+          background: var(--hover-bg);
           transition: all 0.2s;
         }
 
         .timeline-item:hover {
-          border-color: var(--accent, #0052cc);
+          border-color: var(--color-primary);
           transform: translateY(-2px);
           box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
         .timeline-item.active {
-          border-color: var(--accent, #0052cc);
+          border-color: var(--color-primary);
           border-width: 3px;
         }
 
@@ -223,8 +228,8 @@ class AICanvas extends HTMLElement {
           position: absolute;
           top: 2px;
           right: 2px;
-          background: rgba(0,0,0,0.7);
-          color: white;
+          background: var(--modal-overlay);
+          color: var(--text-inverse);
           padding: 2px 6px;
           border-radius: 3px;
           font-size: 10px;
@@ -248,7 +253,7 @@ class AICanvas extends HTMLElement {
         .mode-button {
           padding: 4px 8px;
           background: transparent;
-          border: 1px solid var(--border, #eee);
+          border: 1px solid var(--border-color);
           border-radius: 4px;
           cursor: pointer;
           font-size: 0.8em;
@@ -256,15 +261,15 @@ class AICanvas extends HTMLElement {
         }
 
         .mode-button:hover {
-          background: var(--accent, #0052cc);
-          color: white;
-          border-color: var(--accent, #0052cc);
+          background: var(--color-primary);
+          color: var(--text-inverse);
+          border-color: var(--color-primary);
         }
 
         .mode-button.active {
-          background: var(--accent, #0052cc);
-          color: white;
-          border-color: var(--accent, #0052cc);
+          background: var(--color-primary);
+          color: var(--text-inverse);
+          border-color: var(--color-primary);
         }
 
         .grid-view {
@@ -276,7 +281,7 @@ class AICanvas extends HTMLElement {
         }
 
         .grid-item {
-          border: 1px solid var(--border, #eee);
+          border: 1px solid var(--border-color);
           border-radius: 4px;
           overflow: hidden;
           cursor: pointer;
@@ -289,9 +294,9 @@ class AICanvas extends HTMLElement {
         }
 
         .grid-item-header {
-          background: var(--panel-bg, #fff);
+          background: var(--panel-bg);
           padding: 10px;
-          border-bottom: 1px solid var(--border, #eee);
+          border-bottom: 1px solid var(--border-color);
           font-size: 0.9em;
         }
 
@@ -305,8 +310,8 @@ class AICanvas extends HTMLElement {
           position: absolute;
           bottom: 20px;
           right: 20px;
-          background: rgba(0,0,0,0.8);
-          color: white;
+          background: var(--modal-overlay);
+          color: var(--text-inverse);
           padding: 10px 15px;
           border-radius: 4px;
           font-size: 0.8em;
@@ -333,7 +338,7 @@ class AICanvas extends HTMLElement {
         }
 
         .keyboard-help-content {
-          background: var(--panel-bg, #fff);
+          background: var(--panel-bg);
           padding: 40px;
           border-radius: 8px;
           max-width: 600px;
@@ -345,7 +350,7 @@ class AICanvas extends HTMLElement {
 
         .keyboard-help h3 {
           margin: 0 0 20px 0;
-          color: var(--text-main, #000);
+          color: var(--text-primary);
           font-size: 1.5em;
           text-align: center;
         }
@@ -387,7 +392,7 @@ class AICanvas extends HTMLElement {
 
         .help-footer {
           text-align: center;
-          color: var(--text-secondary, #666);
+          color: var(--text-secondary);
           font-size: 0.9em;
           margin-top: 20px;
           font-style: italic;
@@ -395,8 +400,8 @@ class AICanvas extends HTMLElement {
 
         .canvas-button {
           padding: 6px 12px;
-          background: var(--accent, #0052cc);
-          color: white;
+          background: var(--color-primary);
+          color: var(--text-inverse);
           border: none;
           border-radius: 4px;
           cursor: pointer;
@@ -410,17 +415,50 @@ class AICanvas extends HTMLElement {
 
         .canvas-button.secondary {
           background: transparent;
-          color: var(--text-main, #000);
-          border: 1px solid var(--border, #eee);
+          color: var(--text-primary);
+          border: 1px solid var(--border-color);
+        }
+
+        .canvas-button.primary {
+          background: var(--color-success);
+          color: white;
+          border: 1px solid var(--color-success);
+        }
+
+        .canvas-button.primary:hover {
+          background: var(--color-success-dark);
+        }
+
+        .gallery-selector {
+          padding: 8px 12px;
+          background: var(--panel-bg);
+          border: 1px solid var(--border-color);
+          border-radius: 4px;
+          color: var(--text-primary);
+          font-size: 0.9em;
+          cursor: pointer;
+          min-width: 180px;
+        }
+
+        .gallery-selector:hover {
+          border-color: var(--color-primary);
+        }
+
+        .gallery-selector:focus {
+          outline: none;
+          border-color: var(--color-primary);
+          box-shadow: 0 0 0 2px var(--color-primary-light);
         }
 
         .content-area {
           width: 100%;
-          min-height: 400px;
-          background: var(--panel-bg, #fff);
-          border-radius: 4px;
-          padding: 20px;
+          height: 100%;
+          flex: 1;
+          background: var(--panel-bg);
           box-sizing: border-box;
+          padding: 0;
+          overflow-y: scroll;
+          overflow-x: hidden;
         }
 
         /* Code display styles */
@@ -436,7 +474,7 @@ class AICanvas extends HTMLElement {
         }
 
         .dark-theme .code-block {
-          background: #2d2d2d;
+          background: var(--background-secondary);
           border-color: #444;
           color: #f8f8f2;
         }
@@ -458,7 +496,7 @@ class AICanvas extends HTMLElement {
         }
 
         .dark-theme .wireframe {
-          background: #2a2a2a;
+          background: var(--hover-bg);
           border-color: #666;
         }
 
@@ -478,7 +516,7 @@ class AICanvas extends HTMLElement {
         }
 
         .dark-theme .progress-step {
-          background: #333;
+          background: var(--border-color);
         }
 
         .progress-step.active {
@@ -487,7 +525,7 @@ class AICanvas extends HTMLElement {
         }
 
         .dark-theme .progress-step.active {
-          background: #1e3a5f;
+          background: var(--color-info-dark, #1e3a5f);
           border-color: #2196f3;
         }
 
@@ -497,7 +535,7 @@ class AICanvas extends HTMLElement {
         }
 
         .dark-theme .progress-step.completed {
-          background: #1b3d1f;
+          background: var(--color-success-dark, #1b3d1f);
           border-color: #4caf50;
         }
 
@@ -511,14 +549,14 @@ class AICanvas extends HTMLElement {
 
         .comparison-side {
           padding: 20px;
-          border: 1px solid var(--border, #eee);
+          border: 1px solid var(--border-color);
           border-radius: 4px;
         }
 
         .comparison-label {
           font-weight: 600;
           margin-bottom: 10px;
-          color: var(--text-secondary, #666);
+          color: var(--text-secondary);
         }
 
         /* Data visualization styles */
@@ -533,12 +571,18 @@ class AICanvas extends HTMLElement {
         .empty-state {
           text-align: center;
           padding: 60px 20px;
-          color: var(--text-secondary, #666);
+          color: var(--text-secondary);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          min-height: 100%;
+          box-sizing: border-box;
         }
 
         .empty-state h3 {
           margin-bottom: 10px;
-          color: var(--text-main, #000);
+          color: var(--text-primary);
         }
 
         /* Animation for new content */
@@ -555,6 +599,17 @@ class AICanvas extends HTMLElement {
 
         .content-area > * {
           animation: fadeIn 0.3s ease-out;
+          width: 100%;
+          min-height: 100%;
+          box-sizing: border-box;
+        }
+        
+        /* Allow iframe content to fill height */
+        .content-area > iframe {
+          width: 100%;
+          height: 100%;
+          border: none;
+          display: block;
         }
       </style>
 
@@ -568,11 +623,13 @@ class AICanvas extends HTMLElement {
               <button class="mode-button" id="gridMode" title="Grid View (G)">📊</button>
               <button class="mode-button" id="fullscreenMode" title="Fullscreen (F)">🎬</button>
             </div>
-            <button class="canvas-button secondary" id="saveBtn">💾 Save</button>
-            <label style="margin-left: 10px; font-size: 0.9em;">
-              <input type="checkbox" id="publicToggle" style="margin-right: 5px;">
-              Public
-            </label>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <button class="canvas-button primary" id="saveGalleryBtn">📁 Save Gallery</button>
+              <label style="font-size: 0.9em;">
+                <input type="checkbox" id="publicToggle" style="margin-right: 5px;">
+                Public
+              </label>
+            </div>
             <button class="canvas-button secondary" id="clearBtn">Clear All</button>
           </div>
         </div>
@@ -596,7 +653,7 @@ class AICanvas extends HTMLElement {
     `;
 
     // Add event listeners
-    this.shadowRoot.getElementById('saveBtn').addEventListener('click', () => this.saveCurrentVisual());
+    this.shadowRoot.getElementById('saveGalleryBtn').addEventListener('click', () => this.saveAsGallerySet());
     this.shadowRoot.getElementById('clearBtn').addEventListener('click', () => this.clearAll());
     
     // Mode buttons
@@ -890,11 +947,249 @@ class AICanvas extends HTMLElement {
     div.textContent = str;
     return div.innerHTML;
   }
+  
+  // Create HTML for a single slide
+  createSlideHtml(visual, slideNumber) {
+    const timestamp = new Date().toISOString();
+    let content = '';
+    
+    // Reconstruct the visual content based on type
+    switch (visual.type) {
+      case 'html':
+        content = visual.content;
+        break;
+      case 'code':
+        content = `<pre class="code-block"><code>${this.escapeHtml(visual.content)}</code></pre>`;
+        break;
+      case 'diagram':
+        content = `<div class="diagram-container">${visual.content}</div>`;
+        break;
+      case 'comparison':
+        content = `
+          <div class="comparison-container">
+            <div class="comparison-side">
+              <h3>Before</h3>
+              ${visual.content.before}
+            </div>
+            <div class="comparison-side">
+              <h3>After</h3>
+              ${visual.content.after}
+            </div>
+          </div>`;
+        break;
+      default:
+        content = JSON.stringify(visual.content, null, 2);
+    }
+    
+    return `<!DOCTYPE html>
+<html>
+<head>
+  <title>Slide ${slideNumber} - ${timestamp}</title>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+    }
+    .slide-header {
+      border-bottom: 1px solid #eee;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+    .slide-header h1 {
+      margin: 0 0 10px 0;
+      color: #333;
+      font-size: 24px;
+    }
+    .slide-header p {
+      margin: 5px 0;
+      color: #666;
+      font-size: 14px;
+    }
+    ${this.getContentStyles()}
+  </style>
+</head>
+<body>
+  <div class="slide-header">
+    <h1>Slide ${slideNumber}</h1>
+    <p><strong>Type:</strong> ${visual.type}</p>
+    <p><strong>Created:</strong> ${new Date(visual.timestamp).toLocaleString()}</p>
+  </div>
+  <div class="slide-content">
+    ${content}
+  </div>
+</body>
+</html>`;
+  }
+  
+  // Show saving progress
+  showSavingProgress() {
+    const contentArea = this.shadowRoot.getElementById('contentArea');
+    contentArea.innerHTML = `
+      <div style="text-align: center; padding: 60px 20px;">
+        <div style="font-size: 4em; margin-bottom: 20px;">⏳</div>
+        <h2 style="margin-bottom: 10px;">Saving Gallery...</h2>
+        <p style="color: #666;">Creating ${this.visualHistory.length} slides</p>
+        <div style="
+          width: 300px;
+          height: 4px;
+          background: #eee;
+          border-radius: 2px;
+          margin: 20px auto;
+          overflow: hidden;
+        ">
+          <div style="
+            width: 0%;
+            height: 100%;
+            background: #4caf50;
+            transition: width 0.3s ease;
+            animation: progress 2s ease-in-out infinite;
+          "></div>
+        </div>
+      </div>
+      <style>
+        @keyframes progress {
+          0% { width: 0%; }
+          50% { width: 70%; }
+          100% { width: 0%; }
+        }
+      </style>
+    `;
+  }
+  
+  // Show gallery success
+  showGallerySuccess(gallerySet, slideCount) {
+    const contentArea = this.shadowRoot.getElementById('contentArea');
+    contentArea.innerHTML = `
+      <div style="text-align: center; padding: 60px 20px;">
+        <div style="font-size: 5em; margin-bottom: 20px;">🎉</div>
+        <h2 style="color: #4caf50; margin-bottom: 10px;">Gallery Saved!</h2>
+        <p style="color: #666; font-size: 18px; margin-bottom: 30px;">
+          ${gallerySet.icon} ${gallerySet.name}
+        </p>
+        <div style="
+          background: #f0f0f0;
+          padding: 20px;
+          border-radius: 8px;
+          display: inline-block;
+        ">
+          <p style="margin: 0 0 10px 0;"><strong>${slideCount} slides</strong> saved successfully</p>
+          <p style="margin: 0; font-size: 14px; color: #666;">
+            ${this.shadowRoot.getElementById('publicToggle').checked ? 
+              '🌍 Public gallery (will be committed to repository)' : 
+              '🔒 Private gallery (local only)'}
+          </p>
+        </div>
+        <button onclick="window.location.reload()" style="
+          margin-top: 30px;
+          padding: 10px 20px;
+          background: #4caf50;
+          color: white;
+          border: none;
+          border-radius: 4px;
+          font-size: 16px;
+          cursor: pointer;
+        ">
+          View in Gallery Tab
+        </button>
+      </div>
+    `;
+    
+    // Restore after 5 seconds
+    setTimeout(() => {
+      this.render();
+    }, 5000);
+  }
 
-  // Save current visual
+  // Save all slides as a new gallery set
+  async saveAsGallerySet() {
+    if (this.visualHistory.length === 0) {
+      alert('No visuals to save! Create some content first.');
+      return;
+    }
+    
+    // Prompt for gallery set details
+    const name = prompt(`Enter name for gallery set (${this.visualHistory.length} slides):`);
+    if (!name) return;
+    
+    const icon = prompt('Enter an emoji icon (or press Enter for default 📊):') || '📊';
+    const description = prompt('Enter description (optional):') || '';
+    const isPublic = this.shadowRoot.getElementById('publicToggle').checked;
+    
+    try {
+      // Show saving progress
+      this.showSavingProgress();
+      
+      // Save all slides
+      const savedSlides = [];
+      for (let i = 0; i < this.visualHistory.length; i++) {
+        const visual = this.visualHistory[i];
+        const slideHtml = this.createSlideHtml(visual, i + 1);
+        
+        // Save each slide
+        const response = await fetch('/api/canvas/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            html: slideHtml,
+            type: visual.type,
+            isPublic: isPublic
+          })
+        });
+        
+        if (!response.ok) throw new Error('Failed to save slide');
+        
+        const result = await response.json();
+        savedSlides.push(result.filename);
+      }
+      
+      // Create gallery set with all slides
+      const setResponse = await fetch('/api/gallery/sets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          icon,
+          description,
+          slideIds: savedSlides
+        })
+      });
+      
+      if (!setResponse.ok) throw new Error('Failed to create gallery set');
+      
+      const newSet = await setResponse.json();
+      console.log('Gallery set created:', newSet);
+      
+      // Show success
+      this.showGallerySuccess(newSet, savedSlides.length);
+      
+    } catch (error) {
+      console.error('Failed to save gallery:', error);
+      alert('Failed to save gallery: ' + error.message);
+    }
+  }
+
+  // Save current visual to gallery
   async saveCurrentVisual() {
     if (!this.currentContent) {
       alert('No visual to save!');
+      return;
+    }
+    
+    const selector = this.shadowRoot.getElementById('gallerySetSelector');
+    const selectedSetId = selector.value;
+    
+    if (!selectedSetId) {
+      alert('Please select a gallery set first');
+      return;
+    }
+    
+    if (selectedSetId === '__new__') {
+      await this.createNewGallerySet();
       return;
     }
     
@@ -913,7 +1208,7 @@ class AICanvas extends HTMLElement {
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 20px;
-      background: #f5f5f5;
+      background: var(--hover-bg);
     }
     .canvas-saved {
       max-width: 1200px;
@@ -967,7 +1262,8 @@ class AICanvas extends HTMLElement {
         body: JSON.stringify({
           html: fullHTML,
           type: this.currentContent.type,
-          isPublic: isPublic
+          isPublic: isPublic,
+          setId: selectedSetId
         })
       });
       
@@ -980,9 +1276,70 @@ class AICanvas extends HTMLElement {
       
       // Visual feedback
       this.showSaveConfirmation(isPublic);
+      
+      // Update the set in gallery sets if needed
+      if (selectedSetId && result.filename) {
+        await this.addSlideToSet(selectedSetId, result.filename);
+      }
     } catch (error) {
       console.error('Save error:', error);
       alert('Failed to save visual: ' + error.message);
+    }
+  }
+  
+  // Create a new gallery set
+  async createNewGallerySet() {
+    const name = prompt('Enter name for new gallery set:');
+    if (!name) return;
+    
+    const icon = prompt('Enter an emoji icon (or press Enter for default 📊):') || '📊';
+    const description = prompt('Enter description (optional):') || '';
+    
+    try {
+      const response = await fetch('/api/gallery/sets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          icon,
+          description,
+          slideIds: []
+        })
+      });
+      
+      if (!response.ok) throw new Error('Failed to create gallery set');
+      
+      const newSet = await response.json();
+      await this.loadGallerySets();
+      
+      // Select the new set
+      const selector = this.shadowRoot.getElementById('gallerySetSelector');
+      selector.value = newSet.id;
+      
+      // Now save the visual to the new set
+      await this.saveCurrentVisual();
+    } catch (error) {
+      console.error('Failed to create gallery set:', error);
+      alert('Failed to create gallery set: ' + error.message);
+    }
+  }
+  
+  // Add slide to gallery set
+  async addSlideToSet(setId, filename) {
+    try {
+      const response = await fetch(`/api/gallery/sets/${setId}/slides`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slideId: filename })
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to add slide to set');
+      }
+      
+      console.log('Slide added to gallery set');
+    } catch (error) {
+      console.error('Failed to add slide to set:', error);
     }
   }
   
@@ -996,7 +1353,7 @@ class AICanvas extends HTMLElement {
       .comparison-side { padding: 20px; border: 1px solid #eee; border-radius: 8px; }
       .progress-container { max-width: 600px; margin: 0 auto; }
       .progress-step { display: flex; align-items: center; margin: 10px 0; padding: 10px; border-radius: 4px; background: #f0f0f0; }
-      .progress-step.active { background: #e3f2fd; border: 1px solid #2196f3; }
+      .progress-step.active { background: var(--color-primary-light); border: 1px solid var(--color-primary); }
       .progress-step.completed { background: #e8f5e9; border: 1px solid #4caf50; }
     `;
   }

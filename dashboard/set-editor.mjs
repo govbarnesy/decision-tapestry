@@ -328,7 +328,7 @@ export class SetEditor extends LitElement {
     }
     
     body.dark-theme .slide-thumbnail {
-      background: #1a1a1a;
+      background: var(--background-secondary);
     }
 
     .slide-thumbnail iframe {
@@ -1041,29 +1041,24 @@ export class SetEditor extends LitElement {
         lastModified: new Date().toISOString()
       };
       
-      // Save to storage (will be replaced with server API)
-      const existingSets = JSON.parse(localStorage.getItem('canvas-gallery-sets') || '[]');
+      // Save to server
+      const response = await fetch('/api/gallery/sets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(setData)
+      });
       
-      if (this.mode === 'edit') {
-        const index = existingSets.findIndex(s => s.id === setData.id);
-        if (index >= 0) {
-          existingSets[index] = setData;
-        }
-        
-        // Dispatch update event
-        window.dispatchEvent(new CustomEvent('gallery-set-updated', {
-          detail: setData
-        }));
-      } else {
-        existingSets.push(setData);
-        
-        // Dispatch create event
-        window.dispatchEvent(new CustomEvent('gallery-set-created', {
-          detail: setData
-        }));
+      if (!response.ok) {
+        throw new Error('Failed to save gallery set');
       }
       
-      localStorage.setItem('canvas-gallery-sets', JSON.stringify(existingSets));
+      const savedSet = await response.json();
+      
+      // Dispatch appropriate event
+      window.dispatchEvent(new CustomEvent(
+        this.mode === 'edit' ? 'gallery-set-updated' : 'gallery-set-created',
+        { detail: savedSet }
+      ));
       
       this.showNotification(
         this.mode === 'create' ? 'Set created successfully' : 'Set updated successfully',

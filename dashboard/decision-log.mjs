@@ -95,19 +95,19 @@ class DecisionLogPanel extends LitElement {
       animation: activityPulse 1.5s infinite ease-in-out;
     }
     .activity-badge.working {
-      background-color: #4caf50;
+      background-color: var(--activity-working);
     }
     .activity-badge.debugging {
-      background-color: #ff9800;
+      background-color: var(--activity-debugging);
     }
     .activity-badge.testing {
-      background-color: #2196f3;
+      background-color: var(--activity-testing);
     }
     .activity-badge.reviewing {
-      background-color: #9c27b0;
+      background-color: var(--activity-reviewing);
     }
     .activity-badge.idle {
-      background-color: #757575;
+      background-color: var(--activity-idle);
     }
 
     @keyframes activityPulse {

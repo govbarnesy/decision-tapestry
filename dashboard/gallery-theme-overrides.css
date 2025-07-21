@@ -153,9 +153,9 @@ a,
 /* ===== RESPONSIVE DARK MODE ===== */
 
 /* Automatically apply dark theme based on system preference */
+/* Commented out to prevent conflicts with manual theme selection
 @media (prefers-color-scheme: dark) {
   :root:not(body.light-theme) {
-    /* Apply dark theme variables */
     --background: #0d1117;
     --panel-bg: #1c2128;
     --text-primary: #f0f6fc;
@@ -164,6 +164,7 @@ a,
     --color-primary: #58a6ff;
   }
 }
+*/
 
 /* ===== ANIMATION ENHANCEMENTS ===== */
 

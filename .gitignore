@@ -10,3 +10,4 @@ dist/
 ai-canvas-gallery/private/
 # Public visuals in ai-canvas-gallery/public/ ARE committed
 
+ai-canvas-gallery/public/canvas-html-*.html

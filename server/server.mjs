@@ -700,6 +700,114 @@ app.post("/api/canvas/save", express.json({ limit: '10mb' }), async (req, res) =
   }
 });
 
+// Gallery Sets API endpoints
+app.get("/api/gallery/sets", async (req, res) => {
+  try {
+    const setsFile = path.join(CWD, 'settings', 'gallery-sets.json');
+    const setsData = await fsp.readFile(setsFile, 'utf8').catch(() => '[]');
+    const sets = JSON.parse(setsData);
+    res.json(sets);
+  } catch (error) {
+    console.error('[Gallery] Error loading sets:', error);
+    res.status(500).json({ error: 'Failed to load gallery sets' });
+  }
+});
+
+app.post("/api/gallery/sets", express.json(), async (req, res) => {
+  try {
+    const { name, icon, description, slideIds = [] } = req.body;
+    
+    if (!name) {
+      return res.status(400).json({ error: 'Set name is required' });
+    }
+    
+    const setsFile = path.join(CWD, 'settings', 'gallery-sets.json');
+    const setsData = await fsp.readFile(setsFile, 'utf8').catch(() => '[]');
+    const sets = JSON.parse(setsData);
+    
+    const newSet = {
+      id: Date.now().toString(),
+      name,
+      icon: icon || '📊',
+      description: description || '',
+      slideIds,
+      created: new Date().toISOString(),
+      lastModified: new Date().toISOString()
+    };
+    
+    sets.push(newSet);
+    await fsp.writeFile(setsFile, JSON.stringify(sets, null, 2));
+    
+    console.log(`[Gallery] Created new set: ${name}`);
+    res.json(newSet);
+  } catch (error) {
+    console.error('[Gallery] Error creating set:', error);
+    res.status(500).json({ error: 'Failed to create gallery set' });
+  }
+});
+
+// Add slide to gallery set
+app.post("/api/gallery/sets/:setId/slides", express.json(), async (req, res) => {
+  try {
+    const { setId } = req.params;
+    const { slideId } = req.body;
+    
+    if (!slideId) {
+      return res.status(400).json({ error: 'slideId is required' });
+    }
+    
+    const setsFile = path.join(CWD, 'settings', 'gallery-sets.json');
+    const setsData = await fsp.readFile(setsFile, 'utf8').catch(() => '[]');
+    const sets = JSON.parse(setsData);
+    
+    const set = sets.find(s => s.id === setId);
+    if (!set) {
+      return res.status(404).json({ error: 'Gallery set not found' });
+    }
+    
+    // Add slide if not already present
+    if (!set.slideIds.includes(slideId)) {
+      set.slideIds.push(slideId);
+      set.lastModified = new Date().toISOString();
+      
+      await fsp.writeFile(setsFile, JSON.stringify(sets, null, 2));
+      console.log(`[Gallery] Added slide ${slideId} to set ${set.name}`);
+    }
+    
+    res.json({ message: 'Slide added to set', set });
+  } catch (error) {
+    console.error('[Gallery] Error adding slide to set:', error);
+    res.status(500).json({ error: 'Failed to add slide to set' });
+  }
+});
+
+// Delete gallery set
+app.delete("/api/gallery/sets/:setId", async (req, res) => {
+  try {
+    const { setId } = req.params;
+    
+    const setsFile = path.join(CWD, 'settings', 'gallery-sets.json');
+    const setsData = await fsp.readFile(setsFile, 'utf8').catch(() => '[]');
+    const sets = JSON.parse(setsData);
+    
+    const setIndex = sets.findIndex(s => s.id === setId);
+    if (setIndex === -1) {
+      return res.status(404).json({ error: 'Gallery set not found' });
+    }
+    
+    const deletedSet = sets[setIndex];
+    sets.splice(setIndex, 1);
+    
+    await fsp.writeFile(setsFile, JSON.stringify(sets, null, 2));
+    console.log(`[Gallery] Deleted set: ${deletedSet.name}`);
+    
+    res.json({ message: 'Gallery set deleted successfully', deletedSet });
+  } catch (error) {
+    console.error('[Gallery] Error deleting set:', error);
+    res.status(500).json({ error: 'Failed to delete gallery set' });
+  }
+});
+
 // New endpoint for activity history analytics
 app.get("/api/activity/analytics", (req, res) => {
   const { timeRange = "1h" } = req.query;

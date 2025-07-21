@@ -312,7 +312,7 @@ export class PresentationLauncher extends LitElement {
     }
 
     .thumbnail-item {
-      background: #222;
+      background: var(--background-secondary);
       border-radius: 8px;
       overflow: hidden;
       cursor: pointer;

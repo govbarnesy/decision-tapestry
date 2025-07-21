@@ -41,7 +41,7 @@ class CommitActivityHeatmap extends LitElement {
     .heatmap-title {
       font-size: 16px;
       font-weight: 600;
-      color: var(--text-main);
+      color: var(--text-primary);
       display: flex;
       align-items: center;
       gap: 8px;
@@ -60,10 +60,10 @@ class CommitActivityHeatmap extends LitElement {
 
     .weeks-selector {
       padding: 4px 8px;
-      border: 1px solid var(--border);
+      border: 1px solid var(--border-color);
       border-radius: 4px;
       background: var(--panel-bg);
-      color: var(--text-main);
+      color: var(--text-primary);
       font-size: 12px;
       cursor: pointer;
     }
@@ -117,7 +117,7 @@ class CommitActivityHeatmap extends LitElement {
     .day-cell {
       width: 12px;
       height: 12px;
-      background: var(--border);
+      background: var(--border-color);
       border-radius: 4px;
       cursor: pointer;
       transition: all 0.2s ease;
@@ -125,24 +125,24 @@ class CommitActivityHeatmap extends LitElement {
     }
 
     .day-cell[data-count="0"] {
-      background: var(--border);
+      background: var(--border-color);
       opacity: 0.5;
     }
 
     .day-cell[data-level="1"] {
-      background: rgba(0, 82, 204, 0.25);
+      background: var(--color-primary-light);
     }
 
     .day-cell[data-level="2"] {
-      background: rgba(0, 82, 204, 0.5);
+      background: color-mix(in srgb, var(--color-primary) 50%, transparent);
     }
 
     .day-cell[data-level="3"] {
-      background: rgba(0, 82, 204, 0.75);
+      background: color-mix(in srgb, var(--color-primary) 75%, transparent);
     }
 
     .day-cell[data-level="4"] {
-      background: var(--accent);
+      background: var(--color-primary);
     }
 
     .day-cell:hover {
@@ -170,7 +170,7 @@ class CommitActivityHeatmap extends LitElement {
       left: 50%;
       transform: translateX(-50%) translateY(-4px);
       background: var(--panel-bg);
-      border: 1px solid var(--border);
+      border: 1px solid var(--border-color);
       border-radius: 4px;
       padding: 4px 8px;
       font-size: 11px;
@@ -208,9 +208,9 @@ class CommitActivityHeatmap extends LitElement {
     .summary {
       margin-top: 16px;
       padding: 12px;
-      background: rgba(0, 82, 204, 0.05);
+      background: var(--color-primary-light);
       border-radius: 4px;
-      border: 1px solid rgba(0, 82, 204, 0.2);
+      border: 1px solid var(--color-primary);
     }
 
     .summary-stats {
@@ -226,7 +226,7 @@ class CommitActivityHeatmap extends LitElement {
     .summary-value {
       font-size: 20px;
       font-weight: 600;
-      color: var(--text-main);
+      color: var(--text-primary);
     }
 
     .summary-label {
@@ -238,7 +238,7 @@ class CommitActivityHeatmap extends LitElement {
     }
 
     .current-streak {
-      color: var(--accent);
+      color: var(--color-primary);
     }
 
     .empty-state {
@@ -505,21 +505,21 @@ class CommitActivityHeatmap extends LitElement {
         <span class="legend-label">Less</span>
         <div
           class="legend-item"
-          style="background: var(--border); opacity: 0.5;"
+          style="background: var(--border-color); opacity: 0.5;"
         ></div>
         <div
           class="legend-item"
-          style="background: rgba(0, 82, 204, 0.25);"
+          style="background: var(--color-primary-light);"
         ></div>
         <div
           class="legend-item"
-          style="background: rgba(0, 82, 204, 0.5);"
+          style="background: color-mix(in srgb, var(--color-primary) 50%, transparent);"
         ></div>
         <div
           class="legend-item"
-          style="background: rgba(0, 82, 204, 0.75);"
+          style="background: color-mix(in srgb, var(--color-primary) 75%, transparent);"
         ></div>
-        <div class="legend-item" style="background: var(--accent);"></div>
+        <div class="legend-item" style="background: var(--color-primary);"></div>
         <span class="legend-label">More</span>
       </div>
 

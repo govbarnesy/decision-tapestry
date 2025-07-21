@@ -107,8 +107,8 @@ export class ErrorMonitor {
         position: fixed;
         bottom: 20px;
         right: 20px;
-        background: #f44336;
-        color: white;
+        background: var(--color-error, #f44336);
+        color: var(--text-inverse, white);
         padding: 10px 15px;
         border-radius: 5px;
         font-family: Arial, sans-serif;

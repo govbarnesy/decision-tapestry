@@ -32,8 +32,6 @@
     <script type="module" src="./hot-update-client.mjs"></script>
     <script type="module" src="./ai-canvas.mjs"></script>
     <script type="module" src="./error-monitor.mjs"></script>
-    <script type="module" src="./canvas-gallery.mjs"></script>
-    <script type="module" src="./canvas-gallery-enhanced.mjs"></script>
     <script type="module" src="./gallery-sets.mjs"></script>
     <script type="module" src="./set-editor.mjs"></script>
     <script type="module" src="./presentation-launcher.mjs"></script>
@@ -65,15 +63,13 @@
                         AI Canvas
                         <span class="canvas-alert" id="canvas-alert" style="display: none;">•</span>
                     </button>
-                    <button class="center-tab" data-view="gallery">Gallery</button>
-                    <button class="center-tab" data-view="gallery-sets">Gallery Sets</button>
+                    <button class="center-tab" data-view="gallery-sets">Sets</button>
                 </div>
             </div>
             <div class="center-panel-content">
                 <decision-map id="decision-map" class="center-view active" data-view="decisions"></decision-map>
                 <architecture-map id="architecture-map" class="center-view" data-view="architecture"></architecture-map>
                 <ai-canvas id="ai-canvas" class="center-view" data-view="ai-canvas"></ai-canvas>
-                <canvas-gallery id="canvas-gallery" class="center-view" data-view="gallery"></canvas-gallery>
                 <gallery-sets id="gallery-sets" class="center-view" data-view="gallery-sets"></gallery-sets>
             </div>
         </div>

@@ -49,7 +49,7 @@ class DecisionDetailPanel extends LitElement {
       line-height: 160% !important;
     }
     .status-accepted {
-      background-color: #28a745;
+      background-color: var(--color-success);
       color: white;
       padding: 2px 6px;
       border-radius: 4px;
@@ -108,7 +108,7 @@ class DecisionDetailPanel extends LitElement {
       background-color: #ff9800;
     }
     .activity-badge.testing {
-      background-color: #2196f3;
+      background-color: var(--color-info);
     }
     .activity-badge.reviewing {
       background-color: #9c27b0;
@@ -182,8 +182,9 @@ class DecisionDetailPanel extends LitElement {
       align-items: center;
       gap: 6px;
       padding: 6px 12px;
-      background: #24292e;
-      color: white;
+      background: var(--panel-bg);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
       border-radius: 4px;
       text-decoration: none;
       font-size: 12px;
@@ -192,7 +193,7 @@ class DecisionDetailPanel extends LitElement {
     }
 
     .github-link:hover {
-      background: #1a1e22;
+      background: var(--hover-bg);
     }
 
     /* GitHub metadata sections */
@@ -603,7 +604,7 @@ class DecisionDetailPanel extends LitElement {
     const additionalGitHubHtml = this._renderAdditionalGitHubData(github_metadata);
 
     return html`
-      <h2>Decision #${id}: ${title}${this.decision.quick_task ? ' <span style="background: #ffc107; color: #000; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; vertical-align: middle;">⚡ Quick Task</span>' : ''}</h2>
+      <h2>Decision #${id}: ${title}${this.decision.quick_task ? ' <span style="background: var(--color-warning); color: var(--text-primary); padding: 2px 8px; border-radius: 4px; font-size: 0.7em; vertical-align: middle;">⚡ Quick Task</span>' : ''}</h2>
       <p>
         <strong>Status:</strong> <span class="${statusClass}">${status}</span>
       </p>

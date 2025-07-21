@@ -28,7 +28,7 @@ class SmartAnalytics extends LitElement {
     .analytics-title {
       font-size: 24px;
       font-weight: 700;
-      color: #212529;
+      color: var(--text-primary);
       margin: 0;
       background: linear-gradient(135deg, #0066ff, #0052cc);
       -webkit-background-clip: text;
@@ -38,7 +38,7 @@ class SmartAnalytics extends LitElement {
 
     .analytics-subtitle {
       font-size: 14px;
-      color: #6c757d;
+      color: var(--text-secondary);
       margin: 0;
     }
 
@@ -86,20 +86,20 @@ class SmartAnalytics extends LitElement {
     .insight-title {
       font-size: 16px;
       font-weight: 600;
-      color: #212529;
+      color: var(--text-primary);
       margin: 0;
     }
 
     .insight-metric {
       font-size: 32px;
       font-weight: 700;
-      color: #0066ff;
+      color: var(--color-primary);
       margin: 8px 0;
     }
 
     .insight-description {
       font-size: 14px;
-      color: #6c757d;
+      color: var(--text-secondary);
       line-height: 1.4;
       margin: 0;
     }
@@ -114,15 +114,15 @@ class SmartAnalytics extends LitElement {
     }
 
     .trend-positive {
-      color: #28a745;
+      color: var(--color-success);
     }
 
     .trend-negative {
-      color: #dc3545;
+      color: var(--color-error);
     }
 
     .trend-neutral {
-      color: #6c757d;
+      color: var(--text-secondary);
     }
 
     .recommendations-section {
@@ -136,7 +136,7 @@ class SmartAnalytics extends LitElement {
     .recommendations-title {
       font-size: 18px;
       font-weight: 600;
-      color: #212529;
+      color: var(--text-primary);
       margin: 0 0 16px 0;
       display: flex;
       align-items: center;
@@ -150,7 +150,7 @@ class SmartAnalytics extends LitElement {
       padding: 12px;
       border-radius: 4px;
       margin-bottom: 8px;
-      background: #f8f9fa;
+      background: var(--background-secondary);
       border-left: 4px solid #0066ff;
     }
 
@@ -166,13 +166,13 @@ class SmartAnalytics extends LitElement {
     .recommendation-title {
       font-size: 14px;
       font-weight: 600;
-      color: #212529;
+      color: var(--text-primary);
       margin: 0 0 4px 0;
     }
 
     .recommendation-description {
       font-size: 12px;
-      color: #6c757d;
+      color: var(--text-secondary);
       margin: 0;
       line-height: 1.3;
     }
@@ -187,7 +187,7 @@ class SmartAnalytics extends LitElement {
     .patterns-title {
       font-size: 18px;
       font-weight: 600;
-      color: #212529;
+      color: var(--text-primary);
       margin: 0 0 16px 0;
       display: flex;
       align-items: center;
@@ -201,19 +201,19 @@ class SmartAnalytics extends LitElement {
       padding: 12px;
       border-radius: 4px;
       margin-bottom: 8px;
-      background: #f8f9fa;
+      background: var(--background-secondary);
       transition: background 0.2s ease;
     }
 
     .pattern-item:hover {
-      background: #e9ecef;
+      background: var(--selected-bg);
     }
 
     .pattern-indicator {
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: #0066ff;
+      background: var(--color-primary);
     }
 
     .pattern-content {
@@ -223,13 +223,13 @@ class SmartAnalytics extends LitElement {
     .pattern-name {
       font-size: 14px;
       font-weight: 600;
-      color: #212529;
+      color: var(--text-primary);
       margin: 0 0 4px 0;
     }
 
     .pattern-frequency {
       font-size: 12px;
-      color: #6c757d;
+      color: var(--text-secondary);
       margin: 0;
     }
 
@@ -239,7 +239,7 @@ class SmartAnalytics extends LitElement {
       padding: 4px 8px;
       border-radius: 4px;
       background: #e8f4f8;
-      color: #0066ff;
+      color: var(--color-primary);
     }
 
     .refresh-button {
@@ -270,7 +270,7 @@ class SmartAnalytics extends LitElement {
       justify-content: center;
       height: 200px;
       font-size: 16px;
-      color: #6c757d;
+      color: var(--text-secondary);
     }
 
     .spinner {
@@ -291,7 +291,7 @@ class SmartAnalytics extends LitElement {
     .no-data {
       text-align: center;
       padding: 40px;
-      color: #6c757d;
+      color: var(--text-secondary);
       font-size: 14px;
     }
   `;

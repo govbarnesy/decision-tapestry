@@ -22,7 +22,7 @@ class AgentStatusPanel extends LitElement {
       justify-content: space-between;
       margin-bottom: 1rem;
       padding: 0.5rem;
-      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark, #0056b3) 100%);
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
       border-radius: 4px;
       color: white;
     }

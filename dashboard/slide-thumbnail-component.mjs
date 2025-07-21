@@ -19,7 +19,7 @@ export class SlideThumbnail extends LitElement {
       height: 100%;
       position: relative;
       overflow: hidden;
-      background: #f8f8f8;
+      background: var(--background-secondary);
       border-radius: 8px 8px 0 0;
       display: flex;
       align-items: center;
@@ -27,7 +27,7 @@ export class SlideThumbnail extends LitElement {
     }
 
     :host([dark-mode]) .thumbnail-container {
-      background: #1a1a1a;
+      background: var(--background-secondary);
     }
 
     .thumbnail-frame {
@@ -49,7 +49,7 @@ export class SlideThumbnail extends LitElement {
       transform-origin: center center;
       border: none;
       pointer-events: none;
-      background: white;
+      background: var(--panel-bg);
       border-radius: 4px;
     }
 
@@ -60,8 +60,8 @@ export class SlideThumbnail extends LitElement {
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+      color: var(--text-inverse);
       font-size: 1.2em;
       font-weight: 600;
       text-align: center;
@@ -85,16 +85,16 @@ export class SlideThumbnail extends LitElement {
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #fee;
-      color: #c00;
+      background: var(--color-error-light, #fee);
+      color: var(--color-error);
       font-size: 0.9em;
       padding: 10px;
       text-align: center;
     }
 
     :host([dark-mode]) .thumbnail-error {
-      background: #3a1f1f;
-      color: #ff6b6b;
+      background: var(--color-error-dark, #3a1f1f);
+      color: var(--color-error);
     }
 
     .thumbnail-loading {
@@ -110,7 +110,7 @@ export class SlideThumbnail extends LitElement {
       width: 100%;
       height: 100%;
       border: 3px solid rgba(255, 255, 255, 0.3);
-      border-top-color: white;
+      border-top-color: var(--text-inverse);
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
@@ -229,7 +229,7 @@ export class SlideThumbnail extends LitElement {
             margin: 0;
             padding: 20px;
             transform-origin: top left;
-            background: white !important;
+            background: var(--panel-bg) !important;
           }
           * {
             max-width: 100% !important;

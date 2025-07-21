@@ -190,7 +190,7 @@ class GeminiPrompt extends LitElement {
     }
 
     .send-button:hover:not(:disabled) {
-      background: #0052cc;
+      background: var(--color-primary);
       transform: translateY(-1px);
     }
 

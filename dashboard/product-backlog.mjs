@@ -20,14 +20,14 @@ class ProductBacklogPanel extends LitElement {
       padding: 0.3rem 0.8rem;
       font-size: 0.8em;
       cursor: pointer;
-      border: 1px solid #0052cc;
-      background-color: #0052cc;
-      color: white;
+      border: 1px solid var(--color-primary);
+      background-color: var(--color-primary);
+      color: var(--text-inverse);
       border-radius: 4px;
     }
     .promote-btn:disabled {
-      background-color: #6c757d;
-      border-color: #6c757d;
+      background-color: var(--color-secondary);
+      border-color: var(--color-secondary);
     }
     .backlog-item p {
       font-size: 0.9em;

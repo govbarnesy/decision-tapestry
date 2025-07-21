@@ -5,36 +5,25 @@
 @import url('./theme-system.css');
 
 html {
-    --background: #f4f7f6;
-    --panel-bg: #fff;
-    --panel-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    --panel-radius: 4px;
-    --text-main: #000;
-    --text-secondary: #000;
-    --border: #eee;
-    --accent: #0052cc;
+    /* Legacy variable mappings for backward compatibility */
+    /* These map to the new theme system variables defined in theme-system.css */
+    --text-main: var(--text-primary);
+    --border: var(--border-color);
+    --accent: var(--color-primary);
+    --panel-radius: var(--border-radius);
+    
+    /* Status colors (keep these as they're specific to Decision Tapestry) */
     --status-accepted: #28a745;
     --status-superseded: #6c757d;
     --status-deprecated: #dc3545;
-    --tab-bg: #f9f9f9;
-    --tab-active-bg: #fff;
-    --tab-active-border: #0052cc;
-    --tab-active-color: #0052cc;
-    --log-selected-bg: #e9ecef;
-    --log-hover-bg: #f8f9fa;
     
-    /* Border radius design tokens */
-    --border-radius: 4px;
-    --border-radius-sm: 2px;
-    --border-radius-lg: 8px;
-    --border-radius-circle: 50%;
-    
-    /* Activity state colors */
-    --activity-working: #4CAF50;
-    --activity-debugging: #FF9800;
-    --activity-testing: #2196F3;
-    --activity-reviewing: #9C27B0;
-    --activity-idle: #757575;
+    /* Legacy tab colors - map to theme system */
+    --tab-bg: var(--tab-bg);
+    --tab-active-bg: var(--tab-active-bg);
+    --tab-active-border: var(--tab-active-border);
+    --tab-active-color: var(--tab-active-color);
+    --log-selected-bg: var(--selected-bg);
+    --log-hover-bg: var(--hover-bg);
 }
 
 body,
@@ -47,29 +36,10 @@ html {
 }
 
 body.dark-theme {
-    --background: #181a1b;
-    --panel-bg: #222222;
-    --panel-shadow: 0 2px 8px rgba(0,0,0,0.4);
-    --text-main: #fff;
-    --text-secondary: #fff;
-    --border: #222;
-    --accent: #3399ff;
+    /* Status colors adjusted for dark theme */
     --status-accepted: #6be675;
     --status-superseded: #b0b3b8;
     --status-deprecated: #ff6b6b;
-    --tab-bg: #000;
-    --tab-active-bg: #000;
-    --tab-active-border: #3399ff;
-    --tab-active-color: #3399ff;
-    --log-selected-bg: #000;
-    --log-hover-bg: #000;
-    
-    /* Activity colors stay the same - they work well in dark theme */
-    --activity-working: #4CAF50;
-    --activity-debugging: #FF9800;
-    --activity-testing: #2196F3;
-    --activity-reviewing: #9C27B0;
-    --activity-idle: #757575;
 }
 
 .dashboard {
@@ -108,6 +78,16 @@ body.dark-theme {
     display: flex;
     flex-direction: column;
     height: calc(100vh - 2rem);
+}
+
+/* Ensure all web components inside panels inherit transparent background */
+.panel > *,
+.panel-content,
+.panel-view,
+.controls-view,
+.center-view,
+.tab-content {
+    background: transparent;
 }
 
 /* Remove duplicate grid positioning - already defined above */

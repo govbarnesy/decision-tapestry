@@ -126,7 +126,7 @@ async function runTests() {
         { label: 'Email', type: 'email', required: true, placeholder: 'your@email.com' },
         { label: 'Password', type: 'password', required: true },
         { label: 'Confirm Password', type: 'password', required: true },
-        { label: 'Terms', type: 'checkbox', label: 'I agree to the terms' }
+        { label: 'Terms', type: 'checkbox', text: 'I agree to the terms' }
       ],
       [
         { text: 'Sign Up', primary: true },

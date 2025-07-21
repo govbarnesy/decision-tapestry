@@ -52,7 +52,7 @@ for (let i = 0; i < args.length; i++) {
         process.exit(1);
       });
       return;
-    case '--from-script':
+    case '--from-script': {
       // Create from a presentation script
       const scriptPath = args[++i];
       createSetFromScript(scriptPath, options).then(set => {
@@ -65,6 +65,7 @@ for (let i = 0; i < args.length; i++) {
         process.exit(1);
       });
       return;
+    }
     case '--help':
     case '-h':
       console.log(`
@@ -100,6 +101,7 @@ Examples:
   node create-gallery-set.mjs --from-script presentation-opengov-cpo.mjs
       `);
       process.exit(0);
+      break;
     default:
       if (arg.startsWith('-')) {
         console.error(`Unknown option: ${arg}`);

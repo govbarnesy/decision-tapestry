@@ -23,14 +23,14 @@ class DecisionVelocityChart extends LitElement {
     }
     #analytics-controls button {
       padding: 0.25rem 0.5rem;
-      border: 1px solid #ccc;
-      background-color: #f0f0f0;
+      border: 1px solid var(--border-color);
+      background-color: var(--background-secondary);
       cursor: pointer;
     }
     #analytics-controls button.active {
-      background-color: #007bff;
-      color: white;
-      border-color: #007bff;
+      background-color: var(--color-primary);
+      color: var(--text-inverse);
+      border-color: var(--color-primary);
     }
     .chart-wrapper {
       position: relative;

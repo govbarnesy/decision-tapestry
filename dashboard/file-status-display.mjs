@@ -50,11 +50,11 @@ class FileStatusDisplay extends LitElement {
     }
 
     .status-icon.created {
-      background: #28a745;
+      background: var(--color-success);
     }
 
     .status-icon.modified {
-      background: #0366d6;
+      background: var(--color-primary);
     }
 
     .status-icon.deleted {

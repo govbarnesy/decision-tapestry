@@ -50,7 +50,7 @@ class ActivityTimeline extends LitElement {
 
     .filter-button.active {
       background: var(--accent);
-      color: white;
+      color: var(--text-inverse);
       border-color: var(--accent);
     }
 
@@ -67,7 +67,7 @@ class ActivityTimeline extends LitElement {
 
     .clear-button:hover {
       background: var(--status-deprecated);
-      color: white;
+      color: var(--text-inverse);
     }
 
     .timeline {
@@ -156,7 +156,7 @@ class ActivityTimeline extends LitElement {
 
     .agent-badge {
       background: var(--state-color, var(--accent));
-      color: white;
+      color: var(--text-inverse);
       padding: 0.2rem 0.5rem;
       border-radius: 4px;
       font-size: 0.75rem;
@@ -208,23 +208,23 @@ class ActivityTimeline extends LitElement {
 
     /* State colors */
     .timeline-item[data-state="working"] {
-      --state-color: #4caf50;
+      --state-color: var(--activity-working);
     }
 
     .timeline-item[data-state="debugging"] {
-      --state-color: #ff9800;
+      --state-color: var(--activity-debugging);
     }
 
     .timeline-item[data-state="testing"] {
-      --state-color: #2196f3;
+      --state-color: var(--activity-testing);
     }
 
     .timeline-item[data-state="reviewing"] {
-      --state-color: #9c27b0;
+      --state-color: var(--activity-reviewing);
     }
 
     .timeline-item[data-state="idle"] {
-      --state-color: #757575;
+      --state-color: var(--activity-idle);
     }
   `;
 
