@@ -220,24 +220,27 @@ class GitHubService {
     try {
       const { data } = await this.octokit.search.issuesAndPullRequests({
         q: `type:pr repo:${owner}/${repo} "Decision #${decisionId}" OR "#${decisionId}"`,
-        sort: 'created',
-        order: 'desc',
-        per_page: 10
+        sort: "created",
+        order: "desc",
+        per_page: 10,
       });
 
       await this.updateRateLimit();
-      
-      return data.items.map(pr => ({
+
+      return data.items.map((pr) => ({
         number: pr.number,
         title: pr.title,
         state: pr.state,
         url: pr.html_url,
         created_at: pr.created_at,
         merged_at: pr.pull_request?.merged_at,
-        author: pr.user.login
+        author: pr.user.login,
       }));
     } catch (error) {
-      console.error(`Failed to fetch PRs for decision ${decisionId}:`, error.message);
+      console.error(
+        `Failed to fetch PRs for decision ${decisionId}:`,
+        error.message,
+      );
       return [];
     }
   }
@@ -256,14 +259,14 @@ class GitHubService {
       // Use the same endpoint as PRs but filter for issues
       const { data } = await this.octokit.search.issuesAndPullRequests({
         q: `type:issue repo:${owner}/${repo} "Decision #${decisionId}" OR "#${decisionId}"`,
-        sort: 'created',
-        order: 'desc',
-        per_page: 10
+        sort: "created",
+        order: "desc",
+        per_page: 10,
       });
 
       await this.updateRateLimit();
-      
-      return data.items.map(issue => ({
+
+      return data.items.map((issue) => ({
         number: issue.number,
         title: issue.title,
         state: issue.state,
@@ -271,10 +274,13 @@ class GitHubService {
         created_at: issue.created_at,
         closed_at: issue.closed_at,
         author: issue.user.login,
-        labels: issue.labels.map(l => l.name)
+        labels: issue.labels.map((l) => l.name),
       }));
     } catch (error) {
-      console.error(`Failed to fetch issues for decision ${decisionId}:`, error.message);
+      console.error(
+        `Failed to fetch issues for decision ${decisionId}:`,
+        error.message,
+      );
       return [];
     }
   }
@@ -293,20 +299,20 @@ class GitHubService {
       const { data } = await this.octokit.repos.getCombinedStatusForRef({
         owner,
         repo,
-        ref: sha
+        ref: sha,
       });
 
       await this.updateRateLimit();
-      
+
       return {
         state: data.state, // success, failure, pending
         total_count: data.total_count,
-        statuses: data.statuses.map(s => ({
+        statuses: data.statuses.map((s) => ({
           context: s.context,
           state: s.state,
           description: s.description,
-          target_url: s.target_url
-        }))
+          target_url: s.target_url,
+        })),
       };
     } catch (error) {
       console.error(`Failed to fetch commit status for ${sha}:`, error.message);
@@ -330,12 +336,12 @@ class GitHubService {
         repo,
         per_page: options.limit || 10,
         branch: options.branch,
-        status: options.status // completed, in_progress, queued
+        status: options.status, // completed, in_progress, queued
       });
 
       await this.updateRateLimit();
-      
-      return data.workflow_runs.map(run => ({
+
+      return data.workflow_runs.map((run) => ({
         id: run.id,
         name: run.name,
         status: run.status,
@@ -344,7 +350,7 @@ class GitHubService {
         updated_at: run.updated_at,
         url: run.html_url,
         head_sha: run.head_sha,
-        head_branch: run.head_branch
+        head_branch: run.head_branch,
       }));
     } catch (error) {
       console.error(`Failed to fetch workflow runs:`, error.message);
@@ -366,20 +372,23 @@ class GitHubService {
       const { data } = await this.octokit.pulls.listReviews({
         owner,
         repo,
-        pull_number: prNumber
+        pull_number: prNumber,
       });
 
       await this.updateRateLimit();
-      
-      return data.map(review => ({
+
+      return data.map((review) => ({
         id: review.id,
         user: review.user.login,
         state: review.state, // APPROVED, CHANGES_REQUESTED, COMMENTED
         submitted_at: review.submitted_at,
-        body: review.body
+        body: review.body,
       }));
     } catch (error) {
-      console.error(`Failed to fetch PR reviews for #${prNumber}:`, error.message);
+      console.error(
+        `Failed to fetch PR reviews for #${prNumber}:`,
+        error.message,
+      );
       return [];
     }
   }
@@ -398,28 +407,38 @@ class GitHubService {
       const { data } = await this.octokit.repos.getBranchProtection({
         owner,
         repo,
-        branch
+        branch,
       });
 
       await this.updateRateLimit();
-      
+
       return {
-        required_reviews: data.required_pull_request_reviews?.required_approving_review_count || 0,
-        dismiss_stale_reviews: data.required_pull_request_reviews?.dismiss_stale_reviews || false,
-        require_code_owner_reviews: data.required_pull_request_reviews?.require_code_owner_reviews || false,
+        required_reviews:
+          data.required_pull_request_reviews?.required_approving_review_count ||
+          0,
+        dismiss_stale_reviews:
+          data.required_pull_request_reviews?.dismiss_stale_reviews || false,
+        require_code_owner_reviews:
+          data.required_pull_request_reviews?.require_code_owner_reviews ||
+          false,
         required_status_checks: data.required_status_checks?.contexts || [],
         enforce_admins: data.enforce_admins?.enabled || false,
-        restrictions: data.restrictions ? {
-          users: data.restrictions.users.map(u => u.login),
-          teams: data.restrictions.teams.map(t => t.name)
-        } : null
+        restrictions: data.restrictions
+          ? {
+              users: data.restrictions.users.map((u) => u.login),
+              teams: data.restrictions.teams.map((t) => t.name),
+            }
+          : null,
       };
     } catch (error) {
       if (error.status === 404) {
         // No protection rules
         return null;
       }
-      console.error(`Failed to fetch branch protection for ${branch}:`, error.message);
+      console.error(
+        `Failed to fetch branch protection for ${branch}:`,
+        error.message,
+      );
       return null;
     }
   }
@@ -438,15 +457,16 @@ class GitHubService {
       const { data: releases } = await this.octokit.repos.listReleases({
         owner,
         repo,
-        per_page: 20
+        per_page: 20,
       });
 
       await this.updateRateLimit();
-      
+
       // Find releases that mention this decision
-      const matchingRelease = releases.find(r => 
-        r.body?.includes(`Decision #${decisionId}`) || 
-        r.body?.includes(`#${decisionId}`)
+      const matchingRelease = releases.find(
+        (r) =>
+          r.body?.includes(`Decision #${decisionId}`) ||
+          r.body?.includes(`#${decisionId}`),
       );
 
       if (matchingRelease) {
@@ -455,7 +475,7 @@ class GitHubService {
           name: matchingRelease.name,
           published_at: matchingRelease.published_at,
           url: matchingRelease.html_url,
-          body: matchingRelease.body
+          body: matchingRelease.body,
         };
       }
 
@@ -480,23 +500,26 @@ class GitHubService {
       const [contributors, languages, topics] = await Promise.all([
         this.octokit.repos.listContributors({ owner, repo, per_page: 10 }),
         this.octokit.repos.listLanguages({ owner, repo }),
-        this.octokit.repos.getAllTopics({ owner, repo })
+        this.octokit.repos.getAllTopics({ owner, repo }),
       ]);
 
       await this.updateRateLimit();
 
       return {
-        top_contributors: contributors.data.slice(0, 5).map(c => ({
+        top_contributors: contributors.data.slice(0, 5).map((c) => ({
           login: c.login,
           contributions: c.contributions,
-          avatar_url: c.avatar_url
+          avatar_url: c.avatar_url,
         })),
         languages: Object.entries(languages.data).map(([lang, bytes]) => ({
           name: lang,
           bytes: bytes,
-          percentage: Math.round((bytes / Object.values(languages.data).reduce((a, b) => a + b, 0)) * 100)
+          percentage: Math.round(
+            (bytes / Object.values(languages.data).reduce((a, b) => a + b, 0)) *
+              100,
+          ),
         })),
-        topics: topics.data.names
+        topics: topics.data.names,
       };
     } catch (error) {
       console.error(`Failed to fetch repository insights:`, error.message);
@@ -527,65 +550,47 @@ class GitHubService {
 export const githubService = new GitHubService();
 export default githubService;
 
-
 // Enhanced by Decision Tapestry Agent Framework
 // Decision ID: 65
 // Task: Create GitHub API client with authentication and rate limiting
 // Timestamp: 2025-07-16T05:15:22.017Z
-
-
 
 // Enhanced by Decision Tapestry Agent Framework
 // Decision ID: 65
 // Task: Implement GitHub user lookup service with caching
 // Timestamp: 2025-07-16T05:15:22.059Z
 
-
-
 // Enhanced by Decision Tapestry Agent Framework
 // Decision ID: 65
 // Task: Support oneOf author schema (string | GitHub user object)
 // Timestamp: 2025-07-16T05:15:22.086Z
-
-
 
 // Enhanced by Decision Tapestry Agent Framework
 // Decision ID: 65
 // Task: Create progressive author enhancement (string → GitHub object)
 // Timestamp: 2025-07-16T05:15:22.112Z
 
-
-
 // Enhanced by Decision Tapestry Agent Framework
 // Decision ID: 65
 // Task: Add graceful fallback for non-GitHub users
 // Timestamp: 2025-07-16T05:15:22.138Z
-
-
 
 // Enhanced by Decision Tapestry Agent Framework
 // Decision ID: 65
 // Task: Implement author caching to prevent rate limiting
 // Timestamp: 2025-07-16T05:15:22.163Z
 
-
-
 // Enhanced by Decision Tapestry Agent Framework
 // Decision ID: 85
 // Task: Create webhook endpoint for GitHub events
 // Timestamp: 2025-07-16T07:10:03.587Z
-
-
 
 // Enhanced by Decision Tapestry Agent Framework
 // Decision ID: 85
 // Task: Add webhook signature validation
 // Timestamp: 2025-07-16T07:10:03.670Z
 
-
-
 // Enhanced by Decision Tapestry Agent Framework
 // Decision ID: 85
 // Task: Update decision display with real-time GitHub updates
 // Timestamp: 2025-07-16T07:10:03.756Z
-

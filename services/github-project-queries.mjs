@@ -1,6 +1,6 @@
 /**
  * GitHub Projects v2 GraphQL Queries
- * 
+ *
  * This module provides GraphQL queries for interacting with GitHub Projects v2
  * to organize and visualize architectural decisions.
  */
@@ -473,34 +473,34 @@ export const projectQueries = {
         forkCount
       }
     }
-  `
+  `,
 };
 
 /**
  * Helper function to build decision search query
  */
 export function buildDecisionSearchQuery(options = {}) {
-  const parts = ['label:decision', 'label:architecture'];
-  
+  const parts = ["label:decision", "label:architecture"];
+
   if (options.repo) {
     parts.push(`repo:${options.repo}`);
   }
-  
+
   if (options.status) {
     parts.push(`label:${options.status.toLowerCase()}`);
   }
-  
+
   if (options.author) {
     parts.push(`author:${options.author}`);
   }
-  
+
   if (options.text) {
     parts.push(options.text);
   }
-  
+
   if (options.state) {
     parts.push(`state:${options.state}`);
   }
-  
-  return parts.join(' ');
+
+  return parts.join(" ");
 }
