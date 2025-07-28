@@ -2,26 +2,38 @@
 
 > Visualize and manage architectural decisions with interactive dashboards and automated workflows.
 
+## 🆕 v1.8.0: Now with GitHub-Native Backend!
+
+Decision Tapestry can now run entirely on GitHub infrastructure using Issues and Projects v2. Zero configuration needed!
+
 ## Quick Start
 
-### 1. Install
+### Option A: GitHub-Native Mode (NEW! 🚀)
+
 ```bash
+# Install
 npm install -g decision-tapestry
+
+# Start with GitHub backend
+decision-tapestry start --github
+
+# Or migrate existing decisions
+decision-tapestry migrate-to-github
 ```
 
-### 2. Initialize Your Project
+### Option B: Local Mode (Classic)
+
 ```bash
-# For new projects
+# Install
+npm install -g decision-tapestry
+
+# Initialize
 decision-tapestry init
 
-# For existing projects (auto-analyzes your codebase)
-decision-tapestry analyze
-```
-
-### 3. Start Dashboard
-```bash
+# Start dashboard
 decision-tapestry start
 ```
+
 Open http://localhost:8080 to view your decision dashboard.
 
 ---
@@ -48,32 +60,35 @@ Open http://localhost:8080 to view your decision dashboard.
 ## Features
 
 ✅ **Interactive Dashboard** - Visual decision map with search and filtering  
-✅ **Real-time Collaboration** - Live updates across all connected clients  
-  - Instant decision and task status changes
-  - Agent activity tracking with visual indicators  
-  - Auto-focus on active decisions
-  - WebSocket-based synchronization
-✅ **Dark/Light Themes** - Automatic system preference detection  
-✅ **AI-Human Collaboration** - Persistent context for AI development workflows
-  - Never lose context when AI tools hit token limits
-  - Real-time monitoring of AI agent activities
-  - Track decisions across multiple AI conversations
-  - Export project context to any AI tool
-✅ **AI-Powered Planning** - Context-aware project onboarding  
-✅ **Quality Automation** - Pre-commit hooks and CI/CD  
-✅ **Historical Analysis** - Extract decisions from existing codebases
+✅ **Real-time Collaboration** - Live updates across all connected clients
+
+- Instant decision and task status changes
+- Agent activity tracking with visual indicators
+- Auto-focus on active decisions
+- WebSocket-based synchronization
+  ✅ **Dark/Light Themes** - Automatic system preference detection  
+  ✅ **AI-Human Collaboration** - Persistent context for AI development workflows
+- Never lose context when AI tools hit token limits
+- Real-time monitoring of AI agent activities
+- Track decisions across multiple AI conversations
+- Export project context to any AI tool
+  ✅ **AI-Powered Planning** - Context-aware project onboarding  
+  ✅ **Quality Automation** - Pre-commit hooks and CI/CD  
+  ✅ **Historical Analysis** - Extract decisions from existing codebases
 
 ## 🤖 AI Development Workflow
 
 **Stop losing hours to AI context limits.** Decision Tapestry maintains persistent project context across all your AI tool conversations.
 
 ### The Problem
+
 - Hit Cursor's context limit and lose 3 hours of architecture discussion
-- Explain the same project structure to Claude repeatedly  
+- Explain the same project structure to Claude repeatedly
 - v0 forgets your design decisions from previous sessions
 - Multiple AI tools give conflicting suggestions without context
 
 ### The Solution
+
 ```bash
 # Track AI activity in real-time
 decision-tapestry activity start
@@ -85,12 +100,14 @@ decision-tapestry plan --context-export
 **Perfect for teams using:** Cursor • Claude • v0 • Windsurf • GitHub Copilot • Lovable
 
 ### 🆕 New in v1.7.0: Enhanced Real-time Experience
+
 - **Live Dashboard Updates**: All changes appear instantly without browser refresh
 - **Agent Activity Visualization**: See who's working on what in real-time
 - **Improved Reliability**: Robust file watching with automatic fallbacks
-- **Better Visual Feedback**: Activity badges and animations on decision nodes  
+- **Better Visual Feedback**: Activity badges and animations on decision nodes
 
 ### ⚡ Quick Tasks: From Idea to Execution in One Command
+
 ```bash
 # Create decision and start agent immediately
 decision-tapestry quick-task "Fix login button styling"
@@ -106,6 +123,7 @@ decision-tapestry qt "Fix production bug" -p high --no-agent
 ```
 
 Quick tasks are perfect for:
+
 - Bug fixes that need immediate attention
 - Small refactoring jobs
 - Feature additions with clear scope
