@@ -1,0 +1,110 @@
+name: Architectural Decision
+description: Record an architectural decision for the project
+title: "[Decision] "
+labels: ["decision", "architecture"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Architectural Decision Record
+        Use this template to document important technical or architectural decisions.
+
+  - type: input
+    id: title
+    attributes:
+      label: Decision Title
+      description: A short, descriptive title for this decision
+      placeholder: "e.g., Use React for frontend framework"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: status
+    attributes:
+      label: Status
+      description: Current status of this decision
+      options:
+        - Proposed
+        - Accepted
+        - Rejected
+        - Superseded
+        - In Progress
+      default: 0
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: What is the issue that we're seeing that is motivating this decision or change?
+      placeholder: "Describe the background and context..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: decision
+    attributes:
+      label: Decision
+      description: What is the change that we're proposing and/or doing?
+      placeholder: "We will..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: rationale
+    attributes:
+      label: Rationale
+      description: Why did we choose this option? What are the key factors?
+      placeholder: "- Performance benefits\n- Developer experience\n- Community support"
+    validations:
+      required: true
+
+  - type: textarea
+    id: tradeoffs
+    attributes:
+      label: Tradeoffs
+      description: What are the pros and cons of this decision?
+      placeholder: "Pros:\n- ...\n\nCons:\n- ..."
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: What other options were evaluated?
+      placeholder: "1. Option A - Rejected because...\n2. Option B - Not suitable due to..."
+
+  - type: textarea
+    id: consequences
+    attributes:
+      label: Consequences
+      description: What becomes easier or more difficult to do because of this change?
+      placeholder: "- We will need to...\n- This enables us to...\n- We must be careful about..."
+
+  - type: textarea
+    id: affected_components
+    attributes:
+      label: Affected Components
+      description: List files, directories, or components that will be affected
+      placeholder: "- src/components/\n- lib/auth/\n- package.json"
+
+  - type: textarea
+    id: tasks
+    attributes:
+      label: Implementation Tasks
+      description: Break down the implementation into specific tasks
+      placeholder: "- [ ] Task 1\n- [ ] Task 2\n- [ ] Task 3"
+
+  - type: input
+    id: related_decisions
+    attributes:
+      label: Related Decisions
+      description: Reference other decision issues (e.g., #123, #456)
+      placeholder: "#10, #25"
+
+  - type: input
+    id: related_prs
+    attributes:
+      label: Implementation PRs
+      description: Pull requests that implement this decision
+      placeholder: "#101, #102"

@@ -1,0 +1,26 @@
+{
+  "name": "Decision Tapestry",
+  "description": "Visualize and track architectural decisions using GitHub Issues and Projects",
+  "url": "https://github.com/govbarnesy/decision-tapestry",
+  "hook_attributes": {
+    "url": "https://your-domain.com/webhooks/github"
+  },
+  "redirect_url": "https://your-domain.com/auth/callback",
+  "setup_url": "https://your-domain.com/setup",
+  "public": true,
+  "default_permissions": {
+    "issues": "write",
+    "pull_requests": "read",
+    "contents": "read",
+    "metadata": "read",
+    "projects": "admin"
+  },
+  "default_events": [
+    "issues",
+    "issue_comment",
+    "pull_request",
+    "pull_request_review",
+    "project_v2_item",
+    "label"
+  ]
+}
